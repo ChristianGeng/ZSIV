@@ -30,23 +30,6 @@ from django.forms.formsets import formset_factory
 from django.views.generic import ListView, DetailView
 from django.forms.widgets import CheckboxInput, SelectMultiple, Select
 from pandas.tseries.frequencies import _name
-
-# def index(request):
-#     journallist = Journals.objects.order_by('Name')
-# 
-#     #output = ' ,'.join([q.Name for q in journallist])
-#     templatename = 'ZSIV/index.html'
-#     #template = loader.get_template(templatename)
-#     context = {
-#         'journallist': journallist,
-#     }
-#     #return HttpResponse(template.render(context, request))
-#     return render(request, templatename, context)
-#     #return HttpResponse("Hello, world. You're at the ZSIV  index.")
-
-
-
-#class SnippetListAll(ListView):
 from django.forms.extras.widgets import SelectDateWidget
 from django import forms
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -56,6 +39,7 @@ from django.core.urlresolvers import reverse_lazy
 
 from django.forms.models import modelform_factory
 
+
 """
 Cooler Mixin, der die formfactory zum reinmixen von widgets erlaubt
 http://stackoverflow.com/questions/16937076/how-does-one-use-a-custom-widget-with-a-generic-updateview-without-having-to-red
@@ -64,9 +48,6 @@ class ModelFormWidgetMixin(object):
     def get_form_class(self):
         return modelform_factory(self.model, fields=self.fields, widgets=self.widgets)
 
-
-def home():
-    pass
 
 """
 class based view and file uploads:
@@ -118,94 +99,16 @@ class indexViewMA(generic.ListView):
     def get_queryset(self):
         return Mitarbeiter.objects.filter().order_by('Nachname')
 
-
-
-
-
-
 class DetailViewMA(generic.DetailView):
     model = Mitarbeiter
     template_name = 'ZSIV/detailMA.html'
-
-
-
-
-# def summaries_view(request):
-#     if request.method == 'POST':
-#         form = SummariesForm(request.POST)
-#         if form.is_valid():
-#             summaries = form.cleaned_data.get('summaries')
-# 
-#     else:
-#         form = SummariesForm
-#         
-#     context = {'form':form }
-#     return render(request, 'ZSIV/render_summaries.html', context)
-
-
-
-
-
-# def MAjournals_view_formset(request):
-#     mitarbeiter_id = 1
-#     #majournals = MAJournal MA_id=mitarbeiter_id
-#     
-#     ma = Mitarbeiter.objects.get(pk=mitarbeiter_id)
-#     JournalInlineFormSet = inlineformset_factory(MAJournal,Journals, fields=('Name',))
-#     if request.method == "POST":
-#         formset = JournalInlineFormSet(request.POST, request.FILES, instance=ma)
-#         if formset.is_valid():
-#             formset.save()
-#             # Do something. Should generally end with a redirect. For example:
-#             return HttpResponseRedirect(ma.get_absolute_url())
-#     else:
-#         formset = JournalInlineFormSet(instance=ma)
-#     return render(request, 'render_majournals', {'formset': formset})
-
-
-    
-# def MAjournals_view(request):
-#     if request.method == 'POST':
-#         form = MAJournalForm(request.POST)
-#         if form.is_valid():
-#             MAjournals = form.cleaned_data.get('MAjournals')
-# 
-#     else:
-#         form = MAJournalForm
-#         
-#     context = {'form':form }
-#     return render(request, 'ZSIV/render_majournals.html', context)
-
-    
-# def JournalIndexView(request):    
-#     form = modelform_factory(Journals,form=JournalForm)
-#     #context = {'form':form }
-#     formTemplate = 'ZSIV/vanillaSave.html'
-#     context = {'form':form }
-#     return render(request, formTemplate, context)
-    
-
-# class JournalList(ListView):
-#     queryset = Journals.objects.order_by('Name')
-#     context_object_name = 'book_list'
-    #print("request method: ; ",request.method)
-    
     
 class JournalList(ListView):
     model = Journals
     templatename = 'ZSIV/meineListe.html'
 
 
-
-
-
 def MA_Subscribe_Journals(request, mitarbeiter_id): 
-#     #subscr = get_object_or_404(Journals,pk=mitarbeiter_id)
-#     #ma  = get_object_or_404(Mitarbeiter, pk=1)
-#     formTemplate = 'ZSIV/vanillaSave.html'
-#      = Mitarbeiter.objects.filter(pk=mitarbeiter_id).select_related()
-     # 
-     
 
     formTemplate = 'ZSIV/vanillaSave.html'
     mitarbeiter_list = Mitarbeiter.objects.filter(pk=mitarbeiter_id).select_related()
@@ -215,16 +118,6 @@ def MA_Subscribe_Journals(request, mitarbeiter_id):
     # linking data
     ma_journal_data = MAJournal.objects.filter(MA_id=mitarbeiter_id) #linking table
     initialvalues = [x['Journal_id'] for x in mymitarbeiter.majournal_set.values()]
-
-    
-    
-    
-    print ('ma_journal_data',ma_journal_data)
-    print ("mitarbeiter_id", mitarbeiter_id)
-    print ("mymitarbeiter", mymitarbeiter)
-    
-    print("request method: ; ",request.method)
-    print ("Form Template used; ", formTemplate) 
     if request.method == 'POST':
         form = MitarbeiterForm(request.POST, initial={'Subscriptions': initialvalues}, instance=mymitarbeiter)
         print(form.data)
@@ -232,8 +125,6 @@ def MA_Subscribe_Journals(request, mitarbeiter_id):
         
         if form.is_valid():
             print ("Is form valid?" , form.is_valid())
-            
-            #journals = form.cleaned_data.get('journals')
             Journal_ids_subscribe = form.data.getlist('Subscriptions') # ids
             print ('Substr:' , Journal_ids_subscribe)
             ma_journal_data.delete()
@@ -294,29 +185,3 @@ def Journal_Subscribe_MAs(request,journal_id):
         context = {'form':form}
         return render(request, formTemplate, context)
         #form = JournalForm
-
-
-
-
-
-
-
-
-
-
-
-
-#class DetailView(generic.DetailView):
-#    model = Question
-#    template_name = 'ZSIV/detail.html'
-    # for Part 5: Testing the DetailView:
-    # wir brauchen eine weitere Methode get_queryset
-    # die uns die aus der Zukunft nicht gibt
-#    def get_queryset(self):
-#        """
-#        Excludes any questions that aren't published yet.
-#        """
-#        return Question.objects.filter(pub_date__lte=timezone.now())
-
-
-

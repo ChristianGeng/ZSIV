@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from . import views
-from ZSIV.views import home, SummariesDetailView, DetailView
+from ZSIV.views import SummariesDetailView, DetailView
 from .models import Summaries
 
 from ZSIV.views import SummariesCreateView, SummariesUpdateView, SummariesDeleteView, SummariesDetailView
@@ -11,7 +11,7 @@ urlpatterns = [
     #url(r'^$', DetailView.as_view(),name='home'), # http://127.0.0.1:8000/ZSIV/
     
     # Summaries
-    url(r'^Summaries/add/$', SummariesCreateView.as_view(), name='Summaries-add'),
+    url(r'^Summaries/add/$', SummariesCreateView.as_view(), name='Summaries-add'), #http://localhost:8000/ZSIV/Summaries/add/
     url(r'^Summaries/(?P<pk>[0-9]+)/$', SummariesUpdateView.as_view(), name='Summaries-update'),
     url(r'^Summaries/(?P<pk>[0-9]+)/delete/$', SummariesDeleteView.as_view(), name='Summaries-delete'),
     
