@@ -1,0 +1,14 @@
+
+{% load staticfiles %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'ZSIV/style.css' %}" />
+
+{% if list_to_view %}
+<ul>
+  {% for journal in list_to_view %}
+  <li><a href="{% url 'ZSIV:JournalSubscribe' journal.id %}"> {{ journal.Name }}</a></li>
+  {% endfor %}
+</ul>
+{% else %}
+<p>Keine Daten!</p>
+{% endif %}

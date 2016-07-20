@@ -1,0 +1,6 @@
+[client]
+database = ZSIV
+host = localhost
+user = root
+password = SQLADMIN
+default-character-set = utf8
