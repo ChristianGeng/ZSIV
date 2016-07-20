@@ -6,7 +6,7 @@ from .models import Journals
 from .models import MAJournal
 from .models import Mitarbeiter
 from .models import Summaries
-from .models import Choice, Question
+#from .models import Choice, Question
 from django.template import RequestContext
 #from django.template import loader
 from django.shortcuts import render_to_response
@@ -305,19 +305,6 @@ def Journal_Subscribe_MAs(request,journal_id):
 
 
 
-# from polls app
-class IndexView(generic.ListView):
-    template_name = 'ZSIV/index.html'
-    context_object_name = 'latest_question_list'
-
-    def get_queryset(self):
-        """
-        Return the last five published questions (not including those set to be
-        published in the future).
-        """
-        return Question.objects.filter(
-            pub_date__lte=timezone.now()
-        ).order_by('-pub_date')[:5]
 
 #class DetailView(generic.DetailView):
 #    model = Question
@@ -330,10 +317,6 @@ class IndexView(generic.ListView):
 #        Excludes any questions that aren't published yet.
 #        """
 #        return Question.objects.filter(pub_date__lte=timezone.now())
-
-class ResultsView(generic.DetailView):
-    model = Question
-    template_name = 'ZSIV/results.html'
 
 
 

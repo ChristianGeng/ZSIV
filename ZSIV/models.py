@@ -90,33 +90,33 @@ class Summaries(models.Model):
     def __str__(self):
         return str(self.Journal)+', Jg. '+str(self.Jahrgang)+', No. '+str(self.Heftnummer)
 
-# jede class variable ist ein database field aka spalte
-class Question(models.Model):
-    question_text = models.CharField(max_length=200)
-    pub_date = models.DateTimeField('date published')
-
-    def __str__(self):
-        return self.question_text
-
-    def was_published_recently(self):
-        # alte Version ist nicht durch den test gekommen. 
-        # zukuenftige Daten ergaben auch ein gueltiges ergebnis
-        #return self.pub_date >= timezone.now() - datetime.timedelta(days=1)
-        # jetzt:
-        now = timezone.now()
-        return now - datetime.timedelta(days=1) <= self.pub_date <= now
-    # additional improvement. Verbessern die die Headers in der admin page aussehen
-    was_published_recently.admin_order_field = 'pub_date' # sortieren ermoeglichen 
-    was_published_recently.boolean = True # gruenes haekchen
-    was_published_recently.short_description = 'Published recently?' # ueberschrift
-
-
-# optionales erstes argument: Question in diesem Fall: gut lesbarer identifier
-
-class Choice(models.Model):
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)
-    choice_text = models.CharField(max_length=200)
-    votes = models.IntegerField(default=0)
-    def __str__(self):
-        return self.choice_text
-    #Sent = models.S    
+# # jede class variable ist ein database field aka spalte
+# class Question(models.Model):
+#     question_text = models.CharField(max_length=200)
+#     pub_date = models.DateTimeField('date published')
+# 
+#     def __str__(self):
+#         return self.question_text
+# 
+#     def was_published_recently(self):
+#         # alte Version ist nicht durch den test gekommen. 
+#         # zukuenftige Daten ergaben auch ein gueltiges ergebnis
+#         #return self.pub_date >= timezone.now() - datetime.timedelta(days=1)
+#         # jetzt:
+#         now = timezone.now()
+#         return now - datetime.timedelta(days=1) <= self.pub_date <= now
+#     # additional improvement. Verbessern die die Headers in der admin page aussehen
+#     was_published_recently.admin_order_field = 'pub_date' # sortieren ermoeglichen 
+#     was_published_recently.boolean = True # gruenes haekchen
+#     was_published_recently.short_description = 'Published recently?' # ueberschrift
+# 
+# 
+# # optionales erstes argument: Question in diesem Fall: gut lesbarer identifier
+# 
+# class Choice(models.Model):
+#     question = models.ForeignKey(Question, on_delete=models.CASCADE)
+#     choice_text = models.CharField(max_length=200)
+#     votes = models.IntegerField(default=0)
+#     def __str__(self):
+#         return self.choice_text
+#     #Sent = models.S    
