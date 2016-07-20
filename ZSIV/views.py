@@ -1,6 +1,3 @@
-#from django.shortcuts import render
-# Create your views here.
-
 from django.http import HttpResponse
 from .models import Journals
 from .models import MAJournal
@@ -16,11 +13,8 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 from django.views import generic
 from django.utils import timezone
-
 from django.utils import timezone
 from django.template.context_processors import request
-
-
 from .forms import JournalForm
 from ZSIV.forms import SummariesForm, MAJournalForm, MitarbeiterForm
 from django.forms import inlineformset_factory
@@ -33,12 +27,8 @@ from pandas.tseries.frequencies import _name
 from django.forms.extras.widgets import SelectDateWidget
 from django import forms
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-
 from django.core.urlresolvers import reverse_lazy
-
-
 from django.forms.models import modelform_factory
-
 
 """
 Cooler Mixin, der die formfactory zum reinmixen von widgets erlaubt
@@ -79,10 +69,20 @@ class SummariesDeleteView(DeleteView):
     model = Summaries
 
 
-class SummariesDetailView(DetailView):
+class SummariesDetailView(ModelFormWidgetMixin,DetailView):
     model = Summaries
+    template_name = 'ZSIV/summaries_detail.html'
     #template_name = 'ZSIV/Summaries-Detail.html'
     fields = '__all__'
+    widgets = {
+        #'PublicationDate': SelectDateWidget,
+        'SENT' : CheckboxInput,
+#        'Heftnummer' :  Select,
+        'Heftnummer' :  Select,
+    }
+
+    #def get_object(self):
+    #    return get_object_or_404(Summaries, pk=id)
     #template_name = 'ZSIV/filehandling.html'
 
 

@@ -8,7 +8,7 @@ django.setup()
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
-from ZSIV.models import Mitarbeiter, Journals, MAJournal, Choice, Question
+from ZSIV.models import Mitarbeiter, Journals, MAJournal, Summaries
 from ZSIV.forms import JournalForm
 
 
@@ -84,6 +84,10 @@ type(testma2)
 reverse('ZSIV:detailMA', args=(mitarbeiter.id,))
 reverse('ZSIV:detailMA', args=(mitarbeiter.id,))
 reverse('ZSIV:subscribe', args=(mitarbeiter.id,))
+
+
+
+
 HttpResponseRedirect(reverse('ZSIV:detailMA', args=(mitarbeiter.id,)))
 
 
@@ -96,5 +100,6 @@ test.items()
 
 id=1
 reverse('ZSIV:Summaries-update', args=(1,))
+reverse('ZSIV:Summaries-detail', kwargs={'pk': 2})
 
-
+get_object_or_404(Summaries, pk=1) 

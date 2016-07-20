@@ -42,16 +42,10 @@ LEFT JOIN  ZSIV_journals j  on majo.Journal_id=j.id;
 SELECT majo.*, j.*, ma.*
 from  ZSIV_majournal majo
 LEFT JOIN  ZSIV_journals j  on majo.Journal_id=j.id
-LEFT JOIN  ZSIV_mitarbeiter ma on majo.MA_id=ma.id;
+LEFT JOIN  ZSIV_mitarbeiter ma on majo.MA_id=ma.id
+order by j.Name;
 
-
-
-
-
-
-
-
-
+SHOW INDEX FROM ZSIV_summaries;
 
 desc ZSIV_majournal;
 desc  ZSIV_journals;  
