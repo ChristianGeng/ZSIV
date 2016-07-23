@@ -8,10 +8,19 @@ from ZSIV.views import SummariesCreateView, SummariesUpdateView, SummariesDelete
 from ZSIV.views  import TestFormstSetView
 from ZSIV.models import Summaries
 app_name = 'ZSIV'
+
+
+
+
+
+
 urlpatterns = [
     # ex: /ZSIV/
     #url(r'^$', DetailView.as_view(),name='home'), # http://127.0.0.1:8000/ZSIV/
     
+    
+    
+    url(r'^$', views.index, name='index'),
     
     # Summariey Views
     url(r'^Summaries-all$',
@@ -25,11 +34,11 @@ urlpatterns = [
         name='summaries-index'),
                
     
-    url(r'^Summaries/deltest/$', TestFormstSetView.as_view(), name='Summaries-deltest1'),
+    url(r'^Summaries/delete/$', TestFormstSetView.as_view(), name='Summaries-delete-multi'),
     # Summaries Trias - Add and Update work 
     url(r'^Summaries/add/$', SummariesCreateView.as_view(), name='Summaries-add'), #http://localhost:8000/ZSIV/Summaries/add/
     url(r'^Summaries/update/(?P<pk>[0-9]+)/$', SummariesUpdateView.as_view(), name='Summaries-update'),
-    url(r'^Summaries/delete/(?P<pk>[0-9]+)/$', SummariesDeleteView.as_view(), name='Summaries-delete'),
+    url(r'^Summaries/delete/(?P<pk>[0-9]+)/$', SummariesDeleteView.as_view(), name='Summaries-delete'), # http://localhost:8000/ZSIV/Summaries/delete/93/
     
     #url(r'^Summaries/(?P<pk>[0-9]+)/delete/$', SummariesDeleteView.as_view(), name='Summaries-delete'),
     #url(r'^Summaries/(?P<summary_id>[0-9]+)/detail/$',SummariesDetailView.as_view(), name="Summaries-detail"),

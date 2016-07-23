@@ -24,7 +24,9 @@ from django.forms.models import modelformset_factory
 from django.forms import modelformset_factory, modelform_factory
 from django.forms.formsets import formset_factory
 from django.views.generic import ListView, DetailView
-from django.forms.widgets import CheckboxInput, SelectMultiple, Select
+from django.forms.widgets import CheckboxInput, SelectMultiple, Select,\
+    TextInput, Textarea
+
 from pandas.tseries.frequencies import _name
 from django.forms.extras.widgets import SelectDateWidget
 from django import forms
@@ -110,19 +112,36 @@ from extra_views import FormSetView, ModelFormSetView
 from django.forms import fields
 from extra_views import SearchableListMixin
 from extra_views import SortableListMixin
+from django.forms.widgets import HiddenInput
+
+
+
+
+def index(request):
+    return render_to_response('ZSIV/index.html', context_instance=RequestContext(request))
+
 class TestFormstSetView(SortableListMixin,SearchableListMixin,ModelFormSetView):
     """
     extra views: 
     https://github.com/AndrewIngram/django-extra-views
+    http://stackoverflow.com/questions/21105552/django-extra-views-and-sortablelistmixin-configuration-confusion
     """
     model = Summaries
     form_class = SummariesDeleteForm
     template_name = 'ZSIV/summaries_deltest.html'
     delete = fields.BooleanField(required=False)
     fields = ["SENT","Journal","Jahrgang","Heftnummer"]
+    print ()
+    
     search_fields = ['SENT', 'Jahrgang']
     sort_fields_aliases = [('SENT', 'by_SENT'), ('id', 'by_id'), ]
     extra=0
+    
+    widgets = {
+        'Heftnummer' :  Select(attrs={'disabled': 'disabled'}),
+        'Jahrgang'   : Select(attrs={'disabled': 'disabled'}),
+    }
+    
 
 #class SummariesDeleteFormMultiView(FormView):
 #    formset=formset_factory(SummariesDeleteForm)

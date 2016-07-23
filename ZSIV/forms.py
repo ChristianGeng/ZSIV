@@ -56,28 +56,36 @@ class MAJournalForm(ModelForm):
 
 
 
+
+
+
 """
 https://docs.djangoproject.com/en/dev/topics/forms/formsets/#manually-rendered-can-delete-and-can-order
 """
 from django.forms import fields     
 from django.forms import widgets  
 class SummariesDeleteForm(forms.ModelForm):
-    
+    #readonly_fields = ('Heftnummer')
     id = fields.IntegerField(widget=widgets.HiddenInput)
     delete = fields.BooleanField(required=False)
-    #Journal_id  = fields.IntegerField(widget=widgets.HiddenInput)
-    #Heftnummer
-    
+        
     def save(self, commit=False):
         if self.is_valid() and self.cleaned_data['delete']:
             self.instance.delete()             
     #    def __init__(self, *args, **kwargs):
     #        self.user = kwargs.pop('user')
     #        super(SummariesDeleteForm, self).__init__(*args, **kwargs)
-
+    def __init__(self, *args, **kwargs): 
+        super(SummariesDeleteForm, self).__init__(*args, **kwargs)
+        self.fields['Journal'].disabled = True
+        self.fields['SENT'].disabled = True
+        
     class Meta:
         model = Summaries
         fields = '__all__'
+        
+        
+        
 
 
 #SummariesDeleteFormSet = inlineformset_factory(SummariesDeleteForm)
