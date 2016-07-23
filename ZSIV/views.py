@@ -128,12 +128,15 @@ class SummariesCreateView(ModelFormWidgetMixin,CreateView):
 class SummariesUpdateView(UpdateView):
     model = Summaries
     fields = '__all__'
+    template_name = 'ZSIV/summaries_form.html' #  is the default
     widgets = {
         #'PublicationDate': SelectDateWidget,
         'SENT' : CheckboxInput,
 #        'Heftnummer' :  Select,
         'Heftnummer' :  Select,
     }
+    context_object_name = 'summary'
+    
     #fields = ['Filename']
 
 class SummariesDeleteView(DeleteView):

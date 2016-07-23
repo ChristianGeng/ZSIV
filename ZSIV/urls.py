@@ -26,8 +26,10 @@ urlpatterns = [
     # Summaries Trias - only Add works so far
     url(r'^Summaries/add/$', SummariesCreateView.as_view(), name='Summaries-add'), #http://localhost:8000/ZSIV/Summaries/add/
     url(r'^Summaries/(?P<pk>[0-9]+)/$', SummariesUpdateView.as_view(), name='Summaries-update'),
-    url(r'^Summaries/(?P<pk>[0-9]+)/delete/$', SummariesDeleteView.as_view(), name='Summaries-delete'),
-    url(r'^Summaries/(?P<summary_id>[0-9]+)/detail/$',SummariesDetailView.as_view(), name="Summaries-detail"),
+    
+    
+    #url(r'^Summaries/(?P<pk>[0-9]+)/delete/$', SummariesDeleteView.as_view(), name='Summaries-delete'),
+    #url(r'^Summaries/(?P<summary_id>[0-9]+)/detail/$',SummariesDetailView.as_view(), name="Summaries-detail"),
     
     # Mitarbeiter
     url(r'^Mitarbeiter.html$', views.indexViewMA.as_view(), name='indexMA'), #http://localhost:8000/ZSIV/Mitarbeiter.html
