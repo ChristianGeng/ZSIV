@@ -141,8 +141,20 @@ class SummariesUpdateView(UpdateView):
 
 class SummariesDeleteView(DeleteView):
     model = Summaries
-    success_url = reverse_lazy('Summaries-list')
+    fields = '__all__'
+    
+    #success_url =  reverse('ZSIV:summaries-index')
     model = Summaries
+    widgets = {
+        #'PublicationDate': SelectDateWidget,
+        'SENT' : CheckboxInput,
+#        'Heftnummer' :  Select,
+        'Heftnummer' :  Select,
+    }
+    context_object_name = 'summary'
+    def get_success_url(self):
+        return reverse('ZSIV:summaries-index')
+
 
 
 class SummariesDetailView(DetailView):
