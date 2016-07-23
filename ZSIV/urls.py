@@ -5,6 +5,7 @@ from .models import Summaries
 from django.views.generic import TemplateView,  ListView
 
 from ZSIV.views import SummariesCreateView, SummariesUpdateView, SummariesDeleteView, SummariesDetailView
+from ZSIV.views  import TestFormstSetView
 from ZSIV.models import Summaries
 app_name = 'ZSIV'
 urlpatterns = [
@@ -24,7 +25,7 @@ urlpatterns = [
         name='summaries-index'),
                
     
-    
+    url(r'^Summaries/deltest/$', TestFormstSetView.as_view(), name='Summaries-deltest1'),
     # Summaries Trias - Add and Update work 
     url(r'^Summaries/add/$', SummariesCreateView.as_view(), name='Summaries-add'), #http://localhost:8000/ZSIV/Summaries/add/
     url(r'^Summaries/update/(?P<pk>[0-9]+)/$', SummariesUpdateView.as_view(), name='Summaries-update'),

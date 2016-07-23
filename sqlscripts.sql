@@ -51,7 +51,7 @@ select * from ZSIV_journals;
 select * from ZSIV_mitarbeiter;
 select * from ZSIV_majournal;
 select * from ZSIV_majournal WHERE Journal_id=4;
-select * from ZSIV_mitarbeiter;
+select SENT, Journal_id, Jahrgang, Heftnummer from ZSIV_summaries;
 
 
 -- subscriptions for Bernd Brachial

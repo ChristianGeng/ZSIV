@@ -3,6 +3,8 @@ from .models import Journals
 from .models import MAJournal
 from .models import Mitarbeiter
 from .models import Summaries
+#from .forms import SummariesDeleteFormSet, 
+from .forms import SummariesDeleteForm
 #from .models import Choice, Question
 from django.template import RequestContext
 #from django.template import loader
@@ -26,7 +28,8 @@ from django.forms.widgets import CheckboxInput, SelectMultiple, Select
 from pandas.tseries.frequencies import _name
 from django.forms.extras.widgets import SelectDateWidget
 from django import forms
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView,\
+    FormView
 from django.core.urlresolvers import reverse_lazy
 from django.forms.models import modelform_factory
 
@@ -95,8 +98,38 @@ https://godjango.com/67-understanding-get_absolute_url/
 """
 
 
+from extra_views import FormSetView, ModelFormSetView
 
 
+# class AddressFormSet(FormSetView):
+#     form_class = SummariesDeleteForm
+#     template_name = 'ZSIV/summaries_deltest.html'
+#     def get_queryset(self):
+#         return Summaries.objects.all()
+
+from django.forms import fields
+from extra_views import SearchableListMixin
+from extra_views import SortableListMixin
+class TestFormstSetView(SortableListMixin,SearchableListMixin,ModelFormSetView):
+    """
+    extra views: 
+    https://github.com/AndrewIngram/django-extra-views
+    """
+    model = Summaries
+    form_class = SummariesDeleteForm
+    template_name = 'ZSIV/summaries_deltest.html'
+    delete = fields.BooleanField(required=False)
+    fields = ["SENT","Journal","Jahrgang","Heftnummer"]
+    search_fields = ['SENT', 'Jahrgang']
+    sort_fields_aliases = [('SENT', 'by_SENT'), ('id', 'by_id'), ]
+    extra=0
+
+#class SummariesDeleteFormMultiView(FormView):
+#    formset=formset_factory(SummariesDeleteForm)
+#    template_name = 'ZSIV/summaries_deltest.html'
+#    fields = '__all__'
+
+    
 """
 Cooler Mixin, der die formfactory zum reinmixen von widgets erlaubt
 http://stackoverflow.com/questions/16937076/how-does-one-use-a-custom-widget-with-a-generic-updateview-without-having-to-red
@@ -112,66 +145,46 @@ http://www.kelvinwong.ca/2013/09/19/upload-files-using-filefield-and-generic-cla
 https://godjango.com/35-upload-files/
 """
 class SummariesCreateView(ModelFormWidgetMixin,CreateView):
-#class SummariesCreateView(CreateView):
     model = Summaries
-    #fields = ['Filename']
     fields = '__all__'
-    #template_name = 'ZSIV/filehandling.html'
     template_name = 'ZSIV/Summaries-create.html'
     widgets = {
-        #'PublicationDate': SelectDateWidget,
         'SENT' : CheckboxInput,
-#        'Heftnummer' :  Select,
         'Heftnummer' :  Select,
     }
     
+#class SummariesMultiDeleteView():
+#SummariesDeleteMultiForm
+
+
 class SummariesUpdateView(UpdateView):
     model = Summaries
     fields = '__all__'
     template_name = 'ZSIV/summaries_form.html' #  is the default
     widgets = {
-        #'PublicationDate': SelectDateWidget,
         'SENT' : CheckboxInput,
-#        'Heftnummer' :  Select,
         'Heftnummer' :  Select,
     }
     context_object_name = 'summary'
     
-    #fields = ['Filename']
 
 class SummariesDeleteView(DeleteView):
     model = Summaries
     fields = '__all__'
-    
-    #success_url =  reverse('ZSIV:summaries-index')
     model = Summaries
     widgets = {
-        #'PublicationDate': SelectDateWidget,
         'SENT' : CheckboxInput,
-#        'Heftnummer' :  Select,
         'Heftnummer' :  Select,
     }
     context_object_name = 'summary'
     def get_success_url(self):
         return reverse('ZSIV:summaries-index')
 
-
-
 class SummariesDetailView(DetailView):
     model = Summaries
     template_name = 'ZSIV/summaries_detail.html'
-    #template_name = 'ZSIV/Summaries-Detail.html'
     fields = '__all__'
-    #widgets = {
-    #    #'PublicationDate': SelectDateWidget,
-    #    'SENT' : CheckboxInput,
-#        'Heftnummer' :  Select,
-    #    'Heftnummer' :  Select,
-    #}
 
-    #def get_object(self):
-    #    return get_object_or_404(Summaries, pk=id)
-    #template_name = 'ZSIV/filehandling.html'
 
 
 class indexViewJournals(generic.ListView):
