@@ -30,6 +30,73 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.core.urlresolvers import reverse_lazy
 from django.forms.models import modelform_factory
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"""
+GoDjango: 
+
+The Class Based "View" (https://godjango.com/69-the-class-based-view/)
+- Wann imemr asview benuttz wird, wird die dispatch Methode des Class based views aufgerufen
+- inspiziert was die request methode ist
+
+Class Based Views Part 1: TemplateView and RedirectView 
+(https://godjango.com/15-class-based-views-part-1-templateview-and-redirectview/)
+Template View
+- Use of get_context_data(self, kwargs)
+get data from databse and send to template; Normally trough context, 
+now override get_context_data. Die Methode wird aus der superclasse initialisiert
+- template_name - wie immer 
+- as_view() method
+- Redirect view: 
+es wird die get-Methode implementiert. 
+Warum: by default: all directs are permanent, dieses mal will man das nicht
+Und wir brauchen einen url, auf den geredirected werden kann
+
+Class Based Views Part 2: ListView and FormView
+
+ListView
+- Was tut: der SummariesCreateView (name='Summaries-add')
+- redirected auf den  Summaries-all view
+Dieser weiss das aufgrund der get_absolute_url(self) methode im modell Summaries
+- dies ist ein ListView, welcher in urls.py direkt implementiert ist- 
+
+FormView:
+- Displays a form
+- on error redisplays form with validation errors
+- on success redirects to new url
+* form_class = Taskform
+* success_url
+
+
+Class Based Views Part 3: DetailView and template_name Shortcut
+
+template name shortcut: 
+app/model_detail.html -> ZSIV/templates/Summaries_detail.html
+app/model_list.html    -> ZSIV/templates/Summaries_List.html
+
+
+Understanding get_absolute_url
+https://godjango.com/67-understanding-get_absolute_url/
+
+
+"""
+
+
+
+
 """
 Cooler Mixin, der die formfactory zum reinmixen von widgets erlaubt
 http://stackoverflow.com/questions/16937076/how-does-one-use-a-custom-widget-with-a-generic-updateview-without-having-to-red
@@ -61,6 +128,12 @@ class SummariesCreateView(ModelFormWidgetMixin,CreateView):
 class SummariesUpdateView(UpdateView):
     model = Summaries
     fields = '__all__'
+    widgets = {
+        #'PublicationDate': SelectDateWidget,
+        'SENT' : CheckboxInput,
+#        'Heftnummer' :  Select,
+        'Heftnummer' :  Select,
+    }
     #fields = ['Filename']
 
 class SummariesDeleteView(DeleteView):
@@ -69,17 +142,17 @@ class SummariesDeleteView(DeleteView):
     model = Summaries
 
 
-class SummariesDetailView(ModelFormWidgetMixin,DetailView):
+class SummariesDetailView(DetailView):
     model = Summaries
     template_name = 'ZSIV/summaries_detail.html'
     #template_name = 'ZSIV/Summaries-Detail.html'
     fields = '__all__'
-    widgets = {
-        #'PublicationDate': SelectDateWidget,
-        'SENT' : CheckboxInput,
+    #widgets = {
+    #    #'PublicationDate': SelectDateWidget,
+    #    'SENT' : CheckboxInput,
 #        'Heftnummer' :  Select,
-        'Heftnummer' :  Select,
-    }
+    #    'Heftnummer' :  Select,
+    #}
 
     #def get_object(self):
     #    return get_object_or_404(Summaries, pk=id)
