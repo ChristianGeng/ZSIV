@@ -235,10 +235,11 @@ def Journal_Subscribe_MAs(request,journal_id):
     # linking table
     ma_journal_data = MAJournal.objects.filter(Journal_id=journal_id)
     initialvalues = [x['MA_id'] for x in myjournal.majournal_set.values()]
-    print ('ma_journal_data',ma_journal_data)
-    print ("journal _id", journal_id)
-    print("request method: ; ",request.method)
-    print ("Form Template used; ", formTemplate) 
+    #print ("initialvalues: ", initialvalues)
+    #print ('ma_journal_data',ma_journal_data)
+    #print ("journal _id", journal_id)
+    #print("request method: ; ",request.method)
+    #print ("Form Template used; ", formTemplate) 
     if request.method == 'POST':
         #form = JournalForm(request.POST)
         form = JournalForm(request.POST, initial={'Subscriptions': initialvalues}, instance=myjournal)
@@ -249,6 +250,8 @@ def Journal_Subscribe_MAs(request,journal_id):
             
             #journals = form.cleaned_data.get('journals')
             MA_ids_subscribe = form.data.getlist('Subscriptions') # ids
+            print ("subscriptions ",MA_ids_subscribe )
+            print ("Anzahl subscriptions ",len(MA_ids_subscribe) )
             print ('Substr:' , MA_ids_subscribe)
             ma_journal_data.delete()
             for x in MA_ids_subscribe: ma_journal_data.update_or_create(Journal_id=journal_id, MA_id = x)
@@ -257,6 +260,7 @@ def Journal_Subscribe_MAs(request,journal_id):
             #return render(request, formTemplate, context)
         return HttpResponseRedirect(reverse('ZSIV:indexJournal'))
     else:
+        print ("Form nicht gueltig da alles leer?")
         form = JournalForm(initial={'Subscriptions': initialvalues}, instance=myjournal)
         context = {'form':form}
         return render(request, formTemplate, context)

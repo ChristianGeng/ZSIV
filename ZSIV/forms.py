@@ -10,6 +10,13 @@ DISPLAY_CHOICES = (
 
 
 class JournalForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        """
+        http://www.pydanny.com/overloading-form-fields.html
+        required field muss auf False gesetzt werden, sonst wird die Form ungueltig
+        """
+        super(JournalForm, self).__init__(*args, **kwargs)
+        self.fields['Subscriptions'].required=False
     class Meta:
         model = Journals
         fields = '__all__'
@@ -20,6 +27,13 @@ class JournalForm(ModelForm):
         
         
 class MitarbeiterForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        """
+        http://www.pydanny.com/overloading-form-fields.html
+        """
+        super(MitarbeiterForm, self).__init__(*args, **kwargs)
+        self.fields['Subscriptions'].required=False
+
     class Meta:
         model = Mitarbeiter
         fields = '__all__'

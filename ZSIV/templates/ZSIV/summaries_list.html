@@ -1,0 +1,9 @@
+{% extends "ZSIV/base.html" %}
+{% block content %}
+
+<ul> 
+{% for item in all_summaries %}
+<li><a href="{% url 'ZSIV:Summaries-update' item.id  %}">{{ item.Journal }}, {{item.Jahrgang}} ({{item.Heftnummer}}),Sent: {{item.SENT}} </a></li>
+{% endfor %}
+</ul>
+{% endblock %}
