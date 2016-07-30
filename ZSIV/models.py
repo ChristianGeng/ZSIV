@@ -6,6 +6,13 @@ from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.conf import settings 
 
+def upload_location(filename):
+    #filebase, extension = filename.split(".")
+    #return "%s/%s.%s" %(instance.id, instance.id, extension)
+    #uploadLoc =  "%s/%s" %(instance.id, filename)
+    uploadLoc = filename
+    print ("uploading ", uploadLoc)
+    return  uploadLoc
 
 class Mitarbeiter(models.Model):
     Vorname = models.CharField(max_length=200)
@@ -14,6 +21,8 @@ class Mitarbeiter(models.Model):
     Subscriptions = models.ManyToManyField('Journals', through='MAJournal') 
     def __str__(self):              # __unicode__ on Python 2
         return u'%s %s' % (self.Vorname, self.Nachname)
+
+
 
 class Journals(models.Model):
     Name = models.CharField(max_length=400)
@@ -29,19 +38,11 @@ class MAJournal(models.Model):
     class Meta:
         unique_together = ('MA', 'Journal')
 
-def upload_location(filename):
-    #filebase, extension = filename.split(".")
-    #return "%s/%s.%s" %(instance.id, instance.id, extension)
-    #uploadLoc =  "%s/%s" %(instance.id, filename)
-    uploadLoc = filename
-    print ("uploading ", uploadLoc)
-    return  uploadLoc
-"""
- TODO: Duerfen Heftnummer und Jahrgang leer sein???
-"""
+
+
 class Summaries(models.Model):
-    SENT = models.BooleanField(default=False)
     Journal = models.ForeignKey(Journals)
+    SENT = models.BooleanField(default=False)
     Jahrgang = models.PositiveSmallIntegerField(blank=True, null=True, choices = [(i,i) for i in range(2016,2031)])
     Heftnummer = models.PositiveSmallIntegerField(blank=True, null=True, choices = [(i,i) for i in range(55)])
     Inhaltsverzeichnis = models.FileField(upload_to=settings.MEDIA_ROOT,

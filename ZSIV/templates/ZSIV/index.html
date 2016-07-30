@@ -56,7 +56,7 @@
 </div>
 
 <div class="my_content_container">
-	<a href="{% url 'ZSIV:indexMA' %}"> for Journal </a></li>
+	<a href="{% url 'ZSIV:indexJournal' %}"> for Journal </a></li>
 </div>
 
 
@@ -71,10 +71,17 @@
 </div>
 
 <div class="my_content_container">
-	<a href="{% url 'ZSIV:summaries-index' %}"> Full List </a></li>
+	<a href="{% url 'ZSIV:summaries-index' %}"> All  </a></li>
 </div>
 
-<p> TOCs queued: </p>    
+<div class="my_content_container">
+	<a href="{% url 'ZSIV:summaries-unsent' %}"> Unsent </a></li>
+</div>
+
+<p> Email Queue: </p>    
+<div class="my_content_container">
+	<a href="{% url 'ZSIV:queue' %}"> Queue </a></li>
+</div>
 
 
 

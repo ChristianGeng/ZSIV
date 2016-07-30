@@ -6,7 +6,7 @@ from django.views.generic import TemplateView,  ListView
 
 from ZSIV.views import SummariesCreateView, SummariesUpdateView, SummariesDeleteView, SummariesDetailView
 from ZSIV.views  import TestFormstSetView
-from ZSIV.models import Summaries
+from ZSIV.models import Summaries, Mitarbeiter
 app_name = 'ZSIV'
 
 
@@ -20,7 +20,19 @@ urlpatterns = [
     
     
     
+    
+    # Main Page
     url(r'^$', views.index, name='index'),
+    
+    
+    url(r'^queue$',
+        ListView.as_view(
+                         model = Mitarbeiter,
+                         context_object_name='all_mas',
+                         template_name='ZSIV/queue_list.html',
+                         ),
+        name = 'queue'
+        ),
     
     # Summariey Views
     url(r'^Summaries-all$',
@@ -32,6 +44,19 @@ urlpatterns = [
             template_name='ZSIV/summaries_list.html', # not required, is the default  
             ),
         name='summaries-index'),
+               
+    
+        # Summariey Views
+    url(r'^Summaries-unsent$',
+        ListView.as_view(
+            model=Summaries, 
+            queryset=Summaries.objects.filter(SENT=False).select_related(),
+            context_object_name='all_summaries',
+            #paginate_by = '5',
+            template_name='ZSIV/summaries_list.html', # not required, is the default  
+            ),
+        name='summaries-unsent'),
+               
                
     
     url(r'^Summaries/delete/$', TestFormstSetView.as_view(), name='Summaries-delete-multi'),

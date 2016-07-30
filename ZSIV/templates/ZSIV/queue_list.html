@@ -1,0 +1,14 @@
+{% extends "ZSIV/base.html" %}
+{% block content %}
+<ul> 
+	{% for ma in all_mas %}
+	  <b> <bf> Queue for  {{ma.Vorname}} {{ma.Nachname}}, ({{ma.email}}):   	</b> <br>
+		{% for subscription in ma.Subscriptions.all %}
+		    {% for summary in subscription.summaries_set.values %}   	
+		     {{summary.SENT}},{{subscription.Name}}, {{summary.Jahrgang}}({{summary.Heftnummer}}) <br>
+		    {% endfor %}
+		{% endfor %}
+	{% endfor %}
+
+</ul> 
+{% endblock %}

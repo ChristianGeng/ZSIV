@@ -1,10 +1,6 @@
-
-# Import the model classes we just wrote.
-
-
 import django
+from django.template.defaultfilters import pprint
 django.setup()
-
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
@@ -15,20 +11,12 @@ from ZSIV.forms import JournalForm
 ''' Testing Amitarbeiter '''
 Amitarbeiter = Mitarbeiter.objects.filter(id=1).select_related()
 Amitarbeiter = Mitarbeiter.objects.select_related()
-type(Amitarbeiter)
-Amitarbeiter
 Amitarbeiter = Mitarbeiter.objects.filter(pk=1).select_related()
-type(Amitarbeiter)
-Amitarbeiter
-Amitarbeiter
 Amitarbeiter.select_related().values()
-
 mymitarbeiter = Amitarbeiter[0]
 mymitarbeiter.majournal_set.select_related().values()
 
 
-question = get_object_or_404(Question, pk=1)
-len(question.choice_set.all())
 
 journallist = Journals.objects.select_related()
 journallist = Journals.objects.all()
@@ -91,15 +79,169 @@ reverse('ZSIV:subscribe', args=(mitarbeiter.id,))
 HttpResponseRedirect(reverse('ZSIV:detailMA', args=(mitarbeiter.id,)))
 
 
+notsent = Summaries.objects.filter(SENT=False).select_related(Journal_Name)
 
-question = get_object_or_404(Question, pk=1)
-reverse('ZSIV:results', args=(question.id,))
-HttpResponseRedirect(reverse('ZSIV:results', args=(question.id,)))
-test = HttpResponseRedirect(reverse('ZSIV:results', args=(question.id,)))
-test.items()
+test = MAJournal.objects.all().select_related()
+
+
+dasgeht = Journals.Subscriptions.through.objects.all().select_related()
+Songs.objects.filter(genre__genre='Jazz')
+Summaries.objects.filter()
+nameofforeignkeyHERE__nameofforeignkeyINFOREIGNMODEL
+print (notsent.query.__str__())
+
+SELECT `ZSIV_summaries`.`id`, `ZSIV_summaries`.`SENT`, `ZSIV_summaries`.`Journal_id`, `ZSIV_summaries`.`Jahrgang`, `ZSIV_summaries`.`Heftnummer`, 
+`ZSIV_summaries`.`Inhaltsverzeichnis`, `ZSIV_summaries`.`timestamp`, `ZSIV_summaries`.`updated`, 
+
+`ZSIV_journals`.`id`, `ZSIV_journals`.`Name`, `ZSIV_journals`.`Kurztitel` 
+
+FROM `ZSIV_summaries` INNER JOIN `ZSIV_journals` ON (`ZSIV_summaries`.`Journal_id` = `ZSIV_journals`.`id`) 
+WHERE `ZSIV_summaries`.`SENT` = False
+
+
+Summaries.objects.all()
+test=Journals.objects.all().select_related().prefetch_related('Subscriptions')
+test.query.__str__()
+
+
+
+Summaries.objects.filter(SENT=False,Journal_id=Journals__id)
+ print queryset.query
+
+winner__lucky_draw_id=id
+
 
 id=1
 reverse('ZSIV:Summaries-update', args=(1,))
 reverse('ZSIV:Summaries-detail', kwargs={'pk': 2})
 
 get_object_or_404(Summaries, pk=1) 
+
+Mitarbeiter.Journals.through
+Mitarbeiter.through.objects
+
+
+
+
+from django.db import models
+
+class Blog(models.Model):
+    name = models.CharField(max_length=100)
+    tagline = models.TextField()
+
+    def __str__(self):              # __unicode__ on Python 2
+        return self.name
+
+class Author(models.Model):
+    name = models.CharField(max_length=50)
+    email = models.EmailField()
+
+    def __str__(self):              # __unicode__ on Python 2
+        return self.name
+
+class Entry(models.Model):
+    blog = models.ForeignKey(Blog)
+    headline = models.CharField(max_length=255)
+    body_text = models.TextField()
+    pub_date = models.DateField()
+    mod_date = models.DateField()
+    authors = models.ManyToManyField(Author)
+    n_comments = models.IntegerField()
+    n_pingbacks = models.IntegerField()
+    rating = models.IntegerField()
+
+    def __str__(self):              # __unicode__ on Python 2
+        return self.headline
+    
+    
+
+"""
+im Model Entry:
+blog = models.ForeignKey(Blog)
+>>> b = Blog.objects.get(id=1)
+>>> b.entry_set.all() # Returns all Entry objects related to Blog.
+Summaries Model
+   Journal = models.ForeignKey(Journals)
+   
+"""
+
+q = Journals.objects.get(id=1)
+
+
+"""
+ TODO: Duerfen Heftnummer und Jahrgang leer sein???
+ many to one relationship (nach): 
+ jeder Reporter hat mehrere Artikel geschrieben
+ das wird im Model "Article" als foreign key gehandelt
+ reporter = models.ForeignKey(Reporter, on_delete=models.CASCADE)
+ 
+ 
+ jeder Reporter hat mehrere Artikel geschrieben
+ das wird im Model "Article" als foreign key Reporter gehandelt
+ reporter = models.ForeignKey(Reporter, on_delete=models.CASCADE)
+ 
+ 
+ jedes Journals hat  mehrere Summaries
+ das wird im Model "Summaries" als foreign key Journal gehandelt
+ 
+ 
+"""
+
+
+
+
+
+"""
+ noch nicht verschickte Summaries eines bestimmten Journals holen
+"""
+Summaries.objects.filter(SENT=False, Journal__Name='Wilderei und Unrecht')
+
+"""
+ zu einem noch nicht versandten Summary die Liste der Subscribers holen 
+"""
+q = Summaries.objects.filter(SENT=False)
+mysummary=q[0]
+mysummary.Journal.mitarbeiter_set.all()
+
+
+
+
+"""
+ein mitarbeiter kann mehrere Zeitschriften abonniert haben
+Vin dieser Zeitschrift können meherre zu verschicken sein
+"""
+import pprint
+m = Mitarbeiter.objects.all()
+mym = m[1] # ein Mitarbeiter
+journalNo=2
+summaries2sendforJournalALL = mym.Subscriptions.all()[journalNo].summaries_set.all()
+summaries2sendforJournalUNSENT = mym.Subscriptions.all()[journalNo].summaries_set.filter(SENT=False)
+
+for x in summaries2sendforJournalALL: print(x)
+for x in summaries2sendforJournalUNSENT: print(x)
+
+
+"""
+http://stackoverflow.com/questions/21206319/django-model-relationships-in-views-and-templates?rq=1
+http://stackoverflow.com/questions/5298535/django-traversing-multiple-successive-manytomany-relationships-in-templates-in
+http://stackoverflow.com/questions/5298535/django-traversing-multiple-successive-manytomany-relationships-in-templates-in
+"""
+import pprint
+for ma in Mitarbeiter.objects.all():
+    print("\n",ma.Vorname , ma.Nachname, ma.email)
+    masumm = ma.Subscriptions.filter(summaries__SENT=False).all()
+    for x in masumm: 
+        print (x.summaries_set.filter(SENT=False))
+
+
+"""
+ Vielleicht: 
+ related_name='from_employee'
+ managed_by
+ reverse = false?
+"""
+
+Summaries.objects.filter(SENT=False)
+test = Summaries.objects.filter(SENT=False)
+
+

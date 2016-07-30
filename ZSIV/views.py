@@ -298,7 +298,8 @@ def Journal_Subscribe_MAs(request,journal_id):
             print ("Anzahl subscriptions ",len(MA_ids_subscribe) )
             print ('Substr:' , MA_ids_subscribe)
             ma_journal_data.delete()
-            for x in MA_ids_subscribe: ma_journal_data.update_or_create(Journal_id=journal_id, MA_id = x)
+            for x in MA_ids_subscribe: 
+                ma_journal_data.update_or_create(Journal_id=journal_id, MA_id = x)
             
             context = {'form':form}
             #return render(request, formTemplate, context)

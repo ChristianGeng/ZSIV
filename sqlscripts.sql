@@ -34,10 +34,12 @@ LEFT JOIN  ZSIV_mitarbeiter ma on majo.MA_id=ma.id
 order by ma.Nachname;
 
 -- Versuch die komplette Liste von zu versendeten Artikeln zu generieren
-select su.Journal_id,j.Name,su.Jahrgang,Heftnummer, ma.email, j.Name,j.id , su.SENT from ZSIV_summaries su 
+select ma.*,j.Name,su.Jahrgang,su.Heftnummer, su.SENT  from ZSIV_summaries su 
 INNER JOIN ZSIV_journals j on su.Journal_id=j.id
 RIGHT JOIN ZSIV_majournal majo on j.id=majo.Journal_id
-RIGHT JOIN ZSIV_mitarbeiter ma on majo.MA_id=ma.id;
+RIGHT JOIN ZSIV_mitarbeiter ma on majo.MA_id=ma.id
+WHERE su.SENT=FALSE
+ORDER BY ma.Nachname,su.Jahrgang ;
 
 
 SHOW INDEX FROM ZSIV_summaries;
