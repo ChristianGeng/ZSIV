@@ -15,6 +15,8 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     url(r'^ZSIV/', include('ZSIV.urls')),
@@ -22,8 +24,8 @@ urlpatterns = [
 ]
 
 # aus try django 1.9 , fuer fileupload locations
-from django.conf import settings
-from django.conf.urls.static import static
+
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    

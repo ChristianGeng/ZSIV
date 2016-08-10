@@ -59,6 +59,7 @@ class MAJournalForm(ModelForm):
 
 
 
+
 """
 https://docs.djangoproject.com/en/dev/topics/forms/formsets/#manually-rendered-can-delete-and-can-order
 """
@@ -85,7 +86,7 @@ class SummariesDeleteForm(forms.ModelForm):
         fields = '__all__'
         
         
-        
+SummaryFormSet = inlineformset_factory(Journals,Summaries, extra=0, fields=('Jahrgang','Heftnummer', ))
 
 
 #SummariesDeleteFormSet = inlineformset_factory(SummariesDeleteForm)

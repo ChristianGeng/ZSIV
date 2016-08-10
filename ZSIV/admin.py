@@ -12,7 +12,6 @@ from ZSIV.models import Summaries
 
 
 
-
 class majournalInline(admin.StackedInline):
     model=MAJournal
     extra=1

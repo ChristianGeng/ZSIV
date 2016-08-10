@@ -6,6 +6,40 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 from ZSIV.models import Mitarbeiter, Journals, MAJournal, Summaries
 from ZSIV.forms import JournalForm
+from django.core.mail import EmailMessage
+from django.core import mail
+import numpy as np
+
+data = np.random.randint(10,size=1000)
+
+Summaries.objects.filter(SENT=True).update(SENT=False)
+
+
+
+connection = mail.get_connection()
+print(connection.connection)
+print(connection.host)
+connection.open()
+            
+tmpmail = mail.EmailMessage('subj',
+                            'Hallo Lieber Anwalt',
+                            to=['jedhoo@googlemail.com']
+                            )
+
+# tmpmail.attach('test.pdf',myfilefield) # expected bytes-like object, not FieldFile
+myfilefield  = Summaries.objects.filter(SENT=False,Heftnummer=0).get().Inhaltsverzeichnis
+
+""" attach file example  """
+fn=os.path.join(settings.MEDIA_ROOT,str(myfilefield))
+tmpmail.attach_file(fn)
+
+#tmpmail.attach(filename, content, mimetype)
+ 
+tmpmail.send(fail_silently=False)
+print(tmpmail.attachments)
+connection.close()
+
+
 
 
 ''' Testing Amitarbeiter '''
@@ -243,5 +277,11 @@ for ma in Mitarbeiter.objects.all():
 
 Summaries.objects.filter(SENT=False)
 test = Summaries.objects.filter(SENT=False)
+
+from django.conf import settings
+MEDIA_ROOT = os.path.join(os.path.dirname(settings.BASE_DIR), "media_cdn/")
+
+
+
 
 

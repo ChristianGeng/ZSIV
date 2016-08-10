@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 """
 
 import os
+from django.conf import settings
+
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -31,6 +34,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'django_forms_bootstrap',
     'ZSIV',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -132,30 +136,56 @@ USE_L10N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.9/howto/static-files/
-
-STATIC_URL = '/static/'
-
-
-
-# aus try django 1.9 , fuer fileupload locations
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.9/howto/static-files/
-
-STATIC_URL = '/static/'
-
+"""
+List of directories where "./manage.py collectstatic" 
+will look for files, which it puts all together into STATIC_ROOT. 
+Each app that you have can have it's own "static" files directory.
+"""
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
     #'/var/www/static/',
 ]
 
-STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static_cdn")
+REPOSITORY_ROOT = os.path.dirname(BASE_DIR)
 
-MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "media_cdn")
+
+""" URL that your STATIC files will be accessible through the browser."""
+STATIC_URL = '/static/' 
+
+"""  Physical system path where the static files are stored."""
+STATIC_ROOT = os.path.join(REPOSITORY_ROOT, 'static/') 
+
+"""  URL that your MEDIA files will be accessible through the browser."""
+MEDIA_URL = '/mysite_MYSQL/ZSIV/uploads/'
+
+"""Physical system path where the static files are stored. Files that are being uploaded by the user."""
+MEDIA_ROOT = os.path.join(REPOSITORY_ROOT, 'mysite_MYSQL/ZSIV/uploads')
+
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+#EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+#EMAIL_FILE_PATH = '/tmp/ZSIV-messages' # change this to a proper location
+
+
+"""
+http://stackoverflow.com/questions/6367014/how-to-send-email-via-django
+Sichere Apps erlauben?
+https://support.google.com/accounts/answer/6010255
+security: http://stackoverflow.com/questions/12461484/is-it-secure-to-store-passwords-as-environment-variables-rather-than-as-plain-t
+os.environ['CCGPWD'] 
+
+"""
+
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_HOST_USER = 'macKenzie4'
+EMAIL_HOST_PASSWORD = 'billslater4'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'jedhoo@web.de'
+
 
 
 

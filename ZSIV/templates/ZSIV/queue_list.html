@@ -1,14 +1,40 @@
 {% extends "ZSIV/base.html" %}
+
 {% block content %}
+
+<form action="{% url "ZSIV:queue" %}" method='post' enctype="multipart/form-data">
+  {% csrf_token %}
+
+
 <ul> 
-	{% for ma in all_mas %}
-	  <b> <bf> Queue for  {{ma.Vorname}} {{ma.Nachname}}, ({{ma.email}}):   	</b> <br>
-		{% for subscription in ma.Subscriptions.all %}
-		    {% for summary in subscription.summaries_set.values %}   	
-		     {{summary.SENT}},{{subscription.Name}}, {{summary.Jahrgang}}({{summary.Heftnummer}}) <br>
+
+
+	<b>Emails left to be sent:</b>  <br>
+
+		{% for email in emails %}
+		<b>Attachments to {{email.recipients.0}}</b> <br>
+		    {% for attachment in email.attachments %}
+    		{{attachment.0}} <br>
 		    {% endfor %}
 		{% endfor %}
-	{% endfor %}
+
+		<br>
+		<br>
+
+		<b> All Objects - including unsent ones  </b>  <br>
+		{% for ma in object_list %}
+
+	  <b> <bf> Queue for  {{ma.Vorname}} {{ma.Nachname}}, ({{ma.email}}):   	</b> <br>
+		{% for subscription in ma.Subscriptions.all %}
+		{% for summary in subscription.summaries_set.values %}   	
+		{{summary.SENT}},{{subscription.Name}}, {{summary.Jahrgang}}({{summary.Heftnummer}}) <br>
+		{% endfor %}
+		{% endfor %}
+		{% endfor %}
 
 </ul> 
+<input type="submit" value="send now" />
+
+</form>
+
 {% endblock %}

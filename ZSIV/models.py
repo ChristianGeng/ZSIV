@@ -4,15 +4,11 @@ import datetime
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
-from django.conf import settings 
 
-def upload_location(filename):
-    #filebase, extension = filename.split(".")
-    #return "%s/%s.%s" %(instance.id, instance.id, extension)
-    #uploadLoc =  "%s/%s" %(instance.id, filename)
-    uploadLoc = filename
-    print ("uploading ", uploadLoc)
-    return  uploadLoc
+import uuid
+import os
+
+
 
 class Mitarbeiter(models.Model):
     Vorname = models.CharField(max_length=200)
@@ -38,6 +34,35 @@ class MAJournal(models.Model):
     class Meta:
         unique_together = ('MA', 'Journal')
 
+def upload_location(filename):
+    #filebase, extension = filename.split(".")
+    #return "%s/%s.%s" %(instance.id, instance.id, extension)
+    #uploadLoc =  "%s/%s" %(instance.id, filename)
+    #uploadLoc = filename
+    ext = filename.split('.')[-1]
+    uploadLoc = "%s.%s" % (uuid.uuid4(), ext)
+    
+    print ("uploading ", uploadLoc)
+    return  uploadLoc
+
+from django.conf import settings
+
+def content_file_name(instance, filename):
+#fn =  '/'.join(['content', instance.user.username, filename])
+    ext = filename.split('.')[-1]
+    # str(uuid.uuid4())
+    #uploadLoc = "%s.%s" % (uuid.uuid4(), ext)
+    journalname=instance.Journal.Name.replace(' ', '_')
+    hn=str(instance.Heftnummer)
+    jg=str(instance.Jahrgang)
+    fn = '_'.join([journalname,jg,hn,str(uuid.uuid4())])+'.'+ext
+    #uploadLoc = os.path.join(settings.MEDIA_ROOT,fn)
+    uploadLoc=fn
+    print("uploadLoc:" , uploadLoc)
+    #print("fn:", fn)
+    return uploadLoc
+
+#upload_to=settings.MEDIA_ROOT
 
 
 class Summaries(models.Model):
@@ -45,7 +70,8 @@ class Summaries(models.Model):
     SENT = models.BooleanField(default=False)
     Jahrgang = models.PositiveSmallIntegerField(blank=True, null=True, choices = [(i,i) for i in range(2016,2031)])
     Heftnummer = models.PositiveSmallIntegerField(blank=True, null=True, choices = [(i,i) for i in range(55)])
-    Inhaltsverzeichnis = models.FileField(upload_to=settings.MEDIA_ROOT,
+    #file = models.FileField(upload_to=content_file_name)
+    Inhaltsverzeichnis = models.FileField(upload_to=content_file_name,
                           blank=False, 
                           default=False
                           )

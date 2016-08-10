@@ -5,7 +5,10 @@ from .models import Summaries
 from django.views.generic import TemplateView,  ListView
 
 from ZSIV.views import SummariesCreateView, SummariesUpdateView, SummariesDeleteView, SummariesDetailView
+from ZSIV.views import MAJViewIndex
 from ZSIV.views  import TestFormstSetView
+from ZSIV.views  import Queuelistview
+from ZSIV.views  import JournalCreateView
 from ZSIV.models import Summaries, Mitarbeiter
 app_name = 'ZSIV'
 
@@ -23,12 +26,13 @@ urlpatterns = [
     
     # Main Page
     url(r'^$', views.index, name='index'),
-    
+
+    #url(r'^ttt$', MAJViewIndex.as_view(), name='MAview_index'),
+    url(r'^ttt/$', views.JournalCreateView.as_view(), name='add_journal_and_summaries'),
     
     url(r'^queue$',
-        ListView.as_view(
+        Queuelistview.as_view(
                          model = Mitarbeiter,
-                         context_object_name='all_mas',
                          template_name='ZSIV/queue_list.html',
                          ),
         name = 'queue'

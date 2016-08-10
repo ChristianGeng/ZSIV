@@ -23,7 +23,7 @@ sudo service mysql restart
 
 -- Abfragen
 
-SHOW TABLES LIKE 'Z%';
+SHOW TABLES LIKE 'ZSIV%';
 SHOW TABLES;
 
 -- Joins for Subscriptions
@@ -42,6 +42,12 @@ WHERE su.SENT=FALSE
 ORDER BY ma.Nachname,su.Jahrgang ;
 
 
+select ma.*,j.Name,su.Jahrgang,su.Heftnummer, su.SENT  from ZSIV_summaries su 
+INNER JOIN ZSIV_journals j on su.Journal_id=j.id
+RIGHT JOIN ZSIV_majournal majo on j.id=majo.Journal_id
+RIGHT JOIN ZSIV_mitarbeiter ma on majo.MA_id=ma.id;
+
+
 SHOW INDEX FROM ZSIV_summaries;
 
 desc ZSIV_majournal;
@@ -49,11 +55,13 @@ desc  ZSIV_journals;
 desc ZSIV_mitarbeiter; 
 desc ZSIV_summaries; 
 
+
+select id, Journal_id, Jahrgang, Heftnummer, SENT FROM ZSIV_summaries;
 select * from ZSIV_journals;
 select * from ZSIV_mitarbeiter;
 select * from ZSIV_majournal;
 select * from ZSIV_majournal WHERE Journal_id=4;
-select SENT, Journal_id, Jahrgang, Heftnummer from ZSIV_summaries;
+select SENT, Journal_id, Jahrgang, Heftnummer,Inhaltsverzeichnis from ZSIV_summaries;
 
 
 -- subscriptions for Bernd Brachial
