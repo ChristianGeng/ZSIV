@@ -1,0 +1,10 @@
+
+
+{% block base_content %}
+<form action="." method="post">
+	{{ formset.management_form }}
+  {% csrf_token %}
+  {{ form }}
+
+</form>
+{% endblock base_content %}
