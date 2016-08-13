@@ -1,0 +1,15 @@
+
+{% load staticfiles %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'ZSIV/style.css' %}" />
+
+{% if list_to_view %}
+    <ul>
+    {% for ma in list_to_view %}
+    <li><a href="{% url 'ZSIV:MitarbeiterSubscribe' ma.id %}"> {{ ma.Vorname }} {{ ma.Nachname }}, {{ ma.email }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>Keine Daten!</p>
+{% endif %}
+

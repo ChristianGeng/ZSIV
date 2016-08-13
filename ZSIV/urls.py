@@ -2,14 +2,13 @@ from django.conf.urls import url
 from . import views
 from ZSIV.views import SummariesDetailView, DetailView
 from .models import Summaries
-from django.views.generic import TemplateView,  ListView
+from django.views.generic import ListView
 
-from ZSIV.views import SummariesCreateView, SummariesUpdateView, SummariesDeleteView, SummariesDetailView
-from ZSIV.views import MAJViewIndex
+from ZSIV.views import SummariesCreateView, SummariesUpdateView, SummariesDeleteView
 from ZSIV.views  import TestFormstSetView
 from ZSIV.views  import Queuelistview
 from ZSIV.views  import JournalCreateView
-from ZSIV.models import Summaries, Mitarbeiter
+from ZSIV.models import Mitarbeiter
 app_name = 'ZSIV'
 
 

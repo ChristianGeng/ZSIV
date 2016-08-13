@@ -1,0 +1,11 @@
+
+Nix kommt :-(
+
+<form method="post" action="">
+  {% csrf_token %}
+  {{ formset.management_form }}
+  {% for form in formset %}
+	<li>   {{ form }} 	</li>
+  {% endfor %}
+  <input type="submit" value="submit" />
+</form>

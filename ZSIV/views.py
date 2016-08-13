@@ -437,7 +437,7 @@ class TestFormstSetView(SortableListMixin,SearchableListMixin,ModelFormSetView):
     """
     model = Summaries
     form_class = SummariesDeleteForm
-    template_name = 'ZSIV/summaries_deltest.html'
+    template_name = 'ZSIV/summaries_multidelete.html'
     delete = fields.BooleanField(required=False)
     fields = ["SENT","Journal","Jahrgang","Heftnummer"]
     print ()
@@ -475,7 +475,7 @@ https://godjango.com/35-upload-files/
 class SummariesCreateView(ModelFormWidgetMixin,CreateView):
     model = Summaries
     fields = '__all__'
-    template_name = 'ZSIV/Summaries-create.html'
+    #template_name = 'ZSIV/Summaries-create.html'
     widgets = {
         'SENT' : CheckboxInput,
         'Heftnummer' :  Select,
@@ -516,14 +516,14 @@ class SummariesDetailView(DetailView):
 
 
 class indexViewJournals(generic.ListView):
-    template_name='ZSIV/indexJournal.html'
+    #template_name='ZSIV/indexJournal.html'
     context_object_name = 'list_to_view'
     def get_queryset(self):
         return Journals.objects.filter().order_by('Name')
 
 
 class indexViewMA(generic.ListView):
-    template_name = 'ZSIV/indexMA.html'
+    #template_name = 'ZSIV/indexMA.html' # renamed to default named mitarbeiter_list.html
     context_object_name = 'list_to_view'
     def get_queryset(self):
         return Mitarbeiter.objects.filter().order_by('Nachname')
