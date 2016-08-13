@@ -1,7 +1,6 @@
 
-{% load staticfiles %}
-
-<link rel="stylesheet" type="text/css" href="{% static 'ZSIV/style.css' %}" />
+{% extends "ZSIV/base.html" %}
+{% block content %}
 
 {% if list_to_view %}
 <ul>
@@ -12,3 +11,4 @@
 {% else %}
 <p>Keine Daten!</p>
 {% endif %}
+{% endblock %}

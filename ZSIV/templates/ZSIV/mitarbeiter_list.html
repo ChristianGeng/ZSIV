@@ -1,8 +1,6 @@
+{% extends "ZSIV/base.html" %}
 
-{% load staticfiles %}
-
-<link rel="stylesheet" type="text/css" href="{% static 'ZSIV/style.css' %}" />
-
+{% block content %}
 {% if list_to_view %}
     <ul>
     {% for ma in list_to_view %}
@@ -12,4 +10,4 @@
 {% else %}
     <p>Keine Daten!</p>
 {% endif %}
-
+{% endblock %}
