@@ -1,14 +1,7 @@
 from django import forms
-from .models import Journals, Summaries, MAJournal, Mitarbeiter
+from .models import Journals, Summaries, Mitarbeiter
 from django.forms import ModelForm
 from django.forms.models import inlineformset_factory
-
-DISPLAY_CHOICES = (
-    ("locationbox", "Display Location"),
-    ("displaybox", "Display Direction")
-)
-
-
 
 class JournalForm(ModelForm):
     def __init__(self, *args, **kwargs):
@@ -43,16 +36,10 @@ class MitarbeiterForm(ModelForm):
             'Subscriptions': forms.CheckboxSelectMultiple,
         }
 
-class SummariesForm(ModelForm):
-    class Meta:
-        model = Summaries
-        fields = '__all__'
+
         
         
-class MAJournalForm(ModelForm):
-    class Meta:
-        model = MAJournal
-        fields = '__all__'
+
 
 
 

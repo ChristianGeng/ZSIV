@@ -3,9 +3,10 @@ from . import views
 from .models import Summaries
 from django.views.generic import ListView
 from ZSIV.views import SummariesCreateView, SummariesUpdateView
-from ZSIV.views import SummariesDeleteView # TODO: Implement!
+#from ZSIV.views import SummariesDeleteView # TODO: Implement!
 from ZSIV.views  import TestFormstSetView
 from ZSIV.views  import Queuelistview
+from ZSIV.views  import  JournalCreateView
 from ZSIV.models import Mitarbeiter
 
 
@@ -75,6 +76,6 @@ urlpatterns = [
     # (5) Versuche     
     # Ersetzen der Grunddaten (der admin-site)
     # Versuch, mehrere Journals hinzufuegen - defunct 
-    url(r'^ttt/$', views.JournalCreateView.as_view(), name='add_journal_and_summaries'),
+    url(r'^ttt/$', JournalCreateView.as_view(), name='add_journal_and_summaries'),
     
 ]

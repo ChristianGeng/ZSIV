@@ -1,47 +1,40 @@
+
+
 from .models import Journals
 from .models import MAJournal
 from .models import Mitarbeiter
 from .models import Summaries
+
 #from .forms import SummariesDeleteFormSet, 
 from .forms import SummariesDeleteForm
-#from .models import Choice, Question
-from django.template import RequestContext
-#from django.template import loader
-from django.shortcuts import render_to_response
-from django.shortcuts import render
-from django.shortcuts import get_object_or_404, render
-from django.http import HttpResponseRedirect, HttpResponse
-from django.core.urlresolvers import reverse
-from django.views import generic
-from django.utils import timezone
-from django.utils import timezone
-from django.template.context_processors import request
 from .forms import JournalForm
-from ZSIV.forms import SummariesForm, MAJournalForm, MitarbeiterForm
-from django.forms import inlineformset_factory
-from django.forms.models import modelformset_factory
-from django.forms import modelformset_factory, modelform_factory
-from django.forms.formsets import formset_factory
-from django.views.generic import ListView, DetailView
-from django.forms.widgets import CheckboxInput, SelectMultiple, Select,\
-    TextInput, Textarea
-from django.forms.extras.widgets import SelectDateWidget
-from django import forms
-from django.views.generic.edit import CreateView, UpdateView, DeleteView,\
-    FormView
-from django.core.urlresolvers import reverse_lazy
+from ZSIV.forms import MitarbeiterForm
+from django.forms import modelformset_factory
+from django.forms.widgets import CheckboxInput, Select
 from django.forms.models import modelform_factory
-from django.core import mail
-from extra_views import FormSetView, ModelFormSetView
-from django.conf import settings
 from django.forms import fields
+
+
+from django.shortcuts import render_to_response
+from django.shortcuts import  render
+from django.shortcuts import redirect
+from django.http import HttpResponseRedirect
+from django.core.urlresolvers import reverse
+from django.core import mail
+from django.conf import settings
+
+
+from django.views import generic
+from django.views.generic import ListView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from extra_views import ModelFormSetView
 from extra_views import SearchableListMixin
 from extra_views import SortableListMixin
-from django.forms.widgets import HiddenInput
 from django.views.generic.base import  TemplateResponseMixin, View
-from django.shortcuts import redirect
-from django.core import mail
+
 import os
+
+
 
 """
 
@@ -260,27 +253,27 @@ class SummariesDeleteView(DeleteView):
 
 
 
-
+from django.forms.widgets import HiddenInput
 class TestFormstSetView(SortableListMixin,SearchableListMixin,ModelFormSetView):
     """
     Funktionierender MultiDeleteView
     extra views: 
     https://github.com/AndrewIngram/django-extra-views
     http://stackoverflow.com/questions/21105552/django-extra-views-and-sortablelistmixin-configuration-confusion
+    
     """
     model = Summaries
     form_class = SummariesDeleteForm
     template_name = 'ZSIV/summaries_multidelete.html'
     delete = fields.BooleanField(required=False)
     fields = ["SENT","Journal","Jahrgang","Heftnummer"]
-    print ()
     
     search_fields = ['SENT', 'Jahrgang']
     sort_fields_aliases = [('SENT', 'by_SENT'), ('id', 'by_id'), ]
     extra=0
     
     widgets = {
-        'Heftnummer' :  Select(attrs={'disabled': 'disabled'}),
+        'Heftnummer' : Select(attrs={'disabled': 'disabled'}),
         'Jahrgang'   : Select(attrs={'disabled': 'disabled'}),
     }
     
@@ -374,16 +367,9 @@ class Queuelistview(ListView):
                              [ma.email]
                             )
                 for idxsub, subsc in enumerate(subscriptions): # loop durch die JournalSubscriptions eines Mitarbeiters
-                    #print (idxsub, subsc)
                     for summary in iter(subsc.summaries_set.iterator()): 
-                        jn=str(summary.Journal).replace(' ','_')
-                        hn=str(summary.Heftnummer)
-                        jg=str(summary.Jahrgang)
-                        ext = str(summary.Inhaltsverzeichnis).split('.')[-1]
-                        attach_string = '_'.join([jn,jg,hn])+'.'+ext
                         fn=os.path.join(settings.MEDIA_ROOT,str(summary.Inhaltsverzeichnis))
                         tmpmail.attach_file(fn)
-                        #tmpmail.attach(attach_string, summary.Inhaltsverzeichnis) #  mime type can be guessed "application/pdf"
                         print ("attaching file ", fn)
                 
                 print ("\n\nMITARBEITER NO ", idxma, " EMAIL: ",  ma.email)
