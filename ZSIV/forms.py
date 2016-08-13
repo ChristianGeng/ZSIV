@@ -85,8 +85,6 @@ class SummariesDeleteForm(forms.ModelForm):
         model = Summaries
         fields = '__all__'
         
-        
+
+"""  Versuch eines Journal Multidelete views mittels inlineformset """        
 SummaryFormSet = inlineformset_factory(Journals,Summaries, extra=0, fields=('Jahrgang','Heftnummer', ))
-
-
-#SummariesDeleteFormSet = inlineformset_factory(SummariesDeleteForm)
