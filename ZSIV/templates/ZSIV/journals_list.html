@@ -1,7 +1,8 @@
-
 {% extends "ZSIV/base.html" %}
 {% block content %}
-
+<div class="row">
+<div class="col-md-12">
+<h3>Subscriptions <small>Journals</small></h3>
 {% if list_to_view %}
 <ul>
   {% for journal in list_to_view %}
@@ -11,4 +12,6 @@
 {% else %}
 <p>Keine Daten!</p>
 {% endif %}
+</div>
+</div>
 {% endblock %}

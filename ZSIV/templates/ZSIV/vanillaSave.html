@@ -1,10 +1,20 @@
 {% extends "ZSIV/base.html" %}
 {% block content %}
 
+<div class="row">
+<div class="col-md-12">
+<h3>Subscriptions <small>Persons</small></h3>
+<div class="panel panel-default">
+<div class="panel-heading"><h3 class="panel-title">Edit Subsrciptions</h3></div>
+<div class="panel-body">
 <form method='post'>
   {% csrf_token %}
   {{ form.as_p }}
-  <input type='submit' value='save'>
+  <!--<input type='submit' value='save'>-->
+  <button type="submit" class="btn btn-primary">Save</button>
 </form>
-
+</div>
+</div>
+</div>
+</div>
 {% endblock %}

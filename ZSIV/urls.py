@@ -1,3 +1,5 @@
+# http://getbootstrap.com/components/#breadcrumbs
+
 from django.conf.urls import url
 from . import views
 from .models import Summaries
