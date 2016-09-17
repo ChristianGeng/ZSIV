@@ -59,9 +59,19 @@ desc ZSIV_summaries;
 select id, Journal_id, Jahrgang, Heftnummer, SENT FROM ZSIV_summaries;
 select * from ZSIV_journals;
 select * from ZSIV_mitarbeiter;
+
+
+DELETE FROM ZSIV_messagetext  WHERE id=1;
+select * from ZSIV_messagetext;
+
+
 select * from ZSIV_majournal;
 select * from ZSIV_majournal WHERE Journal_id=4;
 select id,SENT, Journal_id, Jahrgang, Heftnummer,Inhaltsverzeichnis from ZSIV_summaries;
+
+
+
+
 
 
 -- subscriptions for Bernd Brachial

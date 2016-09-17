@@ -1,7 +1,19 @@
 from django import forms
-from .models import Journals, Summaries, Mitarbeiter
+from .models import Journals, Summaries, Mitarbeiter, MessageText
 from django.forms import ModelForm
 from django.forms.models import inlineformset_factory
+
+
+class MessageTextForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(MessageTextForm,self).__init__(*args, **kwargs)
+    class Meta:
+        model=MessageText
+        fields='__all__'
+        
+        
+    
+
 
 class JournalForm(ModelForm):
     def __init__(self, *args, **kwargs):

@@ -4,13 +4,16 @@ from .models import Journals
 from .models import MAJournal
 from .models import Mitarbeiter
 from .models import Summaries
+from .models import MessageText
 
 #from .forms import SummariesDeleteFormSet, 
 from .forms import SummariesDeleteForm
 from .forms import JournalForm
+from .forms import MessageTextForm
+from django.views.generic.edit import FormView
 from ZSIV.forms import MitarbeiterForm
 from django.forms import modelformset_factory
-from django.forms.widgets import CheckboxInput, Select
+from django.forms.widgets import CheckboxInput, Select, Textarea, TextInput
 from django.forms.models import modelform_factory
 from django.forms import fields
 
@@ -97,6 +100,7 @@ https://godjango.com/67-understanding-get_absolute_url/
 """
 
 
+    
 
 """ (1) Main Page """
 def index(request):
@@ -253,6 +257,8 @@ class SummariesDeleteView(DeleteView):
 
 
 
+ 
+ 
 from django.forms.widgets import HiddenInput
 class TestFormstSetView(SortableListMixin,SearchableListMixin,ModelFormSetView):
     """
@@ -282,8 +288,59 @@ class TestFormstSetView(SortableListMixin,SearchableListMixin,ModelFormSetView):
 """ 
    
 """
- (4) Queue and send!
+ (4) Queue and send, und der Email Text 
 """
+
+class MessageTextView(FormView):
+    form_class = MessageTextForm
+    model = MessageText
+    template_name = 'ZSIV/MessageText.html'
+# geht nicht: 
+#    widgets = {
+#        'text' : Textarea(attrs={'size' : '1'}), # TextField 'cols': '40', 'rows': '10'
+#        'subject'   : Textarea(attrs={'cols': '4', 'rows': '10'}), # CharField
+#    }
+    
+    
+    def get_initial(self):
+        """ 
+        http://stackoverflow.com/questions/19479064/how-to-set-form-field-value-django
+        """
+        mt  = MessageText.load()
+        return {'text': mt.text, 'subject' : mt.subject }
+    
+    
+    def dispatch(self, request, *args, **kwargs):
+        """
+        see https://godjango.com/69-the-class-based-view/
+        - Wann imemr asview benutzt wird, wird die dispatch Methode des Class based views aufgerufen
+        - inspiziert was die request methode ist
+        
+        """
+        #print (request.method)
+        #print (self.http_method_names)
+        #print (self._allowed_methods())
+        return super(MessageTextView, self).dispatch(request, *args, **kwargs)
+    
+    def get_success_url(self):
+        return reverse('ZSIV:MessageText')
+    
+    def get_queryset(self):
+        """
+        get_queryset ist die erste Methode die aufgerufen wird.
+        darum wird die liste emails auch hier generiert 
+        andere Methoden koennen die Liste dann so bekommen: 
+        self.object_list = self.get_queryset() #  generiert emails mit: self.emails
+        die Emaillistte soll überall zur Verfügung stehen, deswegen wird die nachher ungut umkopiert. 
+        http://stackoverflow.com/questions/23402047/how-to-combine-two-querysets-when-defining-choices-in-a-modelmultiplechoicefield
+        http://stackoverflow.com/questions/5629702/django-queryset-join-across-four-tables-including-manytomany
+        """
+        qs = super(MessageTextView,self).get_queryset()
+        return qs
+
+    def form_valid(self, form):
+            form.save(commit = True)
+            return super(MessageTextView, self).form_valid(form)
 
 
 
@@ -336,7 +393,8 @@ class Queuelistview(ListView):
         context['emails']=self.emails # muss man die Mails zum Kontext hinzufügen??
         return context
     
-    
+
+        
     def get_queryset(self):
         """
         get_queryset ist die erste Methode die aufgerufen wird.
@@ -347,6 +405,10 @@ class Queuelistview(ListView):
         http://stackoverflow.com/questions/23402047/how-to-combine-two-querysets-when-defining-choices-in-a-modelmultiplechoicefield
         http://stackoverflow.com/questions/5629702/django-queryset-join-across-four-tables-including-manytomany
         """
+        
+        # load email text and subject
+        mt  = MessageText.load()
+        
         qs = super(Queuelistview,self).get_queryset()
         print ("modify qs when you want to contain only people with querysets!")
         mas = Mitarbeiter.objects.all()
@@ -360,9 +422,11 @@ class Queuelistview(ListView):
                 self.emails.append('')
                 print ("\n no emails left for ", ma)
             else:
+                                
+                
                 tmpmail = mail.EmailMessage(
-                            'Inhaltsverzeichnise Zeitschriften',
-                            'Hallo Lieber Anwalt, da haste, Schüss von Frau Winkelmann',
+                            mt.subject,
+                            mt.text,
                              settings.DEFAULT_FROM_EMAIL,
                              [ma.email]
                             )

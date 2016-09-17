@@ -7,6 +7,7 @@ from django.views.generic import ListView
 from ZSIV.views import SummariesCreateView, SummariesUpdateView
 #from ZSIV.views import SummariesDeleteView # TODO: Implement!
 from ZSIV.views  import TestFormstSetView
+from ZSIV.views import MessageTextView
 from ZSIV.views  import Queuelistview
 from ZSIV.views  import  JournalCreateView
 from ZSIV.models import Mitarbeiter
@@ -18,11 +19,14 @@ app_name = 'ZSIV'
     # (1) Main Page
     # (2) Manage Subscriptions
     # (3) Manage Summaries
-    # (4) Queue and send
+    # (4) Queue and send,  email Text
     # (5) Versuche 
 """
 
 urlpatterns = [
+               
+               
+
     
     # (1) Main Page, static so far
     url(r'^$', views.index, name='index'),
@@ -64,7 +68,10 @@ urlpatterns = [
     
     
     
-    # (4) Queue and send
+    # (4) Queue and send,  EmailText 
+
+    url(r'^MessageText$', MessageTextView.as_view(), name='MessageText'),
+    
     url(r'^queue$',
         Queuelistview.as_view(
                          model = Mitarbeiter,
