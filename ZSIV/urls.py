@@ -11,7 +11,7 @@ from ZSIV.views import MessageTextView
 from ZSIV.views  import Queuelistview
 from ZSIV.views  import  JournalCreateView
 from ZSIV.models import Mitarbeiter
-
+from ZSIV.views  import UserFormView
 
 app_name = 'ZSIV'
 
@@ -29,7 +29,7 @@ urlpatterns = [
 
     
     # (1) Main Page, static so far
-    url(r'^$', views.index, name='index'),
+    url(r'^$', views.index, name='index'), # http://localhost:8000/ZSIV/
 
     # (2) Manage Subscriptions / jeweils ein Listview und ein View, der die Subscriptions managt
     url(r'^Mitarbeiter.html$', views.indexViewMA.as_view(), name='indexMA'), #http://localhost:8000/ZSIV/Mitarbeiter.html
@@ -82,7 +82,13 @@ urlpatterns = [
     
     
     
-    # (5) Versuche     
+    # (5) Benutzer registrieren
+    # Django Tutorial for Beginners - 34 - User Registration https://www.youtube.com/watch?v=3UEY0ZIQ9dU
+    
+    
+    url(r'^register/$', UserFormView.as_view(), name='register'),
+    
+    # (6) Versuche     
     # Ersetzen der Grunddaten (der admin-site)
     # Versuch, mehrere Journals hinzufuegen - defunct 
     url(r'^ttt/$', JournalCreateView.as_view(), name='add_journal_and_summaries'),

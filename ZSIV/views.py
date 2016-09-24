@@ -20,8 +20,7 @@ from django.forms import fields
 
 
 from django.shortcuts import render_to_response
-from django.shortcuts import  render
-from django.shortcuts import redirect
+from django.shortcuts import  render, redirect
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.core import mail
@@ -30,11 +29,15 @@ from django.conf import settings
 
 from django.views import generic
 from django.views.generic import ListView
+
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from extra_views import ModelFormSetView
 from extra_views import SearchableListMixin
 from extra_views import SortableListMixin
 from django.views.generic.base import  TemplateResponseMixin, View
+# two ways to import: from django.views.generic import View
+
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 import os
 
@@ -104,7 +107,7 @@ https://godjango.com/67-understanding-get_absolute_url/
     
 
 """ (1) Main Page """
-def index(request):
+def index(request, LoginRequiredMixin):
     return render_to_response('ZSIV/index.html')
 
 
@@ -496,10 +499,40 @@ class Queuelistview(ListView):
 
 
 
-# 5) User registration
+# 5) registration / auth
 """ user registration """
+from django.contrib.auth import authenticate, login
+from .forms import UserForm
 
+class UserFormView(View):
+    form_class = UserForm
+    template_name = 'ZSIV/registration_form.html'
 
+    # display blank form (neuer user kommt zum account, soll er dürfen)
+    def get(self,request):
+        form = self.form_class(None)
+        return render(request, self.template_name,{'form' : form})
+    
+    def post(self,request):
+        form = self.form_class(request.POST) # die post data sind schon validiert
+        if form.is_valid():
+            user = form.save(commit=False) # eine Objekt aus der form erzeugen, noch nicht in die DB speichern 
+            # cleaned / normalized data 
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user.set_password(password)
+            user.save()
+            # returns User objects if credentials are correct
+            user = authenticate(username=username, password=password)
+            
+            if user is not None:
+                if user.is_active:
+                    login(request, user)
+                    return redirect('ZSIV:index')
+            
+        return render(request, self.template_name,{'form' : form})
+            
+            
 # 6) Experimental : Formset-Mixins udn so 
 
 
