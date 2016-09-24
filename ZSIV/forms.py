@@ -4,6 +4,18 @@ from django.forms import ModelForm
 from django.forms.models import inlineformset_factory
 
 
+
+
+""" user registration """
+from django.contrib.auth.models import User
+class UserForm(ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput)
+    class Meta: # information about my class
+        model = User
+        fields = ['username','email','password']
+        
+
+""" Die Email editieren """
 class MessageTextForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(MessageTextForm,self).__init__(*args, **kwargs)

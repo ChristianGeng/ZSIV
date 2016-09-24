@@ -1,4 +1,5 @@
 
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Journals
 from .models import MAJournal
@@ -495,7 +496,11 @@ class Queuelistview(ListView):
 
 
 
-# 5) Experimental : Formset-Mixins udn so 
+# 5) User registration
+""" user registration """
+
+
+# 6) Experimental : Formset-Mixins udn so 
 
 
 # Formset Example

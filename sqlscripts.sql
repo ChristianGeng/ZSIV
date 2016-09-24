@@ -61,7 +61,7 @@ select * from ZSIV_journals;
 select * from ZSIV_mitarbeiter;
 
 
-DELETE FROM ZSIV_messagetext  WHERE id=1;
+DELETE FROM ZSIV_messagetext;
 select * from ZSIV_messagetext;
 
 
@@ -72,10 +72,25 @@ select id,SENT, Journal_id, Jahrgang, Heftnummer,Inhaltsverzeichnis from ZSIV_su
 
 
 
+select * from ZSIV_messagetext;
 
 
 -- subscriptions for Bernd Brachial
 select * from ZSIV_majournal WHERE MA_id=2;
+
+
+
+
+SHOW TABLES LIKE 'au%';
+SHOW TABLES;
+
+select * from auth_group;
+select * from  auth_group_permissions;
+select * from auth_permission;
+select * from auth_user;
+select * from auth_user_groups;
+select * from  auth_user_user_permissions;
+
 
 
 
