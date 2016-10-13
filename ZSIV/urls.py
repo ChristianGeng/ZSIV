@@ -1,6 +1,6 @@
 # http://getbootstrap.com/components/#breadcrumbs
 
-from django.conf.urls import url
+from django.conf.urls import include, url
 from . import views
 from .models import Summaries
 from django.views.generic import ListView
@@ -83,10 +83,10 @@ urlpatterns = [
     
     
     # (5) Benutzer registrieren
-    # Django Tutorial for Beginners - 34 - User Registration https://www.youtube.com/watch?v=3UEY0ZIQ9dU
+    # url(r'^register/$', UserFormView.as_view(), name='register'),
+    # nicht hier notwendig, das ist im sitewisen urls.py
     
-    
-    url(r'^register/$', UserFormView.as_view(), name='register'),
+
     
     # (6) Versuche     
     # Ersetzen der Grunddaten (der admin-site)

@@ -101,13 +101,23 @@ Class Based Views Part 3: DetailView and template_name Shortcut
 Understanding get_absolute_url
 https://godjango.com/67-understanding-get_absolute_url/
 
+
+
+
+Registration
+# Django Tutorial for Beginners - 34 - User Registration https://www.youtube.com/watch?v=3UEY0ZIQ9dU
+# https://docs.djangoproject.com/en/1.10/topics/auth/default/#auth-web-requests #
+# https://django-registration-redux.readthedocs.io/en/latest/quickstart.html
+
+
+
 """
 
 
     
 
 """ (1) Main Page """
-def index(request, LoginRequiredMixin):
+def index(request):
     return render_to_response('ZSIV/index.html')
 
 
@@ -125,6 +135,9 @@ class indexViewMA(generic.ListView):
     def get_queryset(self):
         return Mitarbeiter.objects.filter().order_by('Nachname')
 
+
+#from django.contrib.auth.decorators import login_required
+#@login_required   
 def MA_Subscribe_Journals(request, mitarbeiter_id): 
     """
     Die Journals eines einzelnen Mitarbeiters - aus  der Liste aller Journals

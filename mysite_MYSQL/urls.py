@@ -21,6 +21,9 @@ from django.conf.urls.static import static
 urlpatterns = [
     url(r'^ZSIV/', include('ZSIV.urls')),
     url(r'^admin/', admin.site.urls),
+    # django-registration-redux old
+    #url(r'^accounts/', include('registration.backends.default.urls')),
+    url(r'^accounts/', include('registration.backends.simple.urls')),
 ]
 
 # aus try django 1.9 , fuer fileupload locations

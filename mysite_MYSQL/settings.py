@@ -42,7 +42,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites', # unter sessions sagt das video
+    'registration', #should be immediately above 'django.contrib.auth'
+
 ]
+
+# http://stackoverflow.com/questions/37415247/django-error-while-installing-django-registration-redux
+SITE_ID = 1
 
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
@@ -53,6 +59,7 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'ZSIV.middleware.LoginRequiredMiddleware',
 ]
 
 ROOT_URLCONF = 'mysite_MYSQL.urls'
@@ -60,7 +67,9 @@ ROOT_URLCONF = 'mysite_MYSQL.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+                 os.path.join(BASE_DIR,'ZSIV/templates/ZSIV/'), # django-registration-redux muss base.html finden, warum geht das nicht so?
+                 ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -162,6 +171,21 @@ MEDIA_URL = '/mysite_MYSQL/ZSIV/uploads/'
 """Physical system path where the static files are stored. Files that are being uploaded by the user."""
 MEDIA_ROOT = os.path.join(REPOSITORY_ROOT, 'mysite_MYSQL/ZSIV/uploads')
 
+# registration redux: 
+# old: 
+#ACCOUNT_ACTIVATION_DAYS = 7 # One-week activation window; you may, of course, use a different value.
+#REGISTRATION_AUTO_LOGIN = True # Automatically log the user in.
+# Tango with django 
+REGISTRATION_OPEN = False                # If True, users can register
+ACCOUNT_ACTIVATION_DAYS = 7     # One-week activation window; you may, of course, use a different value.
+REGISTRATION_AUTO_LOGIN = True  # If True, the user will be automatically logged in.
+LOGIN_REDIRECT_URL = '/ZSIV/'  # The page you want users to arrive at after they successful log in
+LOGIN_URL = '/accounts/login/'  # The page users are directed to if they are not logged in,
+                                                                # and are trying to access pages requiring authentication
+
+
+                           
+                                                                
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
