@@ -159,10 +159,17 @@ STATICFILES_DIRS = [
 REPOSITORY_ROOT = os.path.dirname(BASE_DIR)
 
 
+
+
 """ URL that your STATIC files will be accessible through the browser."""
 STATIC_URL = '/static/' 
 
-"""  Physical system path where the static files are stored."""
+"""  
+Physical system path where the static files are stored.
+Digital ocean uses:STATIC_ROOT = os.path.join(BASE_DIR, "static/")
+is the same
+"""
+
 STATIC_ROOT = os.path.join(REPOSITORY_ROOT, 'static/') 
 
 """  URL that your MEDIA files will be accessible through the browser."""
@@ -202,13 +209,16 @@ security: http://stackoverflow.com/questions/12461484/is-it-secure-to-store-pass
 os.environ['CCGPWD'] 
 
 """
+from configparser import ConfigParser
+parser = ConfigParser()
+parser.read('settings.ini')
+EMAIL_HOST = parser.get('EMAIL', 'EMAIL_HOST')
+EMAIL_HOST_USER = parser.get('EMAIL', 'EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = parser.get('EMAIL', 'EMAIL_HOST_PASSWORD')
+EMAIL_PORT = parser.get('EMAIL', 'EMAIL_PORT')
+EMAIL_USE_TLS = parser.get('EMAIL', 'EMAIL_USE_TLS')
+DEFAULT_FROM_EMAIL = parser.get('EMAIL', 'DEFAULT_FROM_EMAIL')
 
-EMAIL_HOST = 'smtp.sendgrid.net'
-EMAIL_HOST_USER = 'macKenzie4'
-EMAIL_HOST_PASSWORD = 'billslater4'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = 'jedhoo@web.de'
 
 
 
