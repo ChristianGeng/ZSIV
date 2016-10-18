@@ -1,5 +1,0 @@
-# python manage.py createsuperuser
-
-username: christian
-email: christian.c.geng@gmail.com
-pass: 

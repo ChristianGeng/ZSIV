@@ -65,3 +65,7 @@ data/
 uploads/
 rsexcludes
 deploy.sh
+scratch.py
+sqlscripts.sql
+ChristianLocal.cnf
+
