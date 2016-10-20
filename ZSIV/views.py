@@ -112,20 +112,19 @@ Registration
 #def index(request):
 #    return render_to_response('ZSIV/index.html')
 
+
 def indexView(request):
     #return render_to_response('ZSIV/index.html')
+    # man muss den context mit uebergeben
+    # see: http://stackoverflow.com/questions/30559020/django-login-template-doesnt-recognize-logged-user
     return render(request, 'ZSIV/index.html', {})
 
-from django.http import HttpResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 class MyView(View,LoginRequiredMixin):
-    #login_url = '/accounts/login/'
-    #redirect_field_name = 'redirect_to'
     def get(self, request):
         print("MyView ",request.user.is_authenticated())
-        return render_to_response('ZSIV/index.html')
-        #return HttpResponse('ZSIV/index.html')
-
+        #return render_to_response('ZSIV/index.html')
+        return render(request, 'ZSIV/index.html', {})
 
 """
 (2) Manage Subscriptions / jeweils ein Listview und ein View, der die Subscriptions managt

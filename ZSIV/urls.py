@@ -29,8 +29,8 @@ urlpatterns = [
 
     
     # (1) Main Page, static so far
-    url(r'^$', views.indexView, name='index'), # http://localhost:8000/ZSIV/
-    #url(r'^$', views.MyView.as_view(), name='index'),
+    #url(r'^$', views.indexView, name='index'), # http://localhost:8000/ZSIV/
+    url(r'^$', views.MyView.as_view(), name='index'),
 
     # (2) Manage Subscriptions / jeweils ein Listview und ein View, der die Subscriptions managt
     url(r'^Mitarbeiter.html$', views.indexViewMA.as_view(), name='indexMA'), #http://localhost:8000/ZSIV/Mitarbeiter.html
