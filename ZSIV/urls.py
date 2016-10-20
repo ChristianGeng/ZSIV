@@ -12,7 +12,7 @@ from ZSIV.views  import Queuelistview
 from ZSIV.views  import  JournalCreateView
 from ZSIV.models import Mitarbeiter
 from ZSIV.views  import UserFormView
-
+#from ZSIV.views  import MyView
 app_name = 'ZSIV'
 
 """
@@ -29,7 +29,8 @@ urlpatterns = [
 
     
     # (1) Main Page, static so far
-    url(r'^$', views.index, name='index'), # http://localhost:8000/ZSIV/
+    url(r'^$', views.indexView, name='index'), # http://localhost:8000/ZSIV/
+    #url(r'^$', views.MyView.as_view(), name='index'),
 
     # (2) Manage Subscriptions / jeweils ein Listview und ein View, der die Subscriptions managt
     url(r'^Mitarbeiter.html$', views.indexViewMA.as_view(), name='indexMA'), #http://localhost:8000/ZSIV/Mitarbeiter.html

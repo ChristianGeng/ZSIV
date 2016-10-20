@@ -1,6 +1,4 @@
-
 from django.contrib.auth.mixins import LoginRequiredMixin
-
 from .models import Journals
 from .models import MAJournal
 from .models import Mitarbeiter
@@ -17,7 +15,6 @@ from django.forms import modelformset_factory
 from django.forms.widgets import CheckboxInput, Select, Textarea, TextInput
 from django.forms.models import modelform_factory
 from django.forms import fields
-
 
 from django.shortcuts import render_to_response
 from django.shortcuts import  render, redirect
@@ -101,15 +98,10 @@ Class Based Views Part 3: DetailView and template_name Shortcut
 Understanding get_absolute_url
 https://godjango.com/67-understanding-get_absolute_url/
 
-
-
-
 Registration
 # Django Tutorial for Beginners - 34 - User Registration https://www.youtube.com/watch?v=3UEY0ZIQ9dU
 # https://docs.djangoproject.com/en/1.10/topics/auth/default/#auth-web-requests #
 # https://django-registration-redux.readthedocs.io/en/latest/quickstart.html
-
-
 
 """
 
@@ -117,9 +109,22 @@ Registration
     
 
 """ (1) Main Page """
-def index(request):
-    return render_to_response('ZSIV/index.html')
+#def index(request):
+#    return render_to_response('ZSIV/index.html')
 
+def indexView(request):
+    #return render_to_response('ZSIV/index.html')
+    return render(request, 'ZSIV/index.html', {})
+
+from django.http import HttpResponse
+from django.contrib.auth.mixins import LoginRequiredMixin
+class MyView(View,LoginRequiredMixin):
+    #login_url = '/accounts/login/'
+    #redirect_field_name = 'redirect_to'
+    def get(self, request):
+        print("MyView ",request.user.is_authenticated())
+        return render_to_response('ZSIV/index.html')
+        #return HttpResponse('ZSIV/index.html')
 
 
 """

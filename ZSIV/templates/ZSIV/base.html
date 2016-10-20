@@ -13,6 +13,8 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
   </head>
+
+
   <body>
       <nav class="navbar navbar-default navbar-inverse navbar-static-top">
       <div class="container">
@@ -24,7 +26,7 @@
             <span class="icon-bar"></span>
           </button>
 
-          <a class="navbar-brand" href="/ZSIV">ZSIV</a>
+          <a class="navbar-brand" href="{% url 'ZSIV:index' %}">ZSIV</a>
 
         </div>
         <div id="navbar" class="navbar-collapse collapse">
@@ -64,7 +66,7 @@
 								<span class="caret"></span></a>
               <ul class="dropdown-menu">
   							{% if user.is_authenticated %}
-								<li><a href="{% url 'auth_login' %}">logout</a></li>
+								<li><a href="{% url 'auth_logout' %}">logout</a></li>
 								{% else %}
 								<li><a href="/accounts/login">login</a></li>
 								<!-- vielleicht besser das hier:  "{% url 'auth_logout' %}" -->
