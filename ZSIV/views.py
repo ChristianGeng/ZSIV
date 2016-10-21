@@ -432,6 +432,7 @@ class Queuelistview(ListView):
         
         qs = super(Queuelistview,self).get_queryset()
         print ("modify qs when you want to contain only people with querysets!")
+        print("Emails werden gesendet von  ",settings.DEFAULT_FROM_EMAIL)
         mas = Mitarbeiter.objects.all()
 
         self.emails=[]
@@ -503,7 +504,7 @@ class Queuelistview(ListView):
                 print ("sending mail containing ",  len(mamail.attachments),  "attachments to ", mamail.recipients()[0])
                 print (not mamail)
                 mamail.send(
-                            fail_silently=True
+                            fail_silently=False
                             )
             
             connection.close()  
