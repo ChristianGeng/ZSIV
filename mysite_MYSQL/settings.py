@@ -220,15 +220,12 @@ LOGIN_URL = '/accounts/login/'  # The page users are directed to if they are not
 
 
 # EMAIL_BACKEND = "sgbackend.SendGridBackend"
-# SENDGRID_API_KEY = "Your SendGrid API Key"
-# or
 #EMAIL_BACKEND = "sgbackend.SendGridBackend"
 #SENDGRID_USER = "Your SendGrid Username"
 #SENDGRID_PASSWORD = "Your SendGrid Password"
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-#EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
-#EMAIL_FILE_PATH = '/tmp/ZSIV-messages' # change this to a proper location
+
+
+#EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 
 """
@@ -240,14 +237,19 @@ os.environ['CCGPWD']
 
 """
 parser.read(settingsfile)
-EMAIL_HOST = parser.get('EMAIL', 'EMAIL_HOST')
-EMAIL_HOST_USER = parser.get('EMAIL', 'EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = parser.get('EMAIL', 'EMAIL_HOST_PASSWORD')
-EMAIL_PORT = parser.get('EMAIL', 'EMAIL_PORT')
-EMAIL_USE_TLS = parser.get('EMAIL', 'EMAIL_USE_TLS')
-DEFAULT_FROM_EMAIL = parser.get('EMAIL', 'DEFAULT_FROM_EMAIL')
+#EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_BACKEND = "sgbackend.SendGridBackend"
 
-
-
-
+if EMAIL_BACKEND == 'django.core.mail.backends.smtp.EmailBackend':
+    EMAIL_HOST = parser.get('EMAIL', 'EMAIL_HOST')
+    EMAIL_HOST_USER = parser.get('EMAIL', 'EMAIL_HOST_USER')
+    EMAIL_HOST_PASSWORD = parser.get('EMAIL', 'EMAIL_HOST_PASSWORD')
+    EMAIL_PORT = parser.get('EMAIL', 'EMAIL_PORT')
+    EMAIL_USE_TLS = parser.get('EMAIL', 'EMAIL_USE_TLS')
+    DEFAULT_FROM_EMAIL = parser.get('EMAIL', 'DEFAULT_FROM_EMAIL')
+elif EMAIL_BACKEND == "sgbackend.SendGridBackend":
+    SENDGRID_USER = parser.get('SGDJANGO', 'SENDGRID_USER')
+    SENDGRID_PASSWORD = parser.get('SGDJANGO', 'SENDGRID_PASSWORD')
+    DEFAULT_FROM_EMAIL = parser.get('SGDJANGO', 'DEFAULT_FROM_EMAIL')
+    SENDGRID_API_KEY  = parser.get('SGDJANGO', 'SENDGRID_API_KEY') 
 

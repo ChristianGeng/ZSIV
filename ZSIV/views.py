@@ -505,6 +505,8 @@ class Queuelistview(ListView):
                 mamail.send(fail_silently=False)
             
             connection.close()  
+        
+        
         Summaries.objects.filter(SENT=False).update(SENT=True)
         # Wohin?
         #return HttpResponse('I did the send')
