@@ -499,13 +499,10 @@ class Queuelistview(ListView):
         if (1==1):
             connection = mail.get_connection()
             connection.open()
-            
             for mamail in self.emails:
                 print ("sending mail containing ",  len(mamail.attachments),  "attachments to ", mamail.recipients()[0])
                 print (not mamail)
-                mamail.send(
-                            fail_silently=False
-                            )
+                mamail.send(fail_silently=False)
             
             connection.close()  
         Summaries.objects.filter(SENT=False).update(SENT=True)

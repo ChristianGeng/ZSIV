@@ -218,6 +218,13 @@ LOGIN_URL = '/accounts/login/'  # The page users are directed to if they are not
                                                                 
 
 
+
+# EMAIL_BACKEND = "sgbackend.SendGridBackend"
+# SENDGRID_API_KEY = "Your SendGrid API Key"
+# or
+#EMAIL_BACKEND = "sgbackend.SendGridBackend"
+#SENDGRID_USER = "Your SendGrid Username"
+#SENDGRID_PASSWORD = "Your SendGrid Password"
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 #EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 #EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
@@ -232,8 +239,6 @@ security: http://stackoverflow.com/questions/12461484/is-it-secure-to-store-pass
 os.environ['CCGPWD'] 
 
 """
-
-
 parser.read(settingsfile)
 EMAIL_HOST = parser.get('EMAIL', 'EMAIL_HOST')
 EMAIL_HOST_USER = parser.get('EMAIL', 'EMAIL_HOST_USER')
