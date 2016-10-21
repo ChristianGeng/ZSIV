@@ -88,16 +88,30 @@ WSGI_APPLICATION = 'mysite_MYSQL.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'ZSIV',
-        'USER': 'christian',
-        'PASSWORD': 'christian',
-        'HOST': 'localhost',   # Or an IP Address that your DB is hosted on
-        'PORT': '3306',
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'ZSIV',
+#         'USER': 'christian',
+#         'PASSWORD': 'christian',
+#         'HOST': 'localhost',   # Or an IP Address that your DB is hosted on
+#         #'PORT': '3306', # default port, not needed
+#     }
+# }
+
+
+from configparser import ConfigParser
+parser = ConfigParser()
+parser.read('settings.ini')
+DATABASES={}
+default={}
+
+default["ENGINE"] = parser.get('DATABASE', 'ENGINE')
+default["NAME"] = parser.get('DATABASE', 'NAME')
+default["USER"] = parser.get('DATABASE', 'USER')
+default["PASSWORD"] = parser.get('DATABASE', 'PASSWORD')
+default["HOST"] = parser.get('DATABASE', 'HOST')
+DATABASES["default"] = default
 
 
 # settings file hat permission issues
