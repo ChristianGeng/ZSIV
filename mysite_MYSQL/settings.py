@@ -19,6 +19,15 @@ from django.conf import settings
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
+# handle settings 
+from configparser import ConfigParser
+parser = ConfigParser()
+settingsfile = os.path.join(BASE_DIR, 'settings.ini')
+parser.read(settingsfile)
+
+
+
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
 
@@ -100,12 +109,12 @@ WSGI_APPLICATION = 'mysite_MYSQL.wsgi.application'
 # }
 
 
-from configparser import ConfigParser
-parser = ConfigParser()
-parser.read('settings.ini')
+
+
+
+
 DATABASES={}
 default={}
-
 default["ENGINE"] = parser.get('DATABASE', 'ENGINE')
 default["NAME"] = parser.get('DATABASE', 'NAME')
 default["USER"] = parser.get('DATABASE', 'USER')
@@ -223,9 +232,9 @@ security: http://stackoverflow.com/questions/12461484/is-it-secure-to-store-pass
 os.environ['CCGPWD'] 
 
 """
-from configparser import ConfigParser
-parser = ConfigParser()
-parser.read('settings.ini')
+
+
+parser.read(settingsfile)
 EMAIL_HOST = parser.get('EMAIL', 'EMAIL_HOST')
 EMAIL_HOST_USER = parser.get('EMAIL', 'EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = parser.get('EMAIL', 'EMAIL_HOST_PASSWORD')
