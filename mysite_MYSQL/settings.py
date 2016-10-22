@@ -40,7 +40,7 @@ DEBUG = False
 
 #ALLOWED_HOSTS = []
 #ALLOWED_HOSTS = ['djangoproject.com']
-ALLOWED_HOSTS = ['localhost', '127.0.0.1','http://zsiv.pythonanywhere.com']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1','.zsiv.pythonanywhere.com']
 
 CSRF_COOKIE_SECURE = False
 SESSION_COOKIE_SECURE = False
