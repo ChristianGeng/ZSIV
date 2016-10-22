@@ -32,13 +32,18 @@ parser.read(settingsfile)
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '5qvi!cro^i20hf&x#f&_)b485qavho3%r8lq73=7g2n4u-je$m'
+SECRET_KEY = parser.get('SECRET_KEY', 'KEY')
+#'5qvi!cro^i20hf&x#f&_)b485qavho3%r8lq73=7g2n4u-je$m'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+#ALLOWED_HOSTS = []
+#ALLOWED_HOSTS = ['djangoproject.com']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1','http://zsiv.pythonanywhere.com']
 
+CSRF_COOKIE_SECURE = False
+SESSION_COOKIE_SECURE = False
 
 # Application definition
 
