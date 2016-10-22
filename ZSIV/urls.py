@@ -5,6 +5,7 @@ from . import views
 from .models import Summaries
 from django.views.generic import ListView
 from ZSIV.views import SummariesCreateView, SummariesUpdateView
+from ZSIV.views import JournalCreateView
 #from ZSIV.views import SummariesDeleteView # TODO: Implement!
 from ZSIV.views  import TestFormstSetView
 from ZSIV.views import MessageTextView
@@ -38,6 +39,10 @@ urlpatterns = [
     url(r'^Journals.html$', views.indexViewJournals.as_view(), name='indexJournal'),
     url(r'^JournalSubscribe/(?P<journal_id>[0-9]+)/$', views.Journal_Subscribe_MAs, name='JournalSubscribe'), #http://localhost:8000/ZSIV/JournalSubscribe/
     
+    
+    # (xxx) unclassified - manage journals 
+    # (xxx) unclassified - manage journals 
+    url(r'^Journal/add/$', JournalCreateView.as_view(), name='Journal-add'), #http://localhost:8000/ZSIV/Journal/add/
     
     # (3) Manage Summaries 
     # (3a) add, update, delete(nicht implementiert!)) + ein MultiDelete

@@ -225,6 +225,30 @@ def Journal_Subscribe_MAs(request,journal_id):
 
 
 """
+(x) unclassified - Make database editable for the user
+"""
+class JournalCreateView(CreateView):
+    model = Journals
+    fields = fields = ["Name","Kurztitel"]
+    template_name = 'ZSIV/journal_add.html' #  is the default
+    # TODO: redirect
+    #def get_success_url(self):
+    #    return reverse('ZSIV:summaries-index')
+
+class JournalsUpdateView(UpdateView):
+    model = Journals
+    fields = fields = ["Name","Kurztitel"]
+    template_name = 'ZSIV/journals_update.html' #  is the default
+    #widgets = {
+    #    'SENT' : CheckboxInput,
+    #    'Heftnummer' :  Select,
+    #}
+    #context_object_name = 'summary'
+    
+    
+       
+
+"""
 (3) Manage Summaries
 (3a) add, update, delete(nicht implementiert!)) + ein MultiDelete
 """
@@ -633,11 +657,11 @@ class FormsetMixin(object):
 
 
 
-class JournalCreateView(FormsetMixin, CreateView):
-    template_name = 'ZSIV/journal_and_summaries_form.html'
-    model = Journals
-    form_class = JournalForm
-    formset_class = SummaryFormSet
+#class JournalCreateView(FormsetMixin, CreateView):
+#    template_name = 'ZSIV/journal_and_summaries_form.html'
+#    model = Journals
+#    form_class = JournalForm
+#    formset_class = SummaryFormSet
 
 
 # MAJViewIndex 
