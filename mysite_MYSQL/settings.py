@@ -36,7 +36,7 @@ SECRET_KEY = parser.get('SECRET_KEY', 'KEY')
 #'5qvi!cro^i20hf&x#f&_)b485qavho3%r8lq73=7g2n4u-je$m'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = parser.get('DEBUG', 'FLAG')
 
 #ALLOWED_HOSTS = []
 #ALLOWED_HOSTS = ['djangoproject.com']
