@@ -1,0 +1,22 @@
+{% extends "ZSIV/base.html" %}
+{% block content %}
+
+<div class="row">
+<div class="col-md-12">
+<h3>Zeitschriften<small>in der Datenbank</small></h3>
+{% if list_to_view %}
+    <ul>
+    {% for jrn in list_to_view %}
+    <li>
+			<a href="{% url 'ZSIV:Journal-update' jrn.id  %}">update</a> - 
+			<a href="{% url 'ZSIV:Journal-delete' jrn.id  %}">delete</a>
+			{{ jrn.Name }} {{ jrn.Kurztitel }}  {{ jrn.Quelle }}  
+		</li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>Keine Daten!</p>
+{% endif %}
+</div>
+</div>
+{% endblock %}

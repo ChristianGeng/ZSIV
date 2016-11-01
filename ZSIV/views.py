@@ -34,7 +34,9 @@ from extra_views import SortableListMixin
 from django.views.generic.base import  TemplateResponseMixin, View
 # two ways to import: from django.views.generic import View
 
-from django.contrib.auth.mixins import LoginRequiredMixin
+
+from django.urls import reverse_lazy
+
 
 import os
 
@@ -119,7 +121,7 @@ def indexView(request):
     # see: http://stackoverflow.com/questions/30559020/django-login-template-doesnt-recognize-logged-user
     return render(request, 'ZSIV/index.html', {})
 
-from django.contrib.auth.mixins import LoginRequiredMixin
+
 class MyView(View,LoginRequiredMixin):
     def get(self, request):
         print("MyView ",request.user.is_authenticated())
@@ -222,58 +224,6 @@ def Journal_Subscribe_MAs(request,journal_id):
         return render(request, formTemplate, context)
 
 
-
-
-"""
-(x) unclassified - edit Mitarbeiter
-"""
-
-class MitarbeiterCreateView(CreateView):
-    model = Mitarbeiter
-    fields = ["Vorname","Nachname","Anrede","email"]
-    template_name = 'ZSIV/mitarbeiter_add.html' #  is the default
-
-class MitarbeiterListview(ListView):
-    model = Mitarbeiter
-    context_object_name = 'list_to_view'
-    template_name="ZSIV/mitarbeiter_list_EditingView.html"
-    def get_context_data(self, **kwargs):
-        context = super(MitarbeiterListview, self).get_context_data(**kwargs)
-        return context
-
-class MitarbeiterUpdateView(UpdateView):
-    model = Mitarbeiter
-    fields = ["Vorname","Nachname","Anrede","email"]
-    template_name = 'ZSIV/mitarbeiter_update.html'
-    context_object_name = 'Mitarbeiter'
-
-from django.urls import reverse_lazy
-class MitarbeiterDeleteView(DeleteView):
-    model = Mitarbeiter
-    success_url = reverse_lazy('ZSIV:Mitarbeiter-List')
-    context_object_name = 'Mitarbeiter'
-    
-
-
-class JournalCreateView(CreateView):
-    model = Journals
-    fields = ["Name","Kurztitel","Quelle"]
-    template_name = 'ZSIV/journal_add.html' #  is the default
-    # TODO: redirect
-    #def get_success_url(self):
-    #    return reverse('ZSIV:summaries-index')
-
-class JournalsUpdateView(UpdateView):
-    model = Journals
-    fields = fields = ["Name","Kurztitel"]
-    template_name = 'ZSIV/journals_update.html' #  is the default
-    #widgets = {
-    #    'SENT' : CheckboxInput,
-    #    'Heftnummer' :  Select,
-    #}
-    #context_object_name = 'summary'
-    
-    
        
 
 """
@@ -605,8 +555,82 @@ class UserFormView(View):
             
         return render(request, self.template_name,{'form' : form})
             
+
+
+
+
+"""
+(6) Manage Journals
+"""
+
+class JournalCreateView(CreateView):
+    model = Journals
+    fields = ["Name","Kurztitel","Quelle"]
+    template_name = 'ZSIV/journal_add.html' #  is the default
+    # TODO: redirect
+    #def get_success_url(self):
+    #    return reverse('ZSIV:summaries-index')
+
+class JournalListview(ListView):
+    model = Journals
+    fields = ["Name","Kurztitel","Quelle"]
+    context_object_name = 'list_to_view'
+    template_name="ZSIV/journal_list_EditingView.html"
+    def get_context_data(self, **kwargs):
+        context = super(JournalListview, self).get_context_data(**kwargs)
+        return context
+
+class JournalUpdateView(UpdateView):
+    model = Journals
+    fields = ["Name","Kurztitel","Quelle"]
+    template_name = 'ZSIV/journal_update.html' #  is the default
+    context_object_name = 'Journal'   
+
+class JournalDeleteView(DeleteView):
+    model = Journals
+    success_url = reverse_lazy('ZSIV:Journal-List')
+    context_object_name = 'Journal'  
+    template_name = 'ZSIV/journal_confirm_delete.html' 
+
+"""
+(7) Manage Mitarbeiter
+"""
+
+class MitarbeiterCreateView(CreateView):
+    model = Mitarbeiter
+    fields = ["Vorname","Nachname","Anrede","email"]
+    template_name = 'ZSIV/mitarbeiter_add.html' #  is the default
+
+class MitarbeiterListview(ListView):
+    model = Mitarbeiter
+    context_object_name = 'list_to_view'
+    template_name="ZSIV/mitarbeiter_list_EditingView.html"
+    def get_context_data(self, **kwargs):
+        context = super(MitarbeiterListview, self).get_context_data(**kwargs)
+        return context
+
+class MitarbeiterUpdateView(UpdateView):
+    model = Mitarbeiter
+    fields = ["Vorname","Nachname","Anrede","email"]
+    template_name = 'ZSIV/mitarbeiter_update.html'
+    context_object_name = 'Mitarbeiter'
+
+
+class MitarbeiterDeleteView(DeleteView):
+    model = Mitarbeiter
+    success_url = reverse_lazy('ZSIV:Mitarbeiter-List')
+    context_object_name = 'Mitarbeiter'
+    
+
+
+
+
+
+
+
+
             
-# 6) Experimental : Formset-Mixins udn so 
+# (XXXX) Experimental : Formset-Mixins  so 
 
 
 # Formset Example
@@ -689,14 +713,6 @@ class FormsetMixin(object):
 
 
 
-#class JournalCreateView(FormsetMixin, CreateView):
-#    template_name = 'ZSIV/journal_and_summaries_form.html'
-#    model = Journals
-#    form_class = JournalForm
-#    formset_class = SummaryFormSet
-
-
-# MAJViewIndex 
 """
 Mixin, der die formfactory zum reinmixen von widgets erlauben soll
 http://stackoverflow.com/questions/16937076/how-does-one-use-a-custom-widget-with-a-generic-updateview-without-having-to-red

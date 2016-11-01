@@ -11,7 +11,12 @@ from ZSIV.views import JournalCreateView
 from ZSIV.views  import TestFormstSetView
 from ZSIV.views import MessageTextView
 from ZSIV.views  import Queuelistview
+
 from ZSIV.views  import  JournalCreateView
+from ZSIV.views import JournalListview
+from ZSIV.views import JournalUpdateView
+from ZSIV.views import JournalDeleteView
+
 from ZSIV.views import MitarbeiterCreateView
 from ZSIV.views import MitarbeiterUpdateView
 from ZSIV.views import MitarbeiterDeleteView
@@ -42,17 +47,7 @@ urlpatterns = [
     url(r'^MitarbeiterSubscribe/(?P<mitarbeiter_id>[0-9]+)/$', views.MA_Subscribe_Journals, name='MitarbeiterSubscribe'),
     url(r'^Journals.html$', views.indexViewJournals.as_view(), name='indexJournal'),
     url(r'^JournalSubscribe/(?P<journal_id>[0-9]+)/$', views.Journal_Subscribe_MAs, name='JournalSubscribe'), #http://localhost:8000/ZSIV/JournalSubscribe/
-    
-    
-    # (xxx) unclassified - manage journals 
-    # (xxx) unclassified - manage journals 
-    url(r'^Journal/add/$', JournalCreateView.as_view(), name='Journal-add'), #http://localhost:8000/ZSIV/Journal/add/
-    
-    url(r'^Mitarbeiter/add/$', MitarbeiterCreateView.as_view(), name='Mitarbeiter-add'),
-    url(r'^Mitarbeiter/all/$', MitarbeiterListview.as_view(), name='Mitarbeiter-List'),
-    url(r'^Mitarbeiter/update/(?P<pk>[0-9]+)/$', MitarbeiterUpdateView.as_view(), name='Mitarbeiter-update'),
-    url(r'^Mitarbeiter/delete/(?P<pk>[0-9]+)/$', MitarbeiterDeleteView.as_view(), name='Mitarbeiter-delete'),
-    
+        
     # (3) Manage Summaries 
     # (3a) add, update, delete(nicht implementiert!)) + ein MultiDelete
     url(r'^Summaries/add/$', SummariesCreateView.as_view(), name='Summaries-add'), #http://localhost:8000/ZSIV/Summaries/add/
@@ -103,7 +98,19 @@ urlpatterns = [
     
 
     
-    # (6) Versuche     
+    # (6) Manage Journals 
+    url(r'^Journal/add/$', JournalCreateView.as_view(), name='Journal-add'), #http://localhost:8000/ZSIV/Journal/add/
+    url(r'^Journals/all/$', JournalListview.as_view(), name='Journal-List'),
+    url(r'^Journal/update/(?P<pk>[0-9]+)/$', JournalUpdateView.as_view(), name='Journal-update'),
+    url(r'^Journal/delete/(?P<pk>[0-9]+)/$', JournalDeleteView.as_view(), name='Journal-delete'),
+    
+    # (7) Manage Mitarbeiter 
+    url(r'^Mitarbeiter/add/$', MitarbeiterCreateView.as_view(), name='Mitarbeiter-add'),
+    url(r'^Mitarbeiter/all/$', MitarbeiterListview.as_view(), name='Mitarbeiter-List'),
+    url(r'^Mitarbeiter/update/(?P<pk>[0-9]+)/$', MitarbeiterUpdateView.as_view(), name='Mitarbeiter-update'),
+    url(r'^Mitarbeiter/delete/(?P<pk>[0-9]+)/$', MitarbeiterDeleteView.as_view(), name='Mitarbeiter-delete'),
+
+    # (XXX) Versuche     
     # Ersetzen der Grunddaten (der admin-site)
     # Versuch, mehrere Journals hinzufuegen - defunct 
     url(r'^ttt/$', JournalCreateView.as_view(), name='add_journal_and_summaries'),
