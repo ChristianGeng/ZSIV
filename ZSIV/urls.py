@@ -4,13 +4,17 @@ from django.conf.urls import include, url
 from . import views
 from .models import Summaries
 from django.views.generic import ListView
-from ZSIV.views import SummariesCreateView, SummariesUpdateView
+from ZSIV.views import SummariesCreateView, SummariesUpdateView,\
+    MitarbeiterListview
 from ZSIV.views import JournalCreateView
 #from ZSIV.views import SummariesDeleteView # TODO: Implement!
 from ZSIV.views  import TestFormstSetView
 from ZSIV.views import MessageTextView
 from ZSIV.views  import Queuelistview
 from ZSIV.views  import  JournalCreateView
+from ZSIV.views import MitarbeiterCreateView
+from ZSIV.views import MitarbeiterUpdateView
+from ZSIV.views import MitarbeiterDeleteView
 from ZSIV.models import Mitarbeiter
 from ZSIV.views  import UserFormView
 #from ZSIV.views  import MyView
@@ -43,6 +47,11 @@ urlpatterns = [
     # (xxx) unclassified - manage journals 
     # (xxx) unclassified - manage journals 
     url(r'^Journal/add/$', JournalCreateView.as_view(), name='Journal-add'), #http://localhost:8000/ZSIV/Journal/add/
+    
+    url(r'^Mitarbeiter/add/$', MitarbeiterCreateView.as_view(), name='Mitarbeiter-add'),
+    url(r'^Mitarbeiter/all/$', MitarbeiterListview.as_view(), name='Mitarbeiter-List'),
+    url(r'^Mitarbeiter/update/(?P<pk>[0-9]+)/$', MitarbeiterUpdateView.as_view(), name='Mitarbeiter-update'),
+    url(r'^Mitarbeiter/delete/(?P<pk>[0-9]+)/$', MitarbeiterDeleteView.as_view(), name='Mitarbeiter-delete'),
     
     # (3) Manage Summaries 
     # (3a) add, update, delete(nicht implementiert!)) + ein MultiDelete

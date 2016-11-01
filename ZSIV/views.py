@@ -225,11 +225,39 @@ def Journal_Subscribe_MAs(request,journal_id):
 
 
 """
-(x) unclassified - Make database editable for the user
+(x) unclassified - edit Mitarbeiter
 """
+
+class MitarbeiterCreateView(CreateView):
+    model = Mitarbeiter
+    fields = ["Vorname","Nachname","Anrede","email"]
+    template_name = 'ZSIV/mitarbeiter_add.html' #  is the default
+
+class MitarbeiterListview(ListView):
+    model = Mitarbeiter
+    context_object_name = 'list_to_view'
+    template_name="ZSIV/mitarbeiter_list_EditingView.html"
+    def get_context_data(self, **kwargs):
+        context = super(MitarbeiterListview, self).get_context_data(**kwargs)
+        return context
+
+class MitarbeiterUpdateView(UpdateView):
+    model = Mitarbeiter
+    fields = ["Vorname","Nachname","Anrede","email"]
+    template_name = 'ZSIV/mitarbeiter_update.html'
+    context_object_name = 'Mitarbeiter'
+
+from django.urls import reverse_lazy
+class MitarbeiterDeleteView(DeleteView):
+    model = Mitarbeiter
+    success_url = reverse_lazy('ZSIV:Mitarbeiter-List')
+    context_object_name = 'Mitarbeiter'
+    
+
+
 class JournalCreateView(CreateView):
     model = Journals
-    fields = fields = ["Name","Kurztitel"]
+    fields = ["Name","Kurztitel","Quelle"]
     template_name = 'ZSIV/journal_add.html' #  is the default
     # TODO: redirect
     #def get_success_url(self):
@@ -277,6 +305,9 @@ class SummariesCreateView(ModelFormWidgetMixin,CreateView):
         'Heftnummer' :  Select,
     }
 
+
+    
+    
 class SummariesUpdateView(UpdateView):
     model = Summaries
     fields = '__all__'
@@ -389,6 +420,8 @@ class MessageTextView(FormView):
 
 
 
+
+
 class Queuelistview(ListView):
     """
     Die Quelistview soll die zu versendenden Emails schicken 
@@ -419,7 +452,6 @@ class Queuelistview(ListView):
         #print (self.http_method_names)
         #print (self._allowed_methods())
         return super(Queuelistview, self).dispatch(request, *args, **kwargs)
-    
     
     
     def get_context_data(self, **kwargs):

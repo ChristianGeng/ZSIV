@@ -3,6 +3,7 @@ import datetime
 from django.utils import timezone
 from django.core.urlresolvers import reverse
 import uuid
+from django.template.defaultfilters import default
 
 class SingletonModel(models.Model):
     """
@@ -52,16 +53,28 @@ class MessageText(SingletonModel):
 class Mitarbeiter(models.Model):
     Vorname = models.CharField(max_length=200)
     Nachname = models.CharField(max_length=200)
+    Anrede = models.CharField(max_length=200,default="Sehr geehrte(r) Dr. ")
     email = models.EmailField()
     Subscriptions = models.ManyToManyField('Journals', through='MAJournal') 
     def __str__(self):              # __unicode__ on Python 2
         return u'%s %s' % (self.Vorname, self.Nachname)
+    def get_absolute_url(self): # fuer die admin site, generiert im admin tool "view on site"
+        return reverse('ZSIV:Mitarbeiter-List')
+    class Meta:
+        unique_together = ("Vorname","Nachname","email")
 
 
+QUELLE_CHOICES = (
+    (1, 'Juris'),
+    (2, 'Beck online'),
+    (3, 'Volltext'),
+)
 
 class Journals(models.Model):
     Name = models.CharField(max_length=400)
     Kurztitel = models.CharField(max_length=200,blank=True)
+    Quelle = models.CharField(max_length=200, choices = QUELLE_CHOICES, default='')
+    
     Subscriptions = models.ManyToManyField('Mitarbeiter', through='MAJournal') # Note: Many to many fields beter referenced as  'Mitarbeiter' 
     def __str__(self):              # __unicode__ on Python 2
         return self.Name

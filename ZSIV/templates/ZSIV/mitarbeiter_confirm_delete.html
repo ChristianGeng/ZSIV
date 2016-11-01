@@ -1,0 +1,20 @@
+{% extends "ZSIV/base.html" %}
+{% block content %}
+<div class="row">
+	<div class="col-md-12">
+		<h3>Löschen des Mitarbeiters bestätigen</h3>
+		<div class="panel panel-default">
+			<div class="panel-heading"><h3 class="panel-title">{{Mitarbeiter.Vorname}} {{Mitarbeiter.Nachname}} - {{Mitarbeiter.email}}   </h3></div>
+			<div class="panel-body">
+				<form action="{% url "ZSIV:Mitarbeiter-delete" pk=Mitarbeiter.id %}" method="post" enctype="multipart/form-data">
+					{% csrf_token %}
+					{{ form.as_p }}
+					<!--<input type="submit" value="submit" />-->
+					<hr />
+					<button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-floppy-disk"></span>do it!</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
