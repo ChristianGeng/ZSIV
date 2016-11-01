@@ -8,7 +8,7 @@
 <div class="panel-body">
 	<form action="{% url "ZSIV:Mitarbeiter-add" %}" method="post" enctype="multipart/form-data">
   {% csrf_token %}
-  {{ form.as_p }}
+  {{ form.as_ul }}
   <!--<input type="submit" value="submit" />-->
   <hr />
   <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-floppy-disk"></span> Save</button>

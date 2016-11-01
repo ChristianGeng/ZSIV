@@ -49,11 +49,17 @@ class MessageText(SingletonModel):
     timestamp = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated = models.DateTimeField(auto_now=True, auto_now_add=False)
 
+SEX_CHOICES = (
+    ('m', 'männlich'),
+    ('f', 'weiblich'),
+)
+
 
 class Mitarbeiter(models.Model):
     Vorname = models.CharField(max_length=200)
     Nachname = models.CharField(max_length=200)
-    Anrede = models.CharField(max_length=200,default="Sehr geehrte(r) Dr. ")
+    Anrede = models.CharField(max_length=200,default="Frau Dr. ")
+    Sex = models.CharField(max_length=10, choices = SEX_CHOICES , default="f")
     email = models.EmailField()
     Subscriptions = models.ManyToManyField('Journals', through='MAJournal') 
     def __str__(self):              # __unicode__ on Python 2

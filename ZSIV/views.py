@@ -34,7 +34,7 @@ from extra_views import SortableListMixin
 from django.views.generic.base import  TemplateResponseMixin, View
 # two ways to import: from django.views.generic import View
 
-
+from django.core.mail import EmailMultiAlternatives
 from django.urls import reverse_lazy
 
 
@@ -419,8 +419,6 @@ class Queuelistview(ListView):
         context = super(Queuelistview, self).get_context_data(**kwargs)
         context['emails']=self.emails # muss man die Mails zum Kontext hinzufügen??
         return context
-    
-
         
     def get_queryset(self):
         """
@@ -435,6 +433,7 @@ class Queuelistview(ListView):
         
         # load email text and subject
         mt  = MessageText.load()
+        grussfloskel = "Sehr geehrte"
         
         qs = super(Queuelistview,self).get_queryset()
         print ("modify qs when you want to contain only people with querysets!")
@@ -446,18 +445,23 @@ class Queuelistview(ListView):
             
             subscriptions = ma.Subscriptions.filter(summaries__SENT=False).distinct()
             if not subscriptions:
-                #context['emails'].append('')
                 self.emails.append('')
                 print ("\n no emails left for ", ma)
             else:
-                                
-                mailtext = "{0}\n\n  {1}".format(ma.Anrede, mt.text) 
-                tmpmail = mail.EmailMessage(
+                
+                if ma.Sex=='m': grussfloskeluse = grussfloskel+"r"
+                anrede = " ".join([ grussfloskeluse, ma.Anrede, ma.Nachname+","])
+                mailtext = "{0}\r\n\r\n  {1}".format(anrede, mt.text) 
+                mailhtml = "<html><body><pre>"+mailtext+"</pre></body></html>"
+                print ("composing it")
+                
+                tmpmail = mail.EmailMultiAlternatives(
                             mt.subject,
                             mailtext,
                              settings.DEFAULT_FROM_EMAIL,
                              [ma.email]
                             )
+                tmpmail.attach_alternative(mailhtml, "text/html")
                 for idxsub, subsc in enumerate(subscriptions): # loop durch die JournalSubscriptions eines Mitarbeiters
                     for summary in iter(subsc.summaries_set.iterator()): 
                         fn=os.path.join(settings.MEDIA_ROOT,str(summary.Inhaltsverzeichnis))
@@ -467,9 +471,6 @@ class Queuelistview(ListView):
                 print ("\n\nMITARBEITER NO ", idxma, " EMAIL: ",  ma.email)
             
                 print ("no of substriptions for this MA: ",  len(subscriptions))
-                #for x in tmpmail.attachments:
-                #    print (x)
-    
                 self.emails.append(tmpmail)
         
         return qs
@@ -501,19 +502,24 @@ class Queuelistview(ListView):
         print ("")
         self.object_list = self.get_queryset() #  generiert emails mit: self.emails
         
-        print ("SENDING .... ")
-        if (1==1):
+        try:
             connection = mail.get_connection()
             connection.open()
             for mamail in self.emails:
-                print ("sending mail containing ",  len(mamail.attachments),  "attachments to ", mamail.recipients()[0])
+                if mamail:
+                    print ("sending mail containing ",  len(mamail.attachments),  "attachments to ", mamail.recipients()[0])
+                    mamail.send(fail_silently=False)
                 print (not mamail)
-                mamail.send(fail_silently=False)
+                
             
             connection.close()  
+            
+            
+            Summaries.objects.filter(SENT=False).update(SENT=True)
         
-        
-        Summaries.objects.filter(SENT=False).update(SENT=True)
+        except Exception as e:
+            #logger.exception('Exception when sending emails!!!')
+            print('Exception when sending emails!!!')
         # Wohin?
         #return HttpResponse('I did the send')
         #return HttpResponseRedirect(reverse('ZSIV:index')) # zuruecl nach hause
@@ -598,7 +604,7 @@ class JournalDeleteView(DeleteView):
 
 class MitarbeiterCreateView(CreateView):
     model = Mitarbeiter
-    fields = ["Vorname","Nachname","Anrede","email"]
+    fields = ["Vorname","Nachname","Sex","Anrede","email"]
     template_name = 'ZSIV/mitarbeiter_add.html' #  is the default
 
 class MitarbeiterListview(ListView):
@@ -611,7 +617,7 @@ class MitarbeiterListview(ListView):
 
 class MitarbeiterUpdateView(UpdateView):
     model = Mitarbeiter
-    fields = ["Vorname","Nachname","Anrede","email"]
+    fields = ["Vorname","Nachname","Sex","Anrede","email"]
     template_name = 'ZSIV/mitarbeiter_update.html'
     context_object_name = 'Mitarbeiter'
 
