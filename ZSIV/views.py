@@ -418,8 +418,12 @@ class Queuelistview(ListView):
         # Call the base implementation first to get a context
         context = super(Queuelistview, self).get_context_data(**kwargs)
         context['emails']=self.emails # muss man die Mails zum Kontext hinzufügen??
+        context['journalName']= self.journalName
+        context['journalQuelle']= self.journalQuelle
         return context
         
+        
+
     def get_queryset(self):
         """
         get_queryset ist die erste Methode die aufgerufen wird.
@@ -431,8 +435,11 @@ class Queuelistview(ListView):
         http://stackoverflow.com/questions/5629702/django-queryset-join-across-four-tables-including-manytomany
         """
         
-        # load email text and subject
-        mt  = MessageText.load()
+        def htmlify(text):
+            return  "<html><body><pre>"+text+"</pre></body></html>"
+        
+        
+        mt  = MessageText.load() # load email text and subject
         grussfloskel = "Sehr geehrte"
         
         qs = super(Queuelistview,self).get_queryset()
@@ -441,6 +448,8 @@ class Queuelistview(ListView):
         mas = Mitarbeiter.objects.all()
 
         self.emails=[]
+        self.journalName=[]
+        self.journalQuelle=[]
         for idxma, ma in enumerate(mas):
             
             subscriptions = ma.Subscriptions.filter(summaries__SENT=False).distinct()
@@ -448,12 +457,12 @@ class Queuelistview(ListView):
                 self.emails.append('')
                 print ("\n no emails left for ", ma)
             else:
+
                 grussfloskeluse = grussfloskel
                 if ma.Sex=='m': grussfloskeluse = grussfloskel+"r"
                 anrede = " ".join([ grussfloskeluse, ma.Anrede, ma.Nachname+","])
-                mailtext = "{0}\r\n\r\n  {1}".format(anrede, mt.text) 
-                mailhtml = "<html><body><pre>"+mailtext+"</pre></body></html>"
-                print ("composing it")
+                mailtext = "{0}\r\n\r\n  {1}".format(anrede, mt.text) +'\r\n\r\n'
+                mailtext =   mailtext + "\r\n"+ "\r\n"  + "Quelle(n):\r\n\r\n"
                 
                 tmpmail = mail.EmailMultiAlternatives(
                             mt.subject,
@@ -461,17 +470,29 @@ class Queuelistview(ListView):
                              settings.DEFAULT_FROM_EMAIL,
                              [ma.email]
                             )
-                tmpmail.attach_alternative(mailhtml, "text/html")
+                
+                #tmpmail.attachments.JournalName=[]
+                #tmpmail.attachments.JournalQuelle=[]
+
                 for idxsub, subsc in enumerate(subscriptions): # loop durch die JournalSubscriptions eines Mitarbeiters
                     for summary in iter(subsc.summaries_set.iterator()): 
                         fn=os.path.join(settings.MEDIA_ROOT,str(summary.Inhaltsverzeichnis))
                         tmpmail.attach_file(fn)
-                        print ("attaching file ", fn)
+                        journalData = Journals.objects.get(Name=str(summary.Journal.Name))
+                        #tmpmail.attachments.JournalName.append(journalData.Name)
+                        #tmpmail.attachments.JournalQuelle.append(journalData.Quelle)
+                        
+                        
+                        mailtext =   mailtext + journalData.Name + " - " + journalData.Quelle + "\r\n" 
                 
-                print ("\n\nMITARBEITER NO ", idxma, " EMAIL: ",  ma.email)
-            
-                print ("no of substriptions for this MA: ",  len(subscriptions))
+                
+                
+                mailhtml = htmlify(mailtext)
+                tmpmail.attach_alternative(mailhtml, "text/html")
                 self.emails.append(tmpmail)
+                self.journalName.append(journalData.Name)
+                self.journalQuelle.append(journalData.Quelle)
+                
         
         return qs
 
@@ -480,8 +501,8 @@ class Queuelistview(ListView):
 #        self.object_list = self.get_queryset() # generiert emails mit: self.emails
 #        print("in der get methode")
 #        print("debug punkt .. ")
-        #return self.render_to_response(context)
-    #    return HttpResponse('Hello World I am a get')
+#        return self.render_to_response(context)
+#       return HttpResponse('Hello World I am a get')
 
 
 

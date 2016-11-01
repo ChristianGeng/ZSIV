@@ -72,7 +72,7 @@ class Mitarbeiter(models.Model):
 
 QUELLE_CHOICES = (
     ('Juris', 'Juris'),
-    ('Beck online', 'Beck online'),
+    ('BeckOnline', 'Beck Online'),
     ('Volltext', 'Volltext'),
 )
 

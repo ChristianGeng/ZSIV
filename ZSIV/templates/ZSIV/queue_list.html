@@ -8,7 +8,7 @@
 {% csrf_token %}
 <ul> 
 {% for email in emails %}
-<li><b>Attachments to {{email.recipients.0}}</b>
+<li><b>Attachments to {{email.recipients.0}} </b>
   <ul>
     {% for attachment in email.attachments %}
     <li>{{attachment.0}} </li>
