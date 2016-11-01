@@ -451,10 +451,10 @@ class Queuelistview(ListView):
                 print ("\n no emails left for ", ma)
             else:
                                 
-                
+                mailtext = "{0}\n\n  {1}".format(ma.Anrede, mt.text) 
                 tmpmail = mail.EmailMessage(
                             mt.subject,
-                            mt.text,
+                            mailtext,
                              settings.DEFAULT_FROM_EMAIL,
                              [ma.email]
                             )
