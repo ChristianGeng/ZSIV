@@ -448,7 +448,7 @@ class Queuelistview(ListView):
                 self.emails.append('')
                 print ("\n no emails left for ", ma)
             else:
-                
+                grussfloskeluse = grussfloskel
                 if ma.Sex=='m': grussfloskeluse = grussfloskel+"r"
                 anrede = " ".join([ grussfloskeluse, ma.Anrede, ma.Nachname+","])
                 mailtext = "{0}\r\n\r\n  {1}".format(anrede, mt.text) 
