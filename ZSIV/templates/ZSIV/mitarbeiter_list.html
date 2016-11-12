@@ -2,14 +2,27 @@
 {% block content %}
 
 <div class="row">
-<div class="col-md-12">
+<div class="col-md-7">
 <h3>Subscriptions <small>Persons</small></h3>
+
 {% if list_to_view %}
-    <ul>
+<table class="table table-striped table-hover table-condensed">
+	<thead>
+		<tr class="active">
+			<th>Name</th>
+			<th>email</th>
+			<th>-</th>
+		</tr>
+	</thead>
+
     {% for ma in list_to_view %}
-    <li><a href="{% url 'ZSIV:MitarbeiterSubscribe' ma.id %}"> {{ ma.Vorname }} {{ ma.Nachname }}, {{ ma.email }}</a></li>
+	<tr>
+		<td>	{{ ma.Vorname }} 	{{ ma.Nachname }}  </td>
+		<td>	{{ ma.email }}</td>
+		<td><a href="{% url 'ZSIV:MitarbeiterSubscribe' ma.id %}">edit </a></td>
+	</tr>
     {% endfor %}
-    </ul>
+</table>
 {% else %}
     <p>Keine Daten!</p>
 {% endif %}

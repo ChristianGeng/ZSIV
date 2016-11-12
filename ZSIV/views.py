@@ -148,7 +148,7 @@ def MA_Subscribe_Journals(request, mitarbeiter_id):
     """
     Die Journals eines einzelnen Mitarbeiters - aus  der Liste aller Journals
     """
-    formTemplate = 'ZSIV/vanillaSave.html'
+    formTemplate = 'ZSIV/ma_subscribe_journal.html'
     mitarbeiter_list = Mitarbeiter.objects.filter(pk=mitarbeiter_id).select_related()
     Mitarbeiter.objects.filter(pk=mitarbeiter_id).select_related().values()
     mymitarbeiter = mitarbeiter_list[0]
@@ -195,7 +195,7 @@ def Journal_Subscribe_MAs(request,journal_id):
     Die Mitarbeiter, die ein bestimmtes Journal subscribieren wollen
     """
     
-    formTemplate = 'ZSIV/vanillaSave.html'
+    formTemplate = 'ZSIV/journal_subscribe_ma.html'
     journallist = Journals.objects.filter(pk=journal_id).select_related()
     myjournal = journallist[0] # TODO: pk lookup always first instance
     
@@ -203,7 +203,10 @@ def Journal_Subscribe_MAs(request,journal_id):
     ma_journal_data = MAJournal.objects.filter(Journal_id=journal_id)
     initialvalues = [x['MA_id'] for x in myjournal.majournal_set.values()]
     if request.method == 'POST':
-        form = JournalForm(request.POST, initial={'Subscriptions': initialvalues}, instance=myjournal)
+        form = JournalForm(request.POST, 
+                           initial={'Subscriptions': initialvalues}, 
+                           instance=myjournal
+                           )
         if form.is_valid():
             print ("Is form valid?" , form.is_valid())
             #journals = form.cleaned_data.get('journals')
@@ -249,7 +252,7 @@ class SummariesCreateView(ModelFormWidgetMixin,CreateView):
     """
     model = Summaries
     fields = '__all__'
-    #template_name = 'ZSIV/Summaries-create.html'
+    template_name = 'ZSIV/summaries_add.html'
     widgets = {
         'SENT' : CheckboxInput,
         'Heftnummer' :  Select,
@@ -261,7 +264,7 @@ class SummariesCreateView(ModelFormWidgetMixin,CreateView):
 class SummariesUpdateView(UpdateView):
     model = Summaries
     fields = '__all__'
-    template_name = 'ZSIV/summaries_form.html' #  is the default
+    template_name = 'ZSIV/summaries_update.html' 
     widgets = {
         'SENT' : CheckboxInput,
         'Heftnummer' :  Select,

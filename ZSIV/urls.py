@@ -34,10 +34,6 @@ app_name = 'ZSIV'
 """
 
 urlpatterns = [
-               
-               
-
-    
     # (1) Main Page, static so far
     #url(r'^$', views.indexView, name='index'), # http://localhost:8000/ZSIV/
     url(r'^$', views.MyView.as_view(), name='index'),
@@ -74,9 +70,6 @@ urlpatterns = [
             template_name='ZSIV/summaries_list.html', # not required, is the default  
             ),
         name='summaries-unsent'),
-
-    
-    
     
     # (4) Queue and send,  EmailText 
 

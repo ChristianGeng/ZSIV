@@ -1,14 +1,15 @@
 {% extends "ZSIV/base.html" %}
+{% load crispy_forms_tags %}
 {% block content %}
 <div class="row">
-	<div class="col-md-12">
+	<div class="col-md-7">
 		<h3>Journal</h3>
 		<div class="panel panel-default">
 			<div class="panel-heading"><h3 class="panel-title">Daten ändern</h3></div>
 			<div class="panel-body">
 				<form action="{% url "ZSIV:Journal-update" pk=Journal.id %}" method="post" enctype="multipart/form-data">
 					{% csrf_token %}
-					{{ form.as_p }}
+					{{ form|crispy }}
 					<!--<input type="submit" value="submit" />-->
 					<hr />
 					<button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-floppy-disk"></span>Update</button>

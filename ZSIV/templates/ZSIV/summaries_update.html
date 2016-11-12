@@ -3,11 +3,11 @@
 {% block content %}
 <div class="row">
 	<div class="col-md-7">
-		<h3>Mitarbeiter</h3>
+		<h3>Summaries</h3>
 		<div class="panel panel-default">
-			<div class="panel-heading"><h3 class="panel-title">Daten ändern</h3></div>
+			<div class="panel-heading"><h3 class="panel-title">Modify Summary Data - you must upload file!</h3></div>
 			<div class="panel-body">
-				<form action="{% url "ZSIV:Mitarbeiter-update" pk=Mitarbeiter.id %}" method="post" enctype="multipart/form-data">
+				<form action="{% url "ZSIV:Summaries-add" %}" method="post" enctype="multipart/form-data">
 					{% csrf_token %}
 					{{ form|crispy }}
 					<!--<input type="submit" value="submit" />-->

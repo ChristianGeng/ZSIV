@@ -38,6 +38,7 @@ SECRET_KEY = parser.get('SECRET_KEY', 'KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = parser.get('DEBUG', 'FLAG')
 
+
 #ALLOWED_HOSTS = []
 #ALLOWED_HOSTS = ['djangoproject.com']
 ALLOWED_HOSTS = ['localhost', '127.0.0.1','.zsiv.pythonanywhere.com']
@@ -58,7 +59,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites', # unter sessions sagt das video
     'registration', #should be immediately above 'django.contrib.auth'
-
+    'crispy_forms'
 ]
 
 # http://stackoverflow.com/questions/37415247/django-error-while-installing-django-registration-redux
@@ -211,9 +212,9 @@ MEDIA_ROOT = os.path.join(REPOSITORY_ROOT, 'mysite_MYSQL/ZSIV/uploads')
 #ACCOUNT_ACTIVATION_DAYS = 7 # One-week activation window; you may, of course, use a different value.
 #REGISTRATION_AUTO_LOGIN = True # Automatically log the user in.
 # Tango with django 
-REGISTRATION_OPEN = False                # If True, users can register
+REGISTRATION_OPEN = True                # If True, users can register
 ACCOUNT_ACTIVATION_DAYS = 7     # One-week activation window; you may, of course, use a different value.
-REGISTRATION_AUTO_LOGIN = True  # If True, the user will be automatically logged in.
+REGISTRATION_AUTO_LOGIN = False  # If True, the user will be automatically logged in.
 LOGIN_REDIRECT_URL = '/ZSIV/'  # The page you want users to arrive at after they successful log in
 LOGIN_URL = '/accounts/login/'  # The page users are directed to if they are not logged in,
                                                                 # and are trying to access pages requiring authentication
@@ -258,3 +259,7 @@ elif EMAIL_BACKEND == "sgbackend.SendGridBackend":
     DEFAULT_FROM_EMAIL = parser.get('SGDJANGO', 'DEFAULT_FROM_EMAIL')
     SENDGRID_API_KEY  = parser.get('SGDJANGO', 'SENDGRID_API_KEY') 
 
+
+
+
+CRISPY_TEMPLATE_PACK = 'bootstrap3'
