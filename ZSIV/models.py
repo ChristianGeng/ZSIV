@@ -79,7 +79,7 @@ QUELLE_CHOICES = (
 
 
 class Journals(models.Model):
-    Name = models.CharField(max_length=400,blank=False)
+    Name = models.CharField(max_length=300,blank=False)
     Kurztitel = models.CharField(max_length=50,blank=False)
     Quelle = models.CharField(max_length=200, choices = QUELLE_CHOICES, default='unspecified')
     
