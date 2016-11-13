@@ -80,7 +80,7 @@ QUELLE_CHOICES = (
 
 class Journals(models.Model):
     Name = models.CharField(max_length=400,blank=False)
-    Kurztitel = models.CharField(max_length=200,blank=False)
+    Kurztitel = models.CharField(max_length=50,blank=False)
     Quelle = models.CharField(max_length=200, choices = QUELLE_CHOICES, default='unspecified')
     
     Subscriptions = models.ManyToManyField('Mitarbeiter', through='MAJournal') # Note: Many to many fields beter referenced as  'Mitarbeiter' 
