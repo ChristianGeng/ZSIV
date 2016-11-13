@@ -205,7 +205,7 @@ def Journal_Subscribe_MAs(request,journal_id):
     if request.method == 'POST':
         form = JournalForm(request.POST, 
                            initial={'Subscriptions': initialvalues}, 
-                           instance=myjournal
+                           instance=myjournal,
                            )
         if form.is_valid():
             print ("Is form valid?" , form.is_valid())

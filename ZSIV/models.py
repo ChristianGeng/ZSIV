@@ -71,6 +71,7 @@ class Mitarbeiter(models.Model):
 
 
 QUELLE_CHOICES = (
+    ('unspecified', 'unspecified'),
     ('Juris', 'Juris'),
     ('BeckOnline', 'Beck Online'),
     ('Volltext', 'Volltext'),
@@ -78,15 +79,18 @@ QUELLE_CHOICES = (
 
 
 class Journals(models.Model):
-    Name = models.CharField(max_length=400)
-    Kurztitel = models.CharField(max_length=200,blank=True)
-    Quelle = models.CharField(max_length=200, choices = QUELLE_CHOICES, default='')
+    Name = models.CharField(max_length=400,blank=False)
+    Kurztitel = models.CharField(max_length=200,blank=False)
+    Quelle = models.CharField(max_length=200, choices = QUELLE_CHOICES, default='unspecified')
     
     Subscriptions = models.ManyToManyField('Mitarbeiter', through='MAJournal') # Note: Many to many fields beter referenced as  'Mitarbeiter' 
     def __str__(self):              # __unicode__ on Python 2
         return self.Name
     def get_absolute_url(self): # fuer die admin site, generiert im admin tool "view on site"
         return reverse('ZSIV:Journal-List')
+    class Meta:
+        unique_together = ("Name","Kurztitel")
+        
     
 class MAJournal(models.Model):
     MA = models.ForeignKey(Mitarbeiter)

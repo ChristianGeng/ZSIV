@@ -61,15 +61,6 @@ class MitarbeiterForm(ModelForm):
         }
 
 
-        
-        
-
-
-
-
-
-
-
 
 """
 https://docs.djangoproject.com/en/dev/topics/forms/formsets/#manually-rendered-can-delete-and-can-order
