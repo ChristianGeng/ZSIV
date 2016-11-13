@@ -17,8 +17,28 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
+from django.views.generic import RedirectView
+
+
+""" redirect http://localhost:8000/ oder zsiv.pythonanywhere.com/""" 
+class RootRedirectView(RedirectView):
+
+    permanent = False
+    query_string = True
+    pattern_name = 'article-detail'
+
+    def get_redirect_url(self, *args, **kwargs):
+        self.url = '/ZSIV/'
+        return super(RootRedirectView, self).get_redirect_url(*args, **kwargs)
+        
+
+
+
 
 urlpatterns = [
+    url(r'^$', RootRedirectView.as_view()),
+    #url(r'^$', redirect_to, {'ZSIV': ''}),
+    
     url(r'^ZSIV/', include('ZSIV.urls')),
     url(r'^admin/', admin.site.urls),
     # django-registration-redux old
