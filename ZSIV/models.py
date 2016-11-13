@@ -1,3 +1,4 @@
+
 from django.db import models
 import datetime   
 from django.utils import timezone
@@ -88,8 +89,8 @@ class Journals(models.Model):
         return self.Name
     def get_absolute_url(self): # fuer die admin site, generiert im admin tool "view on site"
         return reverse('ZSIV:Journal-List')
-    class Meta:
-        unique_together = ("Name","Kurztitel")
+    #class Meta:
+    #    unique_together = ("Name","Kurztitel")
         
     
 class MAJournal(models.Model):
