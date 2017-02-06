@@ -76,13 +76,14 @@ QUELLE_CHOICES = (
     ('Juris', 'Juris'),
     ('BeckOnline', 'Beck Online'),
     ('Volltext', 'Volltext'),
+    ('Printausgabe', 'Printausgabe'),
 )
 
 
 class Journals(models.Model):
     Name = models.CharField(max_length=200,blank=False) # https://wildlyinaccurate.com/mysql-specified-key-was-too-long-max-key-length-is-767-bytes/
     Kurztitel = models.CharField(max_length=50,blank=False)
-    Quelle = models.CharField(max_length=200, choices = QUELLE_CHOICES, default='unspecified')
+    Quelle = models.CharField(max_length=200, choices = QUELLE_CHOICES, default='Printausgabe')
     
     Subscriptions = models.ManyToManyField('Mitarbeiter', through='MAJournal') # Note: Many to many fields beter referenced as  'Mitarbeiter' 
     def __str__(self):              # __unicode__ on Python 2
