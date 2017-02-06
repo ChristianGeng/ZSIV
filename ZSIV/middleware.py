@@ -43,8 +43,8 @@ class LoginRequiredMiddleware:
  'django.contrib.auth.middleware.AuthenticationMiddleware'. If that doesn't\
  work, ensure your TEMPLATE_CONTEXT_PROCESSORS setting includes\
  'django.core.context_processors.auth'."
-        print("der regwest:")
-        print(request)
+        #print("der regwest:")
+        #print(request)
         if not request.user.is_authenticated():
             path = request.path_info.lstrip('/')
             if not any(m.match(path) for m in EXEMPT_URLS):

@@ -12,11 +12,10 @@ from .forms import MessageTextForm
 from django.views.generic.edit import FormView
 from ZSIV.forms import MitarbeiterForm
 from django.forms import modelformset_factory
-from django.forms.widgets import CheckboxInput, Select, Textarea, TextInput
+from django.forms.widgets import CheckboxInput, Select
 from django.forms.models import modelform_factory
 from django.forms import fields
 
-from django.shortcuts import render_to_response
 from django.shortcuts import  render, redirect
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
@@ -34,9 +33,10 @@ from extra_views import SortableListMixin
 from django.views.generic.base import  TemplateResponseMixin, View
 # two ways to import: from django.views.generic import View
 
-from django.core.mail import EmailMultiAlternatives
+#from django.core.mail import EmailMultiAlternatives
 from django.urls import reverse_lazy
 
+#from django.forms.widgets import HiddenInput
 
 import os
 
@@ -107,6 +107,37 @@ Registration
 
 """
 
+
+from contextlib import contextmanager
+import threading
+import _thread
+
+class TimeoutException(Exception):
+    """
+    Timeouts, um einen Email timeout zu behandeln
+    http://stackoverflow.com/questions/366682/how-to-limit-execution-time-of-a-function-call-in-python
+    
+    import time
+    ends after 5 seconds
+    with time_limit(5, 'sleep'):
+        for i in range(10):
+            time.sleep(1)
+        
+    """
+    def __init__(self, msg=''):
+        self.msg = msg
+
+@contextmanager
+def time_limit(seconds, msg=''):
+    timer = threading.Timer(seconds, lambda: _thread.interrupt_main())
+    timer.start()
+    try:
+        yield
+    except KeyboardInterrupt:
+        raise TimeoutException("Timed out for operation {}".format(msg))
+    finally:
+        # if the action ends in specified time, timer is canceled
+        timer.cancel()       
 
     
 
@@ -288,7 +319,7 @@ class SummariesDeleteView(DeleteView):
 
  
  
-from django.forms.widgets import HiddenInput
+
 class TestFormstSetView(SortableListMixin,SearchableListMixin,ModelFormSetView):
     """
     Funktionierender MultiDeleteView
@@ -458,7 +489,7 @@ class Queuelistview(ListView):
             subscriptions = ma.Subscriptions.filter(summaries__SENT=False).distinct()
             if not subscriptions:
                 self.emails.append('')
-                print ("\n no emails left for ", ma)
+                # print ("\n no emails left for ", ma)
             else:
 
                 grussfloskeluse = grussfloskel
@@ -521,7 +552,42 @@ class Queuelistview(ListView):
         
         sending mails:
         http://stackoverflow.com/questions/8659131/how-does-one-send-an-email-to-10-000-users-in-django
+        Threaded Sending: 
+        http://stackoverflow.com/questions/32979945/django-send-mail-function-taking-several-minutes
+        
+        Wichtiges Feature hier: 
+        Logging: Wenn email-versand fehlschlägt, dann soll der Logger das in den Log File Schreiben
+        Python logging configuration
+        Loggers: 
+            Ein Bucket, in den Logging-Messages geschrieben werden koennen
+        Handlers:
+            Was passiert mit jeder Message in einem Logger
+        Filter: 
+            Welche Logeintraege gelangen vom Logger zum Handler
+        Formatters:
+            Die machen was man denkt - Formattieren
+        Der Standardplatz für einen Logger ist settings.py
+            
+        
         """
+        
+        #FALSCH
+        #try:
+        #        send_mail(subject, message, sender, recipients)
+        #    except smtplib.SMTPException:
+        #        result = smtplib.SMTPException.message
+        #RICHTIG    
+        #try:
+        #    send_mail(subject, message, sender, recipients)
+        #except smtplib.SMTPException as e:
+        #result = str(e)
+      
+        # from email_validator import validate_email, EmailNotValidError, EmailUndeliverableError
+        import logging
+        logger = logging.getLogger("django")
+        import smtplib
+        import sys
+        from django.http import HttpResponse
         
         print ("")
         self.object_list = self.get_queryset() #  generiert emails mit: self.emails
@@ -529,21 +595,73 @@ class Queuelistview(ListView):
         try:
             connection = mail.get_connection()
             connection.open()
-            for mamail in self.emails:
-                if mamail:
-                    print ("sending mail containing ",  len(mamail.attachments),  "attachments to ", mamail.recipients()[0])
-                    mamail.send(fail_silently=False)
-                print (not mamail)
+            print("connection offen!")
+            logger.info("Successfully opened email connection")
+        except smtplib.SMTPException as e:
+            msg = str(e)
+            #logger.error("Houston, we have a %s", "major problem: %s", exc_info=1, str(e))
+            logger.error("smtp fehler")
+            return HttpResponse(msg)
+        except: # https://docs.python.org/3/tutorial/errors.html
+            logger.error("ein anderer Fehler")
+            return HttpResponse("ein anderer Fehler")
+            
+        
+            
+        
+        for mamail in self.emails:
+            print(type(mamail))
+            print ("debug the fuck")
+            print ("debug")
+            print(str(mamail))
+            if  isinstance(mamail,mail.message.EmailMultiAlternatives):
+                msg = "EMAIL: attempting to send email containing "+str(len(mamail.attachments))+" attachments to "+"\n".join(mamail.to)
+                logger.info(msg)
+                with time_limit(40, 'sleep'):
+                    try: 
+                        #validation = validate_email("\n".join(mamail.to))
+                        msg = mamail.send(fail_silently=False)
+                        if msg == 1:
+                            logmessage = " EMAIL SUCCESS: sent mail to "+"\n".join(mamail.to)
+                            logger.info(logmessage) # gibt 1 ween success
+                                                    # The return value will be the number of successfully delivered messages.
+                                                    # https://simpleisbetterthancomplex.com/tutorial/2016/06/13/how-to-send-email.html
+                    except EmailNotValidError as e:
+                        #errno, strerror = e.args
+                        logger.error("EMAIL: EmailNotValidError")
+                        pass
+                    except EmailUndeliverableError as e:
+                        errno, strerror = e.args
+                        logger.error("EMAIL: EmailUndeliverableError:({0}): {1}".format(errno,strerror))
+                        pass
+                    except TimeoutException as e:
+                        errno, strerror = e.args
+                        logger.error("EMAIL: TimeoutException({0}): {1}".format(errno,strerror))
+                        print("Timeout Exception??")
+                        pass
+                    except: 
+                        #raise Exception('Unknown Christian error ') # use raise to raise  your own errors.
+                        logger.error('EMAIL : Unknown Christian error ')
+                        print("andere Exception?")
+                        pass 
+            else:
+                msg = "EMAIL: no emails to send!"
+                #logger.info(msg)
                 
             
-            connection.close()  
-            
-            
-            Summaries.objects.filter(SENT=False).update(SENT=True)
+        connection.close()  
         
-        except Exception as e:
+            
+        #Summaries.objects.filter(SENT=False).update(SENT=True)
+        
+        #except Exception as e:
             #logger.exception('Exception when sending emails!!!')
-            print('Exception when sending emails!!!')
+        #    print('Exception when sending emails!!!')
+        
+        
+        
+        
+        
         # Wohin?
         #return HttpResponse('I did the send')
         #return HttpResponseRedirect(reverse('ZSIV:index')) # zuruecl nach hause

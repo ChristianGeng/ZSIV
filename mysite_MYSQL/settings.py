@@ -13,10 +13,37 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 import os
 from django.conf import settings
 
-
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# Logging einrichten
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'debug.log'),
+            'formatter': 'verbose'
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
 
 
 # handle settings 
@@ -103,22 +130,6 @@ WSGI_APPLICATION = 'mysite_MYSQL.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'ZSIV',
-#         'USER': 'christian',
-#         'PASSWORD': 'christian',
-#         'HOST': 'localhost',   # Or an IP Address that your DB is hosted on
-#         #'PORT': '3306', # default port, not needed
-#     }
-# }
-
-
-
-
-
-
 DATABASES={}
 default={}
 default["ENGINE"] = parser.get('DATABASE', 'ENGINE')
@@ -128,18 +139,6 @@ default["PASSWORD"] = parser.get('DATABASE', 'PASSWORD')
 default["HOST"] = parser.get('DATABASE', 'HOST')
 DATABASES["default"] = default
 
-
-# settings file hat permission issues
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'OPTIONS': {
-#             'init_command': 'SET storage_engine=INNODB',
-#             'read_default_file': '/media/win-d/myfiles/2016/django/mysite_MYSQL/ChristianLocal.cnf',
-# #             
-#         },
-#     }
-# }
 
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators

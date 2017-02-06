@@ -4,7 +4,7 @@ import datetime
 from django.utils import timezone
 from django.core.urlresolvers import reverse
 import uuid
-from django.template.defaultfilters import default
+#from django.template.defaultfilters import default
 
 class SingletonModel(models.Model):
     """
