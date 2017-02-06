@@ -476,7 +476,7 @@ class Queuelistview(ListView):
         
         
         mt  = MessageText.load() # load email text and subject
-        grussfloskel = "Sehr geehrte"
+        grussfloskel = "Liebe"
         
         qs = super(Queuelistview,self).get_queryset()
         print ("modify qs when you want to contain only people with querysets!")
