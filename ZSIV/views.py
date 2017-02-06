@@ -39,8 +39,10 @@ from django.urls import reverse_lazy
 #from django.forms.widgets import HiddenInput
 
 import os
-
-
+import smtplib
+import sys
+from django.http import HttpResponse
+import logging
 
 """
 
@@ -583,70 +585,55 @@ class Queuelistview(ListView):
         #result = str(e)
       
         # from email_validator import validate_email, EmailNotValidError, EmailUndeliverableError
-        import logging
-        logger = logging.getLogger("django")
-        import smtplib
-        import sys
-        from django.http import HttpResponse
+
+        email_logger = logging.getLogger("email")
+
         
-        print ("")
         self.object_list = self.get_queryset() #  generiert emails mit: self.emails
         
         try:
             connection = mail.get_connection()
             connection.open()
             print("connection offen!")
-            logger.info("Successfully opened email connection")
+            email_logger.info("Successfully opened email connection")
         except smtplib.SMTPException as e:
             msg = str(e)
-            #logger.error("Houston, we have a %s", "major problem: %s", exc_info=1, str(e))
-            logger.error("smtp fehler")
+            #email_logger.error("Houston, we have a %s", "major problem: %s", exc_info=1, str(e))
+            email_logger.error("smtp fehler")
             return HttpResponse(msg)
         except: # https://docs.python.org/3/tutorial/errors.html
-            logger.error("ein anderer Fehler")
+            email_logger.error("ein anderer Fehler")
             return HttpResponse("ein anderer Fehler")
             
         
             
         
         for mamail in self.emails:
-            print(type(mamail))
-            print ("debug the fuck")
-            print ("debug")
-            print(str(mamail))
             if  isinstance(mamail,mail.message.EmailMultiAlternatives):
                 msg = "EMAIL: attempting to send email containing "+str(len(mamail.attachments))+" attachments to "+"\n".join(mamail.to)
-                logger.info(msg)
+                email_logger.info(msg)
                 with time_limit(40, 'sleep'):
                     try: 
                         #validation = validate_email("\n".join(mamail.to))
                         msg = mamail.send(fail_silently=False)
                         if msg == 1:
                             logmessage = " EMAIL SUCCESS: sent mail to "+"\n".join(mamail.to)
-                            logger.info(logmessage) # gibt 1 ween success
+                            email_logger.info(logmessage) # gibt 1 ween success
                                                     # The return value will be the number of successfully delivered messages.
                                                     # https://simpleisbetterthancomplex.com/tutorial/2016/06/13/how-to-send-email.html
-                    except EmailNotValidError as e:
-                        #errno, strerror = e.args
-                        logger.error("EMAIL: EmailNotValidError")
-                        pass
-                    except EmailUndeliverableError as e:
-                        errno, strerror = e.args
-                        logger.error("EMAIL: EmailUndeliverableError:({0}): {1}".format(errno,strerror))
-                        pass
                     except TimeoutException as e:
                         errno, strerror = e.args
-                        logger.error("EMAIL: TimeoutException({0}): {1}".format(errno,strerror))
+                        email_logger.error("EMAIL: TimeoutException({0}): {1}".format(errno,strerror))
                         print("Timeout Exception??")
                         pass
                     except: 
                         #raise Exception('Unknown Christian error ') # use raise to raise  your own errors.
-                        logger.error('EMAIL : Unknown Christian error ')
+                        email_logger.error('EMAIL : Unknown Christian error ')
                         print("andere Exception?")
                         pass 
             else:
                 msg = "EMAIL: no emails to send!"
-                #logger.info(msg)
+                #email_logger.info(msg)
                 
             
         connection.close()  
@@ -655,7 +642,7 @@ class Queuelistview(ListView):
         #Summaries.objects.filter(SENT=False).update(SENT=True)
         
         #except Exception as e:
-            #logger.exception('Exception when sending emails!!!')
+            #email_logger.exception('Exception when sending emails!!!')
         #    print('Exception when sending emails!!!')
         
         

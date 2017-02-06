@@ -12,9 +12,14 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 
 import os
 from django.conf import settings
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# handle settings 
+from configparser import ConfigParser
+parser = ConfigParser()
+settingsfile = os.path.join(BASE_DIR, 'settings.ini')
+parser.read(settingsfile)
+
 
 # Logging einrichten
 LOGGING = {
@@ -32,28 +37,18 @@ LOGGING = {
         'file': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
-            'filename': os.path.join(BASE_DIR, 'debug.log'),
+            'filename': os.path.join(BASE_DIR, parser.get('EMAIL','LOGFILE')),
             'formatter': 'verbose'
         },
     },
     'loggers': {
-        'django': {
+        'email': {
             'handlers': ['file'],
             'level': 'DEBUG',
             'propagate': True,
         },
     },
 }
-
-
-# handle settings 
-from configparser import ConfigParser
-parser = ConfigParser()
-settingsfile = os.path.join(BASE_DIR, 'settings.ini')
-parser.read(settingsfile)
-
-
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
