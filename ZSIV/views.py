@@ -621,6 +621,7 @@ class Queuelistview(ListView):
                             email_logger.info(logmessage) # gibt 1 ween success
                                                     # The return value will be the number of successfully delivered messages.
                                                     # https://simpleisbetterthancomplex.com/tutorial/2016/06/13/how-to-send-email.html
+                            print ("debug")
                     except TimeoutException as e:
                         errno, strerror = e.args
                         email_logger.error("EMAIL: TimeoutException({0}): {1}".format(errno,strerror))
@@ -638,8 +639,8 @@ class Queuelistview(ListView):
             
         connection.close()  
         
-            
-        #Summaries.objects.filter(SENT=False).update(SENT=True)
+                    
+        Summaries.objects.filter(SENT=False).update(SENT=True)
         
         #except Exception as e:
             #email_logger.exception('Exception when sending emails!!!')
