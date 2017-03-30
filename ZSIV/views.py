@@ -488,7 +488,8 @@ class Queuelistview(ListView):
         for idxma, ma in enumerate(mas):
             subscriptions = ma.Subscriptions.filter(summaries__SENT=False).distinct()
             if not subscriptions:
-                self.emails.append('')
+                #self.emails.append('')
+                pass            
             else:
                 grussfloskeluse = grussfloskel
                 if ma.Sex=='m': grussfloskeluse = grussfloskel+"r"
