@@ -118,7 +118,7 @@ def content_file_name(instance, filename):
     journalname=instance.Journal.Name.replace(' ', '_')
     hn=str(instance.Heftnummer)
     jg=str(instance.Jahrgang)
-    fn = '_'.join([journalname,jg,hn,str(uuid.uuid4())])+'.'+ext
+    fn = '_'.join([journalname,jg,hn])+'.'+ext
     uploadLoc=fn
     print("uploadLoc:" , uploadLoc)
     return uploadLoc

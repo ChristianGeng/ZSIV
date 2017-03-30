@@ -25,6 +25,9 @@ from ZSIV.views  import UserFormView
 #from ZSIV.views  import MyView
 app_name = 'ZSIV'
 
+
+# http://127.0.0.1:8000/ZSIV/queue
+
 """
     # (1) Main Page
     # (2) Manage Subscriptions
