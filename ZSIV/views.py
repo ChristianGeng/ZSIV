@@ -482,18 +482,14 @@ class Queuelistview(ListView):
         print ("modify qs when you want to contain only people with querysets!")
         print("Emails werden gesendet von  ",settings.DEFAULT_FROM_EMAIL)
         mas = Mitarbeiter.objects.all()
-
         self.emails=[]
         self.journalName=[]
         self.journalQuelle=[]
         for idxma, ma in enumerate(mas):
-            
             subscriptions = ma.Subscriptions.filter(summaries__SENT=False).distinct()
             if not subscriptions:
                 self.emails.append('')
-                # print ("\n no emails left for ", ma)
             else:
-
                 grussfloskeluse = grussfloskel
                 if ma.Sex=='m': grussfloskeluse = grussfloskel+"r"
                 anrede = " ".join([ grussfloskeluse, ma.Anrede, ma.Nachname+","])
@@ -506,23 +502,13 @@ class Queuelistview(ListView):
                              settings.DEFAULT_FROM_EMAIL,
                              [ma.email]
                             )
-                
-                #tmpmail.attachments.JournalName=[]
-                #tmpmail.attachments.JournalQuelle=[]
-
                 for idxsub, subsc in enumerate(subscriptions): # loop durch die JournalSubscriptions eines Mitarbeiters
                     for summary in iter(subsc.summaries_set.iterator()): 
-                        fn=os.path.join(settings.MEDIA_ROOT,str(summary.Inhaltsverzeichnis))
-                        tmpmail.attach_file(fn)
-                        journalData = Journals.objects.get(Name=str(summary.Journal.Name))
-                        #tmpmail.attachments.JournalName.append(journalData.Name)
-                        #tmpmail.attachments.JournalQuelle.append(journalData.Quelle)
-                        
-                        
-                        mailtext =   mailtext + journalData.Name + " - " + journalData.Quelle + "\r\n" 
-                
-                
-                
+                        if summary.SENT == False:
+                            fn=os.path.join(settings.MEDIA_ROOT,str(summary.Inhaltsverzeichnis))                        
+                            tmpmail.attach_file(fn)
+                            journalData = Journals.objects.get(Name=str(summary.Journal.Name))
+                            mailtext =   mailtext + journalData.Name + " - " + journalData.Quelle + "\r\n" 
                 mailhtml = htmlify(mailtext)
                 tmpmail.attach_alternative(mailhtml, "text/html")
                 self.emails.append(tmpmail)
