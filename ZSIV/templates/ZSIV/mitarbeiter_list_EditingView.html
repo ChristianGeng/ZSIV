@@ -11,7 +11,7 @@
 				<tr class="active"><th>Anrede</th><th>Vorname</th><th>Nachname</th><th>email</th><th>-</th><th>-</th>
 				</tr>
 			</thead>
-
+			<tbody>
 			{% for ma in list_to_view %}
 			<tr>
 				<td> 			{{ ma.Anrede }} 	  </td>
@@ -23,7 +23,8 @@
 				<td></td>
 			</tr>
 			{% endfor %}
-
+			</tbody>
+		</table>
 			{% else %}
 			<p>Keine Daten!</p>
 			{% endif %}
