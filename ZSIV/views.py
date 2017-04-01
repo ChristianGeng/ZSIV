@@ -217,6 +217,7 @@ class indexViewJournals(generic.ListView):
     """
     List View der Journals - um deren MA Subscriptions zu handeln 
     """
+    paginate_by = 20
     #template_name='ZSIV/indexJournal.html'
     context_object_name = 'list_to_view'
     def get_queryset(self):
