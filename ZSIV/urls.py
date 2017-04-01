@@ -20,7 +20,7 @@ from ZSIV.views import JournalDeleteView
 from ZSIV.views import MitarbeiterCreateView
 from ZSIV.views import MitarbeiterUpdateView
 from ZSIV.views import MitarbeiterDeleteView
-from ZSIV.models import Mitarbeiter
+from ZSIV.models import Mitarbeiter, Summaries
 from ZSIV.views  import UserFormView
 #from ZSIV.views  import MyView
 app_name = 'ZSIV'
@@ -58,9 +58,10 @@ urlpatterns = [
     url(r'^Summaries-all$',
         ListView.as_view(
             model=Summaries,
-            queryset=Summaries.objects.order_by('-updated').select_related(),
+            #queryset=Summaries.objects.order_by('-updated').select_related(),
+            queryset=Summaries.objects.order_by('SENT').select_related(),
             context_object_name='all_summaries',
-            #paginate_by = '5',
+            paginate_by = '15',
             template_name='ZSIV/summaries_list.html', # not required, is the default  
             ),
         name='summaries-index'),

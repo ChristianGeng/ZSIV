@@ -700,9 +700,14 @@ class JournalListview(ListView):
     context_object_name = 'list_to_view'
     template_name="ZSIV/journal_list_EditingView.html"
     paginate_by = 20  # im template siehe https://djangosnippets.org/snippets/3023/ (twitter bootstrap pagination)
+                      # uses https://github.com/jmcclell/django-bootstrap-pagination
     def get_context_data(self, **kwargs):
         context = super(JournalListview, self).get_context_data(**kwargs)
         return context
+    def get_queryset(self):
+        queryset = super(JournalListview, self).get_queryset()       
+        return queryset
+
 
 class JournalUpdateView(UpdateView):
     model = Journals
