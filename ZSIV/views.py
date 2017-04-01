@@ -169,6 +169,7 @@ class indexViewMA(generic.ListView):
     """
     List View der Mitarbeiter - um deren Journal Subscriptions zu handeln 
     """
+    paginate_by = 20
     #template_name = 'ZSIV/indexMA.html' # renamed to default named mitarbeiter_list.html
     context_object_name = 'list_to_view'
     def get_queryset(self):
