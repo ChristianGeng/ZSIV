@@ -699,6 +699,7 @@ class JournalListview(ListView):
     fields = ["Name","Kurztitel","Quelle"]
     context_object_name = 'list_to_view'
     template_name="ZSIV/journal_list_EditingView.html"
+    paginate_by = 20  # im template siehe https://djangosnippets.org/snippets/3023/ (twitter bootstrap pagination)
     def get_context_data(self, **kwargs):
         context = super(JournalListview, self).get_context_data(**kwargs)
         return context
@@ -728,6 +729,7 @@ class MitarbeiterListview(ListView):
     model = Mitarbeiter
     context_object_name = 'list_to_view'
     template_name="ZSIV/mitarbeiter_list_EditingView.html"
+    paginate_by = 20  # im template siehe https://djangosnippets.org/snippets/3023/ (twitter bootstrap pagination)
     def get_context_data(self, **kwargs):
         context = super(MitarbeiterListview, self).get_context_data(**kwargs)
         return context

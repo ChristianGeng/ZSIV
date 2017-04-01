@@ -81,7 +81,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites', # unter sessions sagt das video
     'registration', #should be immediately above 'django.contrib.auth'
-    'crispy_forms'
+    'crispy_forms',
+     'bootstrap_pagination'
 ]
 
 # http://stackoverflow.com/questions/37415247/django-error-while-installing-django-registration-redux
@@ -118,6 +119,12 @@ TEMPLATES = [
         },
     },
 ]
+
+
+
+
+
+
 
 WSGI_APPLICATION = 'mysite_MYSQL.wsgi.application'
 
@@ -257,3 +264,5 @@ elif EMAIL_BACKEND == "sgbackend.SendGridBackend":
 
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
+
+
