@@ -337,11 +337,9 @@ class TestFormstSetView(SortableListMixin,SearchableListMixin,ModelFormSetView):
     template_name = 'ZSIV/summaries_multidelete.html'
     delete = fields.BooleanField(required=False)
     fields = ["SENT","Journal","Jahrgang","Heftnummer"]
-    
     search_fields = ['SENT', 'Jahrgang']
     sort_fields_aliases = [('SENT', 'by_SENT'), ('id', 'by_id'), ]
     extra=0
-    
     widgets = {
         'Heftnummer' : Select(attrs={'disabled': 'disabled'}),
         'Jahrgang'   : Select(attrs={'disabled': 'disabled'}),

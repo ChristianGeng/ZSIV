@@ -70,7 +70,7 @@ urlpatterns = [
             model=Summaries, 
             queryset=Summaries.objects.filter(SENT=False).select_related(),
             context_object_name='all_summaries',
-            #paginate_by = '5',
+            paginate_by = '20',
             template_name='ZSIV/summaries_list.html', # not required, is the default  
             ),
         name='summaries-unsent'),
