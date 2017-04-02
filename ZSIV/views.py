@@ -705,9 +705,8 @@ class JournalListview(ListView):
         context = super(JournalListview, self).get_context_data(**kwargs)
         return context
     def get_queryset(self):
-        queryset = super(JournalListview, self).get_queryset()       
+        queryset = super(JournalListview, self).get_queryset().order_by('Name')
         return queryset
-
 
 class JournalUpdateView(UpdateView):
     model = Journals
@@ -738,6 +737,9 @@ class MitarbeiterListview(ListView):
     def get_context_data(self, **kwargs):
         context = super(MitarbeiterListview, self).get_context_data(**kwargs)
         return context
+    def get_queryset(self):
+        return Mitarbeiter.objects.filter().order_by('Nachname')
+
 
 class MitarbeiterUpdateView(UpdateView):
     model = Mitarbeiter
