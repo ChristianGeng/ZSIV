@@ -224,6 +224,9 @@ class indexViewJournals(generic.ListView):
     def get_queryset(self):
         return Journals.objects.filter().order_by('Name')
     
+
+
+
     
 def Journal_Subscribe_MAs(request,journal_id):
     """
@@ -236,8 +239,10 @@ def Journal_Subscribe_MAs(request,journal_id):
     
     # linking table
     ma_journal_data = MAJournal.objects.filter(Journal_id=journal_id)
+    #ma_journal_data = MAJournal.objects.order_by('MA').filter(Journal_id=journal_id) - nicht der 
     initialvalues = [x['MA_id'] for x in myjournal.majournal_set.values()]
     if request.method == 'POST':
+        
         form = JournalForm(request.POST, 
                            initial={'Subscriptions': initialvalues}, 
                            instance=myjournal,

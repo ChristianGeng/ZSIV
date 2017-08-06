@@ -27,6 +27,16 @@ class MessageTextForm(ModelForm):
     
 
 
+
+
+
+#class CreateForm(EditForm):
+#    name = forms.CharField()
+
+#    def __init__(self, *args, **kwargs):
+#        super(CreateForm, self).__init__(*args, **kwargs)
+#        self.fields.keyOrder = ['name', 'summary', 'description']
+
 class JournalForm(ModelForm):
     def __init__(self, *args, **kwargs):
         """
@@ -35,13 +45,18 @@ class JournalForm(ModelForm):
         """
         super(JournalForm, self).__init__(*args, **kwargs)
         self.fields['Subscriptions'].required=False
+        #self.fields.keyOrder = ['Name','Kurztitel','Quelle'] # get auch nicht 
+        
     class Meta:
         model = Journals
         fields = '__all__'
         #fields = ['Subscriptions']
+        #fields = ['Name','Subscriptions','Kurztitel','Quelle']
         widgets = {
             'Subscriptions': forms.CheckboxSelectMultiple,
         }
+        
+        
         
         
 class MitarbeiterForm(ModelForm):

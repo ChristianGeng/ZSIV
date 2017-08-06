@@ -81,6 +81,8 @@ QUELLE_CHOICES = (
 )
 
 
+
+
 class Journals(models.Model):
     Name = models.CharField(max_length=200,blank=False) # https://wildlyinaccurate.com/mysql-specified-key-was-too-long-max-key-length-is-767-bytes/
     Kurztitel = models.CharField(max_length=50,blank=False)
@@ -130,7 +132,7 @@ class Summaries(models.Model):
     Journal = models.ForeignKey(Journals)
     SENT = models.BooleanField(default=False)
     Jahrgang = models.PositiveSmallIntegerField(blank=True, null=True, choices = [(i,i) for i in range(2016,2031)])
-    Heftnummer = models.PositiveSmallIntegerField(blank=True, null=True, choices = [(i,i) for i in range(55)])
+    Heftnummer = models.PositiveSmallIntegerField(blank=True, null=True, choices = [(i,i) for i in range(100)])
     Inhaltsverzeichnis = models.FileField(upload_to=content_file_name,
                           blank=False, 
                           default=False
