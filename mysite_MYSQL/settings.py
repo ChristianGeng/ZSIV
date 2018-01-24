@@ -266,3 +266,10 @@ elif EMAIL_BACKEND == "sgbackend.SendGridBackend":
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 
+"""
+Avoid this error:
+The number of GET/POST parameters exceeded 
+by settings.DATA_UPLOAD_MAX_NUMBER_FIELDS.
+"""
+DATA_UPLOAD_MAX_NUMBER_FIELDS = None
+
