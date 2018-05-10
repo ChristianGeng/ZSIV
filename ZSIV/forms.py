@@ -68,8 +68,10 @@ class MitarbeiterForm(ModelForm):
 """
 https://docs.djangoproject.com/en/dev/topics/forms/formsets/#manually-rendered-can-delete-and-can-order
 """
+
+
 class SummariesDeleteForm(forms.ModelForm):
-    #readonly_fields = ('Heftnummer')
+    # readonly_fields = ('Heftnummer')
     id = fields.IntegerField(widget=widgets.HiddenInput)
     delete = fields.BooleanField(required=False)
 
