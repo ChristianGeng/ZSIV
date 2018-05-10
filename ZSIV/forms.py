@@ -1,41 +1,35 @@
 from django import forms
-from .models import Journals, Summaries, Mitarbeiter, MessageText
-from django.forms import ModelForm
+from django.contrib.auth.models import User
+from django.forms import ModelForm, fields, widgets
 from django.forms.models import inlineformset_factory
 
-
+from .models import Journals, Summaries, Mitarbeiter, MessageText
 
 
 """ user registration """
-from django.contrib.auth.models import User
+
+
 class UserForm(ModelForm):
     password = forms.CharField(widget=forms.PasswordInput)
-    class Meta: # information about my class
-        model = User
-        fields = ['username','email','password']
-        
 
-""" Die Email editieren """
+    class Meta:  # information about my class
+        model = User
+        fields = ['username', 'email', 'password']
+
+
+"""
+Edit Emails
+"""
+
+
 class MessageTextForm(ModelForm):
     def __init__(self, *args, **kwargs):
-        super(MessageTextForm,self).__init__(*args, **kwargs)
+        super(MessageTextForm, self).__init__(*args, **kwargs)
+
     class Meta:
-        model=MessageText
-        fields='__all__'
-        
-        
-    
+        model = MessageText
+        fields = '__all__'
 
-
-
-
-
-#class CreateForm(EditForm):
-#    name = forms.CharField()
-
-#    def __init__(self, *args, **kwargs):
-#        super(CreateForm, self).__init__(*args, **kwargs)
-#        self.fields.keyOrder = ['name', 'summary', 'description']
 
 class JournalForm(ModelForm):
     def __init__(self, *args, **kwargs):
@@ -44,64 +38,57 @@ class JournalForm(ModelForm):
         required field muss auf False gesetzt werden, sonst wird die Form ungueltig
         """
         super(JournalForm, self).__init__(*args, **kwargs)
-        self.fields['Subscriptions'].required=False
-        #self.fields.keyOrder = ['Name','Kurztitel','Quelle'] # get auch nicht 
-        
+        self.fields['Subscriptions'].required = False
+
     class Meta:
         model = Journals
         fields = '__all__'
-        #fields = ['Subscriptions']
-        #fields = ['Name','Subscriptions','Kurztitel','Quelle']
+
         widgets = {
             'Subscriptions': forms.CheckboxSelectMultiple,
         }
-        
-        
-        
-        
+
+
 class MitarbeiterForm(ModelForm):
     def __init__(self, *args, **kwargs):
         """
         http://www.pydanny.com/overloading-form-fields.html
         """
         super(MitarbeiterForm, self).__init__(*args, **kwargs)
-        self.fields['Subscriptions'].required=False
+        self.fields['Subscriptions'].required = False
 
     class Meta:
         model = Mitarbeiter
         fields = '__all__'
-        #fields = ['Subscriptions']
         widgets = {
             'Subscriptions': forms.CheckboxSelectMultiple,
         }
 
 
-
 """
 https://docs.djangoproject.com/en/dev/topics/forms/formsets/#manually-rendered-can-delete-and-can-order
 """
-from django.forms import fields     
-from django.forms import widgets  
 class SummariesDeleteForm(forms.ModelForm):
     #readonly_fields = ('Heftnummer')
     id = fields.IntegerField(widget=widgets.HiddenInput)
     delete = fields.BooleanField(required=False)
-        
+
     def save(self, commit=False):
         if self.is_valid() and self.cleaned_data['delete']:
-            self.instance.delete()             
+            self.instance.delete()
     #    def __init__(self, *args, **kwargs):
     #        self.user = kwargs.pop('user')
     #        super(SummariesDeleteForm, self).__init__(*args, **kwargs)
-    def __init__(self, *args, **kwargs): 
+
+    def __init__(self, *args, **kwargs):
         super(SummariesDeleteForm, self).__init__(*args, **kwargs)
         self.fields['Journal'].disabled = True
         self.fields['SENT'].disabled = True
-        
+
     class Meta:
         model = Summaries
         fields = '__all__'
-        
+
 
 """  Versuch eines Journal Multidelete views mittels inlineformset """        
 SummaryFormSet = inlineformset_factory(Journals,Summaries, extra=0, fields=('Jahrgang','Heftnummer', ))
