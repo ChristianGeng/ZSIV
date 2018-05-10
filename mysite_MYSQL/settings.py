@@ -11,15 +11,16 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 """
 
 import os
-from django.conf import settings
+from configparser import ConfigParser
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-# handle settings 
-from configparser import ConfigParser
+
+# handle settings
+
 parser = ConfigParser()
 settingsfile = os.path.join(BASE_DIR, 'settings.ini')
 parser.read(settingsfile)
-
 
 # Logging einrichten
 LOGGING = {
@@ -37,7 +38,7 @@ LOGGING = {
         'file': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
-            'filename': os.path.join(BASE_DIR, parser.get('EMAIL','LOGFILE')),
+            'filename': os.path.join(BASE_DIR, parser.get('EMAIL', 'LOGFILE')),
             'formatter': 'verbose'
         },
     },
@@ -55,15 +56,14 @@ LOGGING = {
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = parser.get('SECRET_KEY', 'KEY')
-#'5qvi!cro^i20hf&x#f&_)b485qavho3%r8lq73=7g2n4u-je$m'
+# '5qvi!cro^i20hf&x#f&_)b485qavho3%r8lq73=7g2n4u-je$m'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = parser.get('DEBUG', 'FLAG')
 
-
-#ALLOWED_HOSTS = []
-#ALLOWED_HOSTS = ['djangoproject.com']
-ALLOWED_HOSTS = ['localhost', '127.0.0.1','.zsiv.pythonanywhere.com']
+# ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = ['djangoproject.com']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.zsiv.pythonanywhere.com']
 
 CSRF_COOKIE_SECURE = False
 SESSION_COOKIE_SECURE = False
@@ -79,10 +79,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.sites', # unter sessions sagt das video
-    'registration', #should be immediately above 'django.contrib.auth'
+    'django.contrib.sites',  # unter sessions sagt das video
+    'registration',  # should be immediately above 'django.contrib.auth'
     'crispy_forms',
-     'bootstrap_pagination'
+    'bootstrap_pagination'
 ]
 
 # http://stackoverflow.com/questions/37415247/django-error-while-installing-django-registration-redux
@@ -120,27 +120,19 @@ TEMPLATES = [
     },
 ]
 
-
-
-
-
-
-
 WSGI_APPLICATION = 'mysite_MYSQL.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 
-DATABASES={}
-default={}
+DATABASES = {}
+default = {}
 default["ENGINE"] = parser.get('DATABASE', 'ENGINE')
 default["NAME"] = parser.get('DATABASE', 'NAME')
 default["USER"] = parser.get('DATABASE', 'USER')
 default["PASSWORD"] = parser.get('DATABASE', 'PASSWORD')
 default["HOST"] = parser.get('DATABASE', 'HOST')
 DATABASES["default"] = default
-
 
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
@@ -160,47 +152,37 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'CET'
-
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
 
-
 """
-List of directories where "./manage.py collectstatic" 
-will look for files, which it puts all together into STATIC_ROOT. 
+List of directories where "./manage.py collectstatic"
+will look for files, which it puts all together into STATIC_ROOT.
 Each app that you have can have it's own "static" files directory.
 """
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),
-    #'/var/www/static/',
+    os.path.join(BASE_DIR, "static"),  # '/var/www/static/',
 ]
 
 REPOSITORY_ROOT = os.path.dirname(BASE_DIR)
 
-
-
-
 """ URL that your STATIC files will be accessible through the browser."""
-STATIC_URL = '/static/' 
+STATIC_URL = '/static/'
 
-"""  
+"""
 Physical system path where the static files are stored.
 Digital ocean uses:STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 is the same
 """
 
-STATIC_ROOT = os.path.join(REPOSITORY_ROOT, 'static/') 
+STATIC_ROOT = os.path.join(REPOSITORY_ROOT, 'static/')
 
 """  URL that your MEDIA files will be accessible through the browser."""
 MEDIA_URL = '/mysite_MYSQL/ZSIV/uploads/'
@@ -208,32 +190,24 @@ MEDIA_URL = '/mysite_MYSQL/ZSIV/uploads/'
 """Physical system path where the static files are stored. Files that are being uploaded by the user."""
 MEDIA_ROOT = os.path.join(REPOSITORY_ROOT, 'mysite_MYSQL/ZSIV/uploads')
 
-# registration redux: 
-# old: 
-#ACCOUNT_ACTIVATION_DAYS = 7 # One-week activation window; you may, of course, use a different value.
-#REGISTRATION_AUTO_LOGIN = True # Automatically log the user in.
-# Tango with django 
+# registration redux:
+# old:
+# ACCOUNT_ACTIVATION_DAYS = 7 # One-week activation window; you may, of course, use a different value.
+# REGISTRATION_AUTO_LOGIN = True # Automatically log the user in.
+# Tango with django
 REGISTRATION_OPEN = True                # If True, users can register
-ACCOUNT_ACTIVATION_DAYS = 7     # One-week activation window; you may, of course, use a different value.
-REGISTRATION_AUTO_LOGIN = False  # If True, the user will be automatically logged in.
-LOGIN_REDIRECT_URL = '/ZSIV/'  # The page you want users to arrive at after they successful log in
-LOGIN_URL = '/accounts/login/'  # The page users are directed to if they are not logged in,
-                                                                # and are trying to access pages requiring authentication
-
-
-                           
-                                                                
-
-
+ACCOUNT_ACTIVATION_DAYS = 7             # One-week activation window; you may, of course, use a different value.
+REGISTRATION_AUTO_LOGIN = False         # If True, the user will be automatically logged in.
+LOGIN_REDIRECT_URL = '/ZSIV/'           # The page you want users to arrive at after they successful log in
+LOGIN_URL = '/accounts/login/'          # The page users are directed to if they are not logged in,
+                                        # and are trying to access pages requiring authentication
 
 # EMAIL_BACKEND = "sgbackend.SendGridBackend"
-#EMAIL_BACKEND = "sgbackend.SendGridBackend"
-#SENDGRID_USER = "Your SendGrid Username"
-#SENDGRID_PASSWORD = "Your SendGrid Password"
+# EMAIL_BACKEND = "sgbackend.SendGridBackend"
+# SENDGRID_USER = "Your SendGrid Username"
+# SENDGRID_PASSWORD = "Your SendGrid Password"
 
-
-#EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 """
 http://stackoverflow.com/questions/6367014/how-to-send-email-via-django
@@ -241,10 +215,9 @@ Sichere Apps erlauben?
 https://support.google.com/accounts/answer/6010255
 security: http://stackoverflow.com/questions/12461484/is-it-secure-to-store-passwords-as-environment-variables-rather-than-as-plain-t
 os.environ['CCGPWD'] 
-
 """
 parser.read(settingsfile)
-#EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+# EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_BACKEND = "sgbackend.SendGridBackend"
 
 if EMAIL_BACKEND == 'django.core.mail.backends.smtp.EmailBackend':
@@ -258,18 +231,13 @@ elif EMAIL_BACKEND == "sgbackend.SendGridBackend":
     SENDGRID_USER = parser.get('SGDJANGO', 'SENDGRID_USER')
     SENDGRID_PASSWORD = parser.get('SGDJANGO', 'SENDGRID_PASSWORD')
     DEFAULT_FROM_EMAIL = parser.get('SGDJANGO', 'DEFAULT_FROM_EMAIL')
-    SENDGRID_API_KEY  = parser.get('SGDJANGO', 'SENDGRID_API_KEY') 
-
-
-
+    SENDGRID_API_KEY = parser.get('SGDJANGO', 'SENDGRID_API_KEY')
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
-
 """
 Avoid this error:
-The number of GET/POST parameters exceeded 
+The number of GET/POST parameters exceeded
 by settings.DATA_UPLOAD_MAX_NUMBER_FIELDS.
 """
 DATA_UPLOAD_MAX_NUMBER_FIELDS = None
-
