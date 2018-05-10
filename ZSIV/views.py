@@ -5,7 +5,7 @@ from .models import Mitarbeiter
 from .models import Summaries
 from .models import MessageText
 
-#from .forms import SummariesDeleteFormSet, 
+# from .forms import SummariesDeleteFormSet, 
 from .forms import SummariesDeleteForm
 from .forms import JournalForm
 from .forms import MessageTextForm
@@ -16,12 +16,11 @@ from django.forms.widgets import CheckboxInput, Select
 from django.forms.models import modelform_factory
 from django.forms import fields
 
-from django.shortcuts import  render, redirect
+from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.core import mail
 from django.conf import settings
-
 
 from django.views import generic
 from django.views.generic import ListView
@@ -30,13 +29,13 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from extra_views import ModelFormSetView
 from extra_views import SearchableListMixin
 from extra_views import SortableListMixin
-from django.views.generic.base import  TemplateResponseMixin, View
+from django.views.generic.base import TemplateResponseMixin, View
 # two ways to import: from django.views.generic import View
 
-#from django.core.mail import EmailMultiAlternatives
+# from django.core.mail import EmailMultiAlternatives
 from django.urls import reverse_lazy
 
-#from django.forms.widgets import HiddenInput
+# from django.forms.widgets import HiddenInput
 
 import os
 import smtplib
@@ -54,30 +53,26 @@ Vies for ZSIV-App:
     # (4) Queue and send
     # (5) Versuche 
 
-
-
-Notes: 
+Notes:
 Notes on Class-Based Views (notes after watching GoDjango-CBV-Videos)
 
 The Class Based "View" (https://godjango.com/69-the-class-based-view/)
 - Wann imemr asview benutzt wird, wird die dispatch Methode des Class based views aufgerufen
 - inspiziert was die request methode ist
 
-
-Class Based Views Part 1: TemplateView and RedirectView 
+Class Based Views Part 1: TemplateView and RedirectView
 
 (https://godjango.com/15-class-based-views-part-1-templateview-and-redirectview/)
 Template View
 - Use of get_context_data(self, kwargs)
-get data from database and send to template; Normally trough context, 
+get data from database and send to template; Normally trough context,
 now override get_context_data. Die Methode wird aus der superclasse initialisiert
-- template_name - wie immer 
+- template_name - wie immer
 - as_view() method
 - Redirect view: 
-es wird die get-Methode implementiert. 
+es wird die get-Methode implementiert
 Warum: by default: all directs are permanent, dieses mal will man das nicht
 Und wir brauchen einen url, auf den geredirected werden kann
-
 
 Class Based Views Part 2: ListView and FormView
 
@@ -85,7 +80,7 @@ ListView
 - Was tut: der SummariesCreateView (name='Summaries-add')
 - redirected auf den  Summaries-all view
 Dieser weiss das aufgrund der get_absolute_url(self) methode im modell Summaries
-- dies ist ein ListView, welcher in urls.py direkt implementiert ist- 
+- dies ist ein ListView, welcher in urls.py direkt implementiert ist-
 
 FormView:
 - Displays a form
@@ -93,9 +88,6 @@ FormView:
 - on success redirects to new url
 * form_class = Taskform
 * success_url
-
-
-
 
 Class Based Views Part 3: DetailView and template_name Shortcut
 
@@ -118,16 +110,17 @@ class TimeoutException(Exception):
     """
     Timeouts, um einen Email timeout zu behandeln
     http://stackoverflow.com/questions/366682/how-to-limit-execution-time-of-a-function-call-in-python
-    
+
     import time
     ends after 5 seconds
     with time_limit(5, 'sleep'):
         for i in range(10):
             time.sleep(1)
-        
+
     """
     def __init__(self, msg=''):
         self.msg = msg
+
 
 @contextmanager
 def time_limit(seconds, msg=''):
@@ -139,46 +132,49 @@ def time_limit(seconds, msg=''):
         raise TimeoutException("Timed out for operation {}".format(msg))
     finally:
         # if the action ends in specified time, timer is canceled
-        timer.cancel()       
+        timer.cancel()
 
-    
 
 """ (1) Main Page """
-#def index(request):
+#def index(request)
 #    return render_to_response('ZSIV/index.html')
 
 
 def indexView(request):
-    #return render_to_response('ZSIV/index.html')
+    # return render_to_response('ZSIV/index.html')
     # man muss den context mit uebergeben
     # see: http://stackoverflow.com/questions/30559020/django-login-template-doesnt-recognize-logged-user
     return render(request, 'ZSIV/index.html', {})
 
 
-class MyView(View,LoginRequiredMixin):
+class MyView(View, LoginRequiredMixin):
     def get(self, request):
-        print("MyView ",request.user.is_authenticated())
-        #return render_to_response('ZSIV/index.html')
+        print("MyView ", request.user.is_authenticated())
+        # return render_to_response('ZSIV/index.html')
         return render(request, 'ZSIV/index.html', {})
+
 
 """
 (2) Manage Subscriptions / jeweils ein Listview und ein View, der die Subscriptions managt
 (a) Mitarbeiter 
 """
+
+
 class indexViewMA(generic.ListView):
     """
-    List View der Mitarbeiter - um deren Journal Subscriptions zu handeln 
+    List View der Mitarbeiter - um deren Journal Subscriptions zu handeln
     """
     paginate_by = 20
-    #template_name = 'ZSIV/indexMA.html' # renamed to default named mitarbeiter_list.html
+    # template_name = 'ZSIV/indexMA.html' # renamed to default named mitarbeiter_list.html
     context_object_name = 'list_to_view'
+
     def get_queryset(self):
         return Mitarbeiter.objects.filter().order_by('Nachname')
 
 
-#from django.contrib.auth.decorators import login_required
-#@login_required   
-def MA_Subscribe_Journals(request, mitarbeiter_id): 
+# from django.contrib.auth.decorators import login_required
+# @login_required
+def MA_Subscribe_Journals(request, mitarbeiter_id):
     """
     Die Journals eines einzelnen Mitarbeiters - aus  der Liste aller Journals
     """
@@ -186,93 +182,93 @@ def MA_Subscribe_Journals(request, mitarbeiter_id):
     mitarbeiter_list = Mitarbeiter.objects.filter(pk=mitarbeiter_id).select_related()
     Mitarbeiter.objects.filter(pk=mitarbeiter_id).select_related().values()
     mymitarbeiter = mitarbeiter_list[0]
-    
+
     # linking data
-    ma_journal_data = MAJournal.objects.filter(MA_id=mitarbeiter_id) #linking table
+    ma_journal_data = MAJournal.objects.filter(MA_id=mitarbeiter_id)  # linking table
     initialvalues = [x['Journal_id'] for x in mymitarbeiter.majournal_set.values()]
     if request.method == 'POST':
         form = MitarbeiterForm(request.POST, initial={'Subscriptions': initialvalues}, instance=mymitarbeiter)
         print(form.data)
-        print (form.Meta)
-        
+        print(form.Meta)
+
         if form.is_valid():
-            print ("Is form valid?" , form.is_valid())
-            Journal_ids_subscribe = form.data.getlist('Subscriptions') # ids
-            print ('Substr:' , Journal_ids_subscribe)
+            Journal_ids_subscribe = form.data.getlist('Subscriptions')  # ids
+            print('Substr:', Journal_ids_subscribe)
             ma_journal_data.delete()
-            for x in Journal_ids_subscribe: ma_journal_data.update_or_create(  MA_id= mitarbeiter_id, Journal_id = x)
-            context = {'form':form}
-            #return render(request, formTemplate, context)
+            for x in Journal_ids_subscribe:
+                ma_journal_data.update_or_create(MA_id=mitarbeiter_id, Journal_id=x)
+            context = {'form': form}
+            # return render(request, formTemplate, context)
         return HttpResponseRedirect(reverse('ZSIV:indexMA'))
     else:
-        form = MitarbeiterForm( initial={'Subscriptions': initialvalues}, instance=mymitarbeiter)
-        context = {'form':form}
-        #return render(request, formTemplate, context)
+        form = MitarbeiterForm(initial={'Subscriptions': initialvalues}, instance=mymitarbeiter)
+        context = {'form': form}
+        # return render(request, formTemplate, context)
         return render(request, formTemplate, context)
+
 
 """
 (2) Manage Subscriptions / jeweils ein Listview und ein View, der die Subscriptions managt
 (b) Journals
 """            
+
+
 class indexViewJournals(generic.ListView):
     """
-    List View der Journals - um deren MA Subscriptions zu handeln 
+    List View der Journals - um deren MA Subscriptions zu handeln
     """
     paginate_by = 20
-    #template_name='ZSIV/indexJournal.html'
+    # template_name='ZSIV/indexJournal.html'
     context_object_name = 'list_to_view'
+
     def get_queryset(self):
         return Journals.objects.filter().order_by('Name')
-    
 
 
-
-    
-def Journal_Subscribe_MAs(request,journal_id):
+def Journal_Subscribe_MAs(request, journal_id):
     """
     Die Mitarbeiter, die ein bestimmtes Journal subscribieren wollen
     """
-    
+
     formTemplate = 'ZSIV/journal_subscribe_ma.html'
     journallist = Journals.objects.filter(pk=journal_id).select_related()
-    myjournal = journallist[0] # TODO: pk lookup always first instance
-    
+    myjournal = journallist[0]  # TODO: pk lookup always first instance
+
     # linking table
     ma_journal_data = MAJournal.objects.filter(Journal_id=journal_id)
-    #ma_journal_data = MAJournal.objects.order_by('MA').filter(Journal_id=journal_id) - nicht der 
+    # ma_journal_data = MAJournal.objects.order_by('MA').filter(Journal_id=journal_id) - nicht der
     initialvalues = [x['MA_id'] for x in myjournal.majournal_set.values()]
     if request.method == 'POST':
-        
-        form = JournalForm(request.POST, 
-                           initial={'Subscriptions': initialvalues}, 
+
+        form = JournalForm(request.POST,
+                           initial={'Subscriptions': initialvalues},
                            instance=myjournal,
                            )
         if form.is_valid():
-            print ("Is form valid?" , form.is_valid())
-            #journals = form.cleaned_data.get('journals')
-            MA_ids_subscribe = form.data.getlist('Subscriptions') # ids
-            print ("subscriptions ",MA_ids_subscribe )
-            print ("Anzahl subscriptions ",len(MA_ids_subscribe) )
-            print ('Substr:' , MA_ids_subscribe)
+            print("Is form valid?", form.is_valid())
+            # journals = form.cleaned_data.get('journals')
+            MA_ids_subscribe = form.data.getlist('Subscriptions')  # ids
+            print("subscriptions ", MA_ids_subscribe)
+            print("Anzahl subscriptions ", len(MA_ids_subscribe))
+            print('Substr:',  MA_ids_subscribe)
             ma_journal_data.delete()
-            for x in MA_ids_subscribe: 
-                ma_journal_data.update_or_create(Journal_id=journal_id, MA_id = x)
-            
-            context = {'form':form}
+            for x in MA_ids_subscribe:
+                ma_journal_data.update_or_create(Journal_id=journal_id, MA_id=x)
+
+            context = {'form': form}
         return HttpResponseRedirect(reverse('ZSIV:indexJournal'))
     else:
-        print ("Form nicht gueltig da alles leer?")
+        print("Form nicht gueltig da alles leer?")
         form = JournalForm(initial={'Subscriptions': initialvalues}, instance=myjournal)
-        context = {'form':form}
+        context = {'form': form}
         return render(request, formTemplate, context)
 
-
-       
 
 """
 (3) Manage Summaries
 (3a) add, update, delete(nicht implementiert!)) + ein MultiDelete
 """
+
 
 class ModelFormWidgetMixin(object):
     """
@@ -294,163 +290,153 @@ class SummariesCreateView(ModelFormWidgetMixin,CreateView):
     fields = '__all__'
     template_name = 'ZSIV/summaries_add.html'
     widgets = {
-        'SENT' : CheckboxInput,
-        'Heftnummer' :  Select,
+        'SENT': CheckboxInput,
+        'Heftnummer':  Select,
     }
 
 
-    
-    
+
+
 class SummariesUpdateView(UpdateView):
     model = Summaries
     fields = '__all__'
-    template_name = 'ZSIV/summaries_update.html' 
+    template_name = 'ZSIV/summaries_update.html'
     widgets = {
-        'SENT' : CheckboxInput,
-        'Heftnummer' :  Select,
+        'SENT': CheckboxInput,
+        'Heftnummer':  Select,
     }
     context_object_name = 'summary'
-    
+
 
 class SummariesDeleteView(DeleteView):
     model = Summaries
     fields = '__all__'
     model = Summaries
     widgets = {
-        'SENT' : CheckboxInput,
-        'Heftnummer' :  Select,
+        'SENT': CheckboxInput,
+        'Heftnummer':  Select,
     }
     context_object_name = 'summary'
+
     def get_success_url(self):
         return reverse('ZSIV:summaries-index')
 
 
-
- 
- 
-
-class TestFormstSetView(SortableListMixin,SearchableListMixin,ModelFormSetView):
+class TestFormstSetView(SortableListMixin, SearchableListMixin, ModelFormSetView):
     """
     Funktionierender MultiDeleteView
-    extra views: 
+    extra views:
     https://github.com/AndrewIngram/django-extra-views
     http://stackoverflow.com/questions/21105552/django-extra-views-and-sortablelistmixin-configuration-confusion
-    
     """
     model = Summaries
     form_class = SummariesDeleteForm
     template_name = 'ZSIV/summaries_multidelete.html'
     delete = fields.BooleanField(required=False)
-    fields = ["SENT","Journal","Jahrgang","Heftnummer"]
+    fields = ["SENT", "Journal", "Jahrgang", "Heftnummer"]
     search_fields = ['SENT', 'Jahrgang']
     sort_fields_aliases = [('SENT', 'by_SENT'), ('id', 'by_id'), ]
-    extra=0
+    extra = 0
     widgets = {
-        'Heftnummer' : Select(attrs={'disabled': 'disabled'}),
-        'Jahrgang'   : Select(attrs={'disabled': 'disabled'}),
+        'Heftnummer': Select(attrs={'disabled': 'disabled'}),
+        'Jahrgang': Select(attrs={'disabled': 'disabled'}),
     }
-    
+
+
 """
 (3b) Listviews are VANIILLA list views!!
-""" 
-   
 """
- (4) Queue and send, und der Email Text 
+
+
 """
+ (4) Queue and send, und der Email Text
+"""
+
 
 class MessageTextView(FormView):
     form_class = MessageTextForm
     model = MessageText
     template_name = 'ZSIV/MessageText.html'
-# geht nicht: 
+
+# geht nicht:
 #    widgets = {
 #        'text' : Textarea(attrs={'size' : '1'}), # TextField 'cols': '40', 'rows': '10'
 #        'subject'   : Textarea(attrs={'cols': '4', 'rows': '10'}), # CharField
 #    }
-    
-    
     def get_initial(self):
-        """ 
+        """
         http://stackoverflow.com/questions/19479064/how-to-set-form-field-value-django
         """
-        mt  = MessageText.load()
-        return {'text': mt.text, 'subject' : mt.subject }
-    
-    
+        mt = MessageText.load()
+        return{'text': mt.text, 'subject': mt.subject}
+
     def dispatch(self, request, *args, **kwargs):
         """
         see https://godjango.com/69-the-class-based-view/
         - Wann imemr asview benutzt wird, wird die dispatch Methode des Class based views aufgerufen
         - inspiziert was die request methode ist
-        
+
         """
-        #print (request.method)
-        #print (self.http_method_names)
-        #print (self._allowed_methods())
+        # print (request.method)
+        # print (self.http_method_names)
+        # print (self._allowed_methods())
         return super(MessageTextView, self).dispatch(request, *args, **kwargs)
-    
+
     def get_success_url(self):
         return reverse('ZSIV:MessageText')
-    
+
     def get_queryset(self):
         """
         get_queryset ist die erste Methode die aufgerufen wird.
-        darum wird die liste emails auch hier generiert 
-        andere Methoden koennen die Liste dann so bekommen: 
+        darum wird die liste emails auch hier generiert
+        andere Methoden koennen die Liste dann so bekommen:
         self.object_list = self.get_queryset() #  generiert emails mit: self.emails
-        die Emaillistte soll überall zur Verfügung stehen, deswegen wird die nachher ungut umkopiert. 
+        die Emaillistte soll überall zur Verfügung stehen, deswegen wird die nachher ungut umkopiert.
         http://stackoverflow.com/questions/23402047/how-to-combine-two-querysets-when-defining-choices-in-a-modelmultiplechoicefield
         http://stackoverflow.com/questions/5629702/django-queryset-join-across-four-tables-including-manytomany
         """
-        qs = super(MessageTextView,self).get_queryset()
+        qs = super(MessageTextView, self).get_queryset()
         return qs
 
     def form_valid(self, form):
-            form.save(commit = True)
+            form.save(commit=True)
             return super(MessageTextView, self).form_valid(form)
-
-
-
 
 
 class Queuelistview(ListView):
     """
-    Die Quelistview soll die zu versendenden Emails schicken 
-    Erbt von listview 
+    Die Quelistview soll die zu versendenden Emails schicken
+    Erbt von listview
 
     Links:
     http://www.gregaker.net/2012/apr/20/how-does-djangos-class-based-listview-work/
-    CBV documentation and reference!: 
+    CBV documentation and reference!
     http://stackoverflow.com/questions/28400943/python-django-e-mail-form-example
     http://stackoverflow.com/questions/11268630/how-to-use-two-different-django-form-at-the-same-template
-    reverse relations: 
+    reverse relations:
     http://stackoverflow.com/questions/2642613/what-is-related-name-used-for-in-django
     https://code.google.com/archive/p/django-selectreverse/
-    Many to many and form: 
+    Many to many and form:
     http://stackoverflow.com/questions/21600192/django-form-for-many-to-many-model-how-do-i-fill-a-form-from-views-template
     http://stackoverflow.com/questions/11021242/accessing-many-to-many-through-relation-fields-in-formsets
-
-    
     """
     def dispatch(self, request, *args, **kwargs):
         """
         see https://godjango.com/69-the-class-based-view/
         - Wann imemr asview benutzt wird, wird die dispatch Methode des Class based views aufgerufen
         - inspiziert was die request methode ist
-        
         """
-        #print (request.method)
-        #print (self.http_method_names)
-        #print (self._allowed_methods())
+        # print (request.method)
+        # print (self.http_method_names)
+        # print (self._allowed_methods())
         return super(Queuelistview, self).dispatch(request, *args, **kwargs)
-    
-    
+
     def get_context_data(self, **kwargs):
         """
         http://stackoverflow.com/questions/16458006/django-access-context-in-template:
         default context variable for ListView is objects_list - oder doch mitarbeiter_list??
         context_object_name='all_mas' kann also rausgenommen werden
-        
+
         Problem mit context
         http://lukeplant.me.uk/blog/posts/my-approach-to-class-based-views/
         no use to use get_context_data:
@@ -458,18 +444,16 @@ class Queuelistview(ListView):
         """
         # Call the base implementation first to get a context
         context = super(Queuelistview, self).get_context_data(**kwargs)
-        context['emails']=self.emails # muss man die Mails zum Kontext hinzufügen??
-        context['journalName']= self.journalName
-        context['journalQuelle']= self.journalQuelle
+        context['emails'] = self.emails  # muss man die Mails zum Kontext hinzufügen??
+        context['journalName'] = self.journalName
+        context['journalQuelle'] = self.journalQuelle
         return context
-        
-        
 
     def get_queryset(self):
         """
-        get_queryset ist die erste Methode die aufgerufen wird.
-        darum wird die liste emails auch hier generiert 
-        andere Methoden koennen die Liste dann so bekommen: 
+        get_queryset ist die erste Methode die aufgerufen wird
+        darum wird die liste emails auch hier generiert
+        andere Methoden koennen die Liste dann so bekommen:
         self.object_list = self.get_queryset() #  generiert emails mit: self.emails
         die Emaillistte soll überall zur Verfügung stehen, deswegen wird die nachher ungut umkopiert. 
         http://stackoverflow.com/questions/23402047/how-to-combine-two-querysets-when-defining-choices-in-a-modelmultiplechoicefield

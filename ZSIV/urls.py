@@ -1,27 +1,17 @@
 # http://getbootstrap.com/components/#breadcrumbs
+from django.conf.urls import url
+from django.views.generic import ListView
 
-from django.conf.urls import include, url
 from . import views
 from .models import Summaries
-from django.views.generic import ListView
-from ZSIV.views import SummariesCreateView, SummariesUpdateView,\
-    MitarbeiterListview
-from ZSIV.views import JournalCreateView
+from ZSIV.models import Mitarbeiter
+from ZSIV.views import SummariesCreateView, SummariesUpdateView, MitarbeiterListview, JournalCreateView, TestFormstSetView,
+from ZSIV.views import MessageTextView, Queuelistview, JournalListview, JournalUpdateView, JournalDeleteView, MitarbeiterCreateView, MitarbeiterUpdateView, MitarbeiterDeleteView
+
+
 #from ZSIV.views import SummariesDeleteView # TODO: Implement!
-from ZSIV.views  import TestFormstSetView
-from ZSIV.views import MessageTextView
-from ZSIV.views  import Queuelistview
 
-from ZSIV.views  import  JournalCreateView
-from ZSIV.views import JournalListview
-from ZSIV.views import JournalUpdateView
-from ZSIV.views import JournalDeleteView
 
-from ZSIV.views import MitarbeiterCreateView
-from ZSIV.views import MitarbeiterUpdateView
-from ZSIV.views import MitarbeiterDeleteView
-from ZSIV.models import Mitarbeiter, Summaries
-from ZSIV.views  import UserFormView
 #from ZSIV.views  import MyView
 app_name = 'ZSIV'
 
