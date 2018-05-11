@@ -5,7 +5,7 @@ from django.views.generic import ListView
 from . import views
 from .models import Summaries
 from ZSIV.models import Mitarbeiter
-from ZSIV.views import SummariesCreateView, SummariesUpdateView, MitarbeiterListview, JournalCreateView, TestFormstSetView,
+from ZSIV.views import SummariesCreateView, SummariesUpdateView, MitarbeiterListview, JournalCreateView, TestFormstSetView
 from ZSIV.views import MessageTextView, Queuelistview, JournalListview, JournalUpdateView, JournalDeleteView, MitarbeiterCreateView, MitarbeiterUpdateView, MitarbeiterDeleteView
 
 

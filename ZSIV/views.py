@@ -28,7 +28,7 @@ from extra_views import (ModelFormSetView, SearchableListMixin,
 import _thread
 from ZSIV.forms import MitarbeiterForm
 
-# from .forms import SummariesDeleteFormSet, 
+# from .forms import SummariesDeleteFormSet,
 from .forms import (JournalForm, MessageTextForm, SummariesDeleteForm,
                     SummaryFormSet, UserForm)
 from .models import Journals, MAJournal, MessageText, Mitarbeiter, Summaries
@@ -47,7 +47,7 @@ Vies for ZSIV-App:
     # (2) Manage Subscriptions
     # (3) Manage Summaries
     # (4) Queue and send
-    # (5) Versuche 
+    # (5) Versuche
 
 Notes:
 Notes on Class-Based Views (notes after watching GoDjango-CBV-Videos)
@@ -65,7 +65,7 @@ get data from database and send to template; Normally trough context,
 now override get_context_data. Die Methode wird aus der superclasse initialisiert
 - template_name - wie immer
 - as_view() method
-- Redirect view: 
+- Redirect view:
 es wird die get-Methode implementiert
 Warum: by default: all directs are permanent, dieses mal will man das nicht
 Und wir brauchen einen url, auf den geredirected werden kann
@@ -98,7 +98,6 @@ Registration
 """
 
 
-
 class TimeoutException(Exception):
     """
     Timeouts, um einen Email timeout zu behandeln
@@ -111,6 +110,7 @@ class TimeoutException(Exception):
             time.sleep(1)
 
     """
+
     def __init__(self, msg=''):
         self.msg = msg
 
@@ -129,7 +129,7 @@ def time_limit(seconds, msg=''):
 
 
 """ (1) Main Page """
-#def index(request)
+# def index(request)
 #    return render_to_response('ZSIV/index.html')
 
 
@@ -141,6 +141,7 @@ def indexView(request):
 
 
 class MyView(View, LoginRequiredMixin):
+
     def get(self, request):
         print("MyView ", request.user.is_authenticated())
         # return render_to_response('ZSIV/index.html')
@@ -149,7 +150,7 @@ class MyView(View, LoginRequiredMixin):
 
 """
 (2) Manage Subscriptions / jeweils ein Listview und ein View, der die Subscriptions managt
-(a) Mitarbeiter 
+(a) Mitarbeiter
 """
 
 
@@ -203,7 +204,7 @@ def MA_Subscribe_Journals(request, mitarbeiter_id):
 """
 (2) Manage Subscriptions / jeweils ein Listview und ein View, der die Subscriptions managt
 (b) Journals
-"""            
+"""
 
 
 class indexViewJournals(generic.ListView):
@@ -268,12 +269,12 @@ class ModelFormWidgetMixin(object):
     Cooler Mixin, der die formfactory zum reinmixen von widgets erlaubt
     http://stackoverflow.com/questions/16937076/how-does-one-use-a-custom-widget-with-a-generic-updateview-without-having-to-red
     """
+
     def get_form_class(self):
         return modelform_factory(self.model, fields=self.fields, widgets=self.widgets)
 
 
-
-class SummariesCreateView(ModelFormWidgetMixin,CreateView):
+class SummariesCreateView(ModelFormWidgetMixin, CreateView):
     """
     class based view and file uploads:
     http://www.kelvinwong.ca/2013/09/19/upload-files-using-filefield-and-generic-class-based-views-in-django-1-5/
@@ -286,8 +287,6 @@ class SummariesCreateView(ModelFormWidgetMixin,CreateView):
         'SENT': CheckboxInput,
         'Heftnummer':  Select,
     }
-
-
 
 
 class SummariesUpdateView(UpdateView):
@@ -392,8 +391,8 @@ class MessageTextView(FormView):
         return qs
 
     def form_valid(self, form):
-            form.save(commit=True)
-            return super(MessageTextView, self).form_valid(form)
+        form.save(commit=True)
+        return super(MessageTextView, self).form_valid(form)
 
 
 class Queuelistview(ListView):
@@ -413,6 +412,7 @@ class Queuelistview(ListView):
     http://stackoverflow.com/questions/21600192/django-form-for-many-to-many-model-how-do-i-fill-a-form-from-views-template
     http://stackoverflow.com/questions/11021242/accessing-many-to-many-through-relation-fields-in-formsets
     """
+
     def dispatch(self, request, *args, **kwargs):
         """
         see https://godjango.com/69-the-class-based-view/
@@ -448,118 +448,114 @@ class Queuelistview(ListView):
         darum wird die liste emails auch hier generiert
         andere Methoden koennen die Liste dann so bekommen:
         self.object_list = self.get_queryset() #  generiert emails mit: self.emails
-        die Emaillistte soll überall zur Verfügung stehen, deswegen wird die nachher ungut umkopiert. 
+        die Emaillistte soll überall zur Verfügung stehen, deswegen wird die nachher ungut umkopiert.
         http://stackoverflow.com/questions/23402047/how-to-combine-two-querysets-when-defining-choices-in-a-modelmultiplechoicefield
         http://stackoverflow.com/questions/5629702/django-queryset-join-across-four-tables-including-manytomany
         """
-        
+
         def htmlify(text):
-            return  "<html><body><pre>"+text+"</pre></body></html>"
-        
-        
-        mt  = MessageText.load() # load email text and subject
+            return "<html><body><pre>" + text + "</pre></body></html>"
+
+        mt = MessageText.load()  # load email text and subject
         grussfloskel = "Liebe"
-        
-        qs = super(Queuelistview,self).get_queryset()
-        print ("modify qs when you want to contain only people with querysets!")
-        print("Emails werden gesendet von  ",settings.DEFAULT_FROM_EMAIL)
+
+        qs = super(Queuelistview, self).get_queryset()
+        print("modify qs when you want to contain only people with querysets!")
+        print("Emails werden gesendet von  ", settings.DEFAULT_FROM_EMAIL)
         mas = Mitarbeiter.objects.all()
-        self.emails=[]
-        self.journalName=[]
-        self.journalQuelle=[]
+        self.emails = []
+        self.journalName = []
+        self.journalQuelle = []
         for idxma, ma in enumerate(mas):
             subscriptions = ma.Subscriptions.filter(summaries__SENT=False).distinct()
             if not subscriptions:
-                #self.emails.append('')
-                pass            
+                # self.emails.append('')
+                pass
             else:
                 grussfloskeluse = grussfloskel
-                if ma.Sex=='m': grussfloskeluse = grussfloskel+"r"
-                anrede = " ".join([ grussfloskeluse, ma.Anrede, ma.Nachname+","])
-                mailtext = "{0}\r\n\r\n  {1}".format(anrede, mt.text) +'\r\n\r\n'
-                mailtext =   mailtext + "\r\n"+ "\r\n"  + "Quelle(n):\r\n\r\n"
-                
+                if ma.Sex == 'm':
+                    grussfloskeluse = grussfloskel + "r"
+                anrede = " ".join([grussfloskeluse, ma.Anrede, ma.Nachname + ","])
+                mailtext = "{0}\r\n\r\n  {1}".format(anrede, mt.text) + '\r\n\r\n'
+                mailtext = mailtext + "\r\n" + "\r\n" + "Quelle(n):\r\n\r\n"
+
                 tmpmail = mail.EmailMultiAlternatives(
-                            mt.subject,
-                            mailtext,
-                             settings.DEFAULT_FROM_EMAIL,
-                             [ma.email]
-                            )
-                for idxsub, subsc in enumerate(subscriptions): # loop durch die JournalSubscriptions eines Mitarbeiters
-                    for summary in iter(subsc.summaries_set.iterator()): 
+                    mt.subject,
+                    mailtext,
+                    settings.DEFAULT_FROM_EMAIL,
+                    [ma.email]
+                )
+                for idxsub, subsc in enumerate(subscriptions):  # loop durch die JournalSubscriptions eines Mitarbeiters
+                    for summary in iter(subsc.summaries_set.iterator()):
                         if summary.SENT == False:
-                            fn=os.path.join(settings.MEDIA_ROOT,str(summary.Inhaltsverzeichnis))                        
+                            fn = os.path.join(settings.MEDIA_ROOT, str(summary.Inhaltsverzeichnis))
                             tmpmail.attach_file(fn)
                             journalData = Journals.objects.get(Name=str(summary.Journal.Name))
-                            mailtext =   mailtext + journalData.Name + " - " + journalData.Quelle + "\r\n" 
+                            mailtext = mailtext + journalData.Name + " - " + journalData.Quelle + "\r\n"
                 mailhtml = htmlify(mailtext)
                 tmpmail.attach_alternative(mailhtml, "text/html")
                 self.emails.append(tmpmail)
                 self.journalName.append(journalData.Name)
                 self.journalQuelle.append(journalData.Quelle)
-                
-        
+
         return qs
 
 #    def get(self, request, *args, **kwargs):
-#        
+#
 #        self.object_list = self.get_queryset() # generiert emails mit: self.emails
 #        print("in der get methode")
 #        print("debug punkt .. ")
 #        return self.render_to_response(context)
 #       return HttpResponse('Hello World I am a get')
 
-
-
     def post(self, request, *args, **kwargs):
         """
-        to do: send the email here. 
-        After doing so, flat newly sent files as sent in SUMAARY. 
-        redirect to success url or what?  
-        
-        self.object_list = self.get_queryset() ist von hier: 
+        to do: send the email here.
+        After doing so, flat newly sent files as sent in SUMAARY.
+        redirect to success url or what?
+
+        self.object_list = self.get_queryset() ist von hier:
         http://stackoverflow.com/questions/37675704/productlist-object-has-no-attribute-object-list
-        
-        
+
+
         sending mails:
         http://stackoverflow.com/questions/8659131/how-does-one-send-an-email-to-10-000-users-in-django
-        Threaded Sending: 
+        Threaded Sending:
         http://stackoverflow.com/questions/32979945/django-send-mail-function-taking-several-minutes
-        
-        Wichtiges Feature hier: 
+
+        Wichtiges Feature hier:
         Logging: Wenn email-versand fehlschlägt, dann soll der Logger das in den Log File Schreiben
         Python logging configuration
-        Loggers: 
+        Loggers:
             Ein Bucket, in den Logging-Messages geschrieben werden koennen
         Handlers:
             Was passiert mit jeder Message in einem Logger
-        Filter: 
+        Filter:
             Welche Logeintraege gelangen vom Logger zum Handler
         Formatters:
             Die machen was man denkt - Formattieren
         Der Standardplatz für einen Logger ist settings.py
-            
-        
+
+
         """
-        
-        #FALSCH
-        #try:
+
+        # FALSCH
+        # try:
         #        send_mail(subject, message, sender, recipients)
         #    except smtplib.SMTPException:
         #        result = smtplib.SMTPException.message
-        #RICHTIG    
-        #try:
+        # RICHTIG
+        # try:
         #    send_mail(subject, message, sender, recipients)
-        #except smtplib.SMTPException as e:
-        #result = str(e)
-      
+        # except smtplib.SMTPException as e:
+        # result = str(e)
+
         # from email_validator import validate_email, EmailNotValidError, EmailUndeliverableError
 
         email_logger = logging.getLogger("email")
 
-        
-        self.object_list = self.get_queryset() #  generiert emails mit: self.emails
-        
+        self.object_list = self.get_queryset()  # generiert emails mit: self.emails
+
         try:
             connection = mail.get_connection()
             connection.open()
@@ -567,163 +563,162 @@ class Queuelistview(ListView):
             email_logger.info("Successfully opened email connection")
         except smtplib.SMTPException as e:
             msg = str(e)
-            #email_logger.error("Houston, we have a %s", "major problem: %s", exc_info=1, str(e))
+            # email_logger.error("Houston, we have a %s", "major problem: %s", exc_info=1, str(e))
             email_logger.error("smtp fehler")
             return HttpResponse(msg)
-        except: # https://docs.python.org/3/tutorial/errors.html
+        except:  # https://docs.python.org/3/tutorial/errors.html
             email_logger.error("ein anderer Fehler")
             return HttpResponse("ein anderer Fehler")
-            
-        
-            
-x        
+
         for mamail in self.emails:
-            if  isinstance(mamail,mail.message.EmailMultiAlternatives):
-                msg = "EMAIL: attempting to send email containing "+str(len(mamail.attachments))+" attachments to "+"\n".join(mamail.to)
+            if isinstance(mamail, mail.message.EmailMultiAlternatives):
+                msg = "EMAIL: attempting to send email containing " + \
+                    str(len(mamail.attachments)) + " attachments to " + "\n".join(mamail.to)
                 email_logger.info(msg)
                 with time_limit(40, 'sleep'):
-                    try: 
-                        #validation = validate_email("\n".join(mamail.to))
+                    try:
+                        # validation = validate_email("\n".join(mamail.to))
                         msg = mamail.send(fail_silently=False)
                         if msg == 1:
-                            logmessage = " EMAIL SUCCESS: sent mail to "+"\n".join(mamail.to)
-                            email_logger.info(logmessage) # gibt 1 ween success
-                                                    # The return value will be the number of successfully delivered messages.
-                                                    # https://simpleisbetterthancomplex.com/tutorial/2016/06/13/how-to-send-email.html
-                            print ("debug")
+                            logmessage = " EMAIL SUCCESS: sent mail to " + "\n".join(mamail.to)
+                            email_logger.info(logmessage)  # gibt 1 ween success
+                            # The return value will be the number of successfully delivered messages.
+                            # https://simpleisbetterthancomplex.com/tutorial/2016/06/13/how-to-send-email.html
+                            print("debug")
                     except TimeoutException as e:
                         errno, strerror = e.args
-                        email_logger.error("EMAIL: TimeoutException({0}): {1}".format(errno,strerror))
+                        email_logger.error("EMAIL: TimeoutException({0}): {1}".format(errno, strerror))
                         print("Timeout Exception??")
                         pass
-                    except: 
-                        #raise Exception('Unknown Christian error ') # use raise to raise  your own errors.
+                    except:
+                        # raise Exception('Unknown Christian error ') # use raise to raise  your own errors.
                         email_logger.error('EMAIL : Unknown Christian error ')
                         print("andere Exception?")
-                        pass 
+                        pass
             else:
                 msg = "EMAIL: no emails to send!"
-                #email_logger.info(msg)
-                
-            
-        connection.close()  
-        
-                    
-        Summaries.objects.filter(SENT=False).update(SENT=True)
-        
-        #except Exception as e:
-            #email_logger.exception('Exception when sending emails!!!')
-        #    print('Exception when sending emails!!!')
-        
-        
-        
-        
-        
-        # Wohin?
-        #return HttpResponse('I did the send')
-        #return HttpResponseRedirect(reverse('ZSIV:index')) # zuruecl nach hause
-        #return render_to_response('ZSIV/index.html') # zurueck nach hause
-        return HttpResponseRedirect(reverse('ZSIV:queue'))
+                # email_logger.info(msg)
 
+        connection.close()
+
+        Summaries.objects.filter(SENT=False).update(SENT=True)
+
+        # except Exception as e:
+        # email_logger.exception('Exception when sending emails!!!')
+        #    print('Exception when sending emails!!!')
+
+        # Wohin?
+        # return HttpResponse('I did the send')
+        # return HttpResponseRedirect(reverse('ZSIV:index')) # zuruecl nach hause
+        # return render_to_response('ZSIV/index.html') # zurueck nach hause
+        return HttpResponseRedirect(reverse('ZSIV:queue'))
 
 
 # 5) registration / auth
 """ user registration """
+
 
 class UserFormView(View):
     form_class = UserForm
     template_name = 'ZSIV/registration_form.html'
 
     # display blank form (neuer user kommt zum account, soll er dürfen)
-    def get(self,request):
+    def get(self, request):
         form = self.form_class(None)
-        return render(request, self.template_name,{'form' : form})
-    
-    def post(self,request):
-        form = self.form_class(request.POST) # die post data sind schon validiert
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request):
+        form = self.form_class(request.POST)  # die post data sind schon validiert
         if form.is_valid():
-            user = form.save(commit=False) # eine Objekt aus der form erzeugen, noch nicht in die DB speichern 
-            # cleaned / normalized data 
+            user = form.save(commit=False)  # eine Objekt aus der form erzeugen, noch nicht in die DB speichern
+            # cleaned / normalized data
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
             user.set_password(password)
             user.save()
             # returns User objects if credentials are correct
             user = authenticate(username=username, password=password)
-            
+
             if user is not None:
                 if user.is_active:
                     login(request, user)
                     return redirect('ZSIV:index')
-            
-        return render(request, self.template_name,{'form' : form})
-            
 
-
+        return render(request, self.template_name, {'form': form})
 
 
 """
 (6) Manage Journals
 """
 
+
 class JournalCreateView(CreateView):
     model = Journals
-    fields = ["Name","Kurztitel","Quelle"]
-    template_name = 'ZSIV/journal_add.html' #  is the default
+    fields = ["Name", "Kurztitel", "Quelle"]
+    template_name = 'ZSIV/journal_add.html'  # is the default
     # TODO: redirect
-    #def get_success_url(self):
+    # def get_success_url(self):
     #    return reverse('ZSIV:summaries-index')
+
 
 class JournalListview(ListView):
     model = Journals
-    fields = ["Name","Kurztitel","Quelle"]
+    fields = ["Name", "Kurztitel", "Quelle"]
     context_object_name = 'list_to_view'
-    template_name="ZSIV/journal_list_EditingView.html"
+    template_name = "ZSIV/journal_list_EditingView.html"
     paginate_by = 20  # im template siehe https://djangosnippets.org/snippets/3023/ (twitter bootstrap pagination)
-                      # uses https://github.com/jmcclell/django-bootstrap-pagination
+    # uses https://github.com/jmcclell/django-bootstrap-pagination
+
     def get_context_data(self, **kwargs):
         context = super(JournalListview, self).get_context_data(**kwargs)
         return context
+
     def get_queryset(self):
         queryset = super(JournalListview, self).get_queryset().order_by('Name')
         return queryset
 
+
 class JournalUpdateView(UpdateView):
     model = Journals
-    fields = ["Name","Kurztitel","Quelle"]
-    template_name = 'ZSIV/journal_update.html' #  is the default
-    context_object_name = 'Journal'   
+    fields = ["Name", "Kurztitel", "Quelle"]
+    template_name = 'ZSIV/journal_update.html'  # is the default
+    context_object_name = 'Journal'
+
 
 class JournalDeleteView(DeleteView):
     model = Journals
     success_url = reverse_lazy('ZSIV:Journal-List')
-    context_object_name = 'Journal'  
-    template_name = 'ZSIV/journal_confirm_delete.html' 
+    context_object_name = 'Journal'
+    template_name = 'ZSIV/journal_confirm_delete.html'
 
 """
 (7) Manage Mitarbeiter
 """
 
+
 class MitarbeiterCreateView(CreateView):
     model = Mitarbeiter
-    fields = ["Vorname","Nachname","Sex","Anrede","email"]
-    template_name = 'ZSIV/mitarbeiter_add.html' #  is the default
+    fields = ["Vorname", "Nachname", "Sex", "Anrede", "email"]
+    template_name = 'ZSIV/mitarbeiter_add.html'  # is the default
+
 
 class MitarbeiterListview(ListView):
     model = Mitarbeiter
     context_object_name = 'list_to_view'
-    template_name="ZSIV/mitarbeiter_list_EditingView.html"
+    template_name = "ZSIV/mitarbeiter_list_EditingView.html"
     paginate_by = 20  # im template siehe https://djangosnippets.org/snippets/3023/ (twitter bootstrap pagination)
+
     def get_context_data(self, **kwargs):
         context = super(MitarbeiterListview, self).get_context_data(**kwargs)
         return context
+
     def get_queryset(self):
         return Mitarbeiter.objects.filter().order_by('Nachname')
 
 
 class MitarbeiterUpdateView(UpdateView):
     model = Mitarbeiter
-    fields = ["Vorname","Nachname","Sex","Anrede","email"]
+    fields = ["Vorname", "Nachname", "Sex", "Anrede", "email"]
     template_name = 'ZSIV/mitarbeiter_update.html'
     context_object_name = 'Mitarbeiter'
 
@@ -732,21 +727,13 @@ class MitarbeiterDeleteView(DeleteView):
     model = Mitarbeiter
     success_url = reverse_lazy('ZSIV:Mitarbeiter-List')
     context_object_name = 'Mitarbeiter'
-    
 
 
-
-
-
-
-
-
-            
-# (XXXX) Experimental : Formset-Mixins  so 
+# (XXXX) Experimental : Formset-Mixins  so
 
 
 # Formset Example
-""" 
+"""
 
 https://github.com/epicserve/inlineformset-example/
 formset example: Start to manipulate Journals
@@ -763,7 +750,7 @@ class AuthorCreateView(FormsetMixin, CreateView):
     model = Author
     form_class = AuthorForm
     formset_class = BookFormSet
-    
+
 
 
 class Summaries(models.Model):
@@ -823,33 +810,35 @@ class FormsetMixin(object):
         return self.render_to_response(self.get_context_data(form=form, formset=formset))
 
 
-
 """
 Mixin, der die formfactory zum reinmixen von widgets erlauben soll
 http://stackoverflow.com/questions/16937076/how-does-one-use-a-custom-widget-with-a-generic-updateview-without-having-to-red
 """
-class modelformset_factory_Mixin(object):
-    def get_form_class(self):
-        return modelformset_factory(self.model, fields=self.fields, widgets=self.widgets,extra=1,exclude=("",))
-    
 
-class MAJViewIndex(TemplateResponseMixin, View,modelformset_factory_Mixin):
+
+class modelformset_factory_Mixin(object):
+
+    def get_form_class(self):
+        return modelformset_factory(self.model, fields=self.fields, widgets=self.widgets, extra=1, exclude=("",))
+
+
+class MAJViewIndex(TemplateResponseMixin, View, modelformset_factory_Mixin):
     template_name = 'ZSIV/ma_journal.html'
     fields = '__all__'
-    #context_object_name = 'list_to_view'
+    # context_object_name = 'list_to_view'
+
     def get_queryset(self):
-        #queryset = MAJournal.objects.filter(day__date=datetime.date.today())
+        # queryset = MAJournal.objects.filter(day__date=datetime.date.today())
         queryset = MAJournal.objects.filter()
         return queryset
-    
+
     def dispatch(self, request, *args, **kwargs):
-        print (request.method)
-        print (self.http_method_names)
-        print (self._allowed_methods())
+        print(request.method)
+        print(self.http_method_names)
+        print(self._allowed_methods())
 
         return super(MAJViewIndex, self).dispatch(request, *args, **kwargs)
-        
-    
+
     def post(self, request, *args, **kwargs):
         formset = self.FS(request.POST, request.FILES)
 
@@ -860,4 +849,4 @@ class MAJViewIndex(TemplateResponseMixin, View,modelformset_factory_Mixin):
         else:
             formset = self.FS(queryset=self.queryset)
 
-        return self.render_to_response({'formset':formset})
+        return self.render_to_response({'formset': formset})
