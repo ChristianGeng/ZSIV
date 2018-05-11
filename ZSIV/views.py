@@ -1,47 +1,43 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import Journals
-from .models import MAJournal
-from .models import Mitarbeiter
-from .models import Summaries
-from .models import MessageText
-
-# from .forms import SummariesDeleteFormSet, 
-from .forms import SummariesDeleteForm
-from .forms import JournalForm
-from .forms import MessageTextForm
-from django.views.generic.edit import FormView
-from ZSIV.forms import MitarbeiterForm
-from django.forms import modelformset_factory
-from django.forms.widgets import CheckboxInput, Select
-from django.forms.models import modelform_factory
-from django.forms import fields
-
-from django.shortcuts import render, redirect
-from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse
-from django.core import mail
-from django.conf import settings
-
-from django.views import generic
-from django.views.generic import ListView
-
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from extra_views import ModelFormSetView
-from extra_views import SearchableListMixin
-from extra_views import SortableListMixin
-from django.views.generic.base import TemplateResponseMixin, View
-# two ways to import: from django.views.generic import View
-
-# from django.core.mail import EmailMultiAlternatives
-from django.urls import reverse_lazy
-
-# from django.forms.widgets import HiddenInput
-
+import logging
 import os
 import smtplib
 import sys
-from django.http import HttpResponse
-import logging
+import threading
+from contextlib import contextmanager
+
+from django.conf import settings
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core import mail
+from django.core.urlresolvers import reverse
+from django.forms import fields, modelformset_factory
+from django.forms.models import modelform_factory
+from django.forms.widgets import CheckboxInput, Select
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import redirect, render
+# from django.core.mail import EmailMultiAlternatives
+from django.urls import reverse_lazy
+from django.views import generic
+from django.views.generic import ListView
+from django.views.generic.base import TemplateResponseMixin, View
+from django.views.generic.edit import (CreateView, DeleteView, FormView,
+                                       UpdateView)
+from extra_views import (ModelFormSetView, SearchableListMixin,
+                         SortableListMixin)
+
+import _thread
+from ZSIV.forms import MitarbeiterForm
+
+# from .forms import SummariesDeleteFormSet, 
+from .forms import (JournalForm, MessageTextForm, SummariesDeleteForm,
+                    SummaryFormSet, UserForm)
+from .models import Journals, MAJournal, MessageText, Mitarbeiter, Summaries
+
+# two ways to import: from django.views.generic import View
+
+
+# from django.forms.widgets import HiddenInput
+
 
 """
 
@@ -102,9 +98,6 @@ Registration
 """
 
 
-from contextlib import contextmanager
-import threading
-import _thread
 
 class TimeoutException(Exception):
     """
@@ -583,7 +576,7 @@ class Queuelistview(ListView):
             
         
             
-        
+x        
         for mamail in self.emails:
             if  isinstance(mamail,mail.message.EmailMultiAlternatives):
                 msg = "EMAIL: attempting to send email containing "+str(len(mamail.attachments))+" attachments to "+"\n".join(mamail.to)
@@ -636,8 +629,6 @@ class Queuelistview(ListView):
 
 # 5) registration / auth
 """ user registration """
-from django.contrib.auth import authenticate, login
-from .forms import UserForm
 
 class UserFormView(View):
     form_class = UserForm
@@ -780,7 +771,6 @@ class Summaries(models.Model):
 
  """
 
-from .forms import SummaryFormSet
 
 class FormsetMixin(object):
     object = None
@@ -871,5 +861,3 @@ class MAJViewIndex(TemplateResponseMixin, View,modelformset_factory_Mixin):
             formset = self.FS(queryset=self.queryset)
 
         return self.render_to_response({'formset':formset})
-   
-
