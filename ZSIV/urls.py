@@ -2,13 +2,10 @@
 from django.conf.urls import url
 from django.views.generic import DeleteView, ListView
 
-from ZSIV.models import Mitarbeiter, Summaries
-from ZSIV.views import (JournalCreateView, JournalDeleteView, JournalListview,
-                        JournalUpdateView, MessageTextView,
-                        MitarbeiterCreateView, MitarbeiterDeleteView,
-                        MitarbeiterListview, MitarbeiterUpdateView,
-                        Queuelistview, SummariesCreateView,
-                        SummariesUpdateView, TestFormstSetView)
+from ZSIV.models import Mitarbeiter, Summaries, 
+from ZSIV.views import JournalCreateView, JournalDeleteView, JournalListview, JournalUpdateView, MessageTextView
+from ZSIV.views import MitarbeiterCreateView, MitarbeiterDeleteView, MitarbeiterListview, 
+from ZSIV.views import  SummariesUpdateView, TestFormstSetView, MitarbeiterUpdateView, Queuelistview, SummariesCreateView
 
 from . import views
 
