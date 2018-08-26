@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/ChristianGeng/mysite_MYSQL.png)](https://travis-ci.org/ChristianGeng/mysite_MYSQL)
+
 # ZSIV 
 
 ## send journal digests to subscribers
