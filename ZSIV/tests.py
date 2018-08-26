@@ -18,9 +18,39 @@ Links:
 import datetime
 
 from django.utils import timezone
-from django.test import TestCase
+from django.test import TestCase, TransactionTestCase
+from ZSIV.models import Mitarbeiter, Journals, MAJournal, Summaries
 
-from .models import Summaries
+
+class TestMitarbeiter(TransactionTestCase):
+
+    def test_mitarbeiter_name(self) :
+        """check that same Mitarbeiter cannot be created twice"""
+        # assert ma.id == 1
+
+        Mitarbeiter.objects.all().delete()
+        Mitarbeiter.objects.create(Vorname="Heinz",Nachname="Mustermann",email="Mustermann@example.org")
+
+        with self.assertRaises(Exception) as context:
+            Mitarbeiter.objects.create(Vorname="Heinz",Nachname="Mustermann",email="Mustermann@example.org")
+
+        Mitarbeiter.objects.all().delete()
+
+    def test_mitarbeiter_defaults(self):
+        """test Anrede and Sex defaults"""
+        
+        ma = Mitarbeiter(Vorname="Heinz",
+                         Nachname="Mustermann",
+                         email="Mustermann@example.org")
+
+        self.assertEqual(ma.Sex, 'f')
+        self.assertEqual(ma.Anrede, "Frau Dr. ")
+
+
+    def test_mitarbeiter_sex_choices(self):
+        """These tests should fail"""
+        ma = Mitarbeiter(Vorname="Heinz", Nachname="Mustermann", email="Mustermann@example.org", Sex="aa")
+        ma = Mitarbeiter(Vorname='a'*400)
 
 
 class QuestionMethodTests(TestCase):
@@ -35,3 +65,4 @@ class QuestionMethodTests(TestCase):
         #time = timezone.now() + datetime.timedelta(days=30)
         #future_question = Question(pub_date=time)
         #self.assertIs(future_question.was_published_recently(), False)
+        
