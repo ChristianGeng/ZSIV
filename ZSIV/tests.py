@@ -1,6 +1,19 @@
+"""
+Currently the one and ony test module for ZSIV
 
-#from django.test import TestCase
-# Create your tests here.
+Run it with: 
+
+.. code-block:: guess
+
+    python manage.py test  ZSIV  --keepdb
+
+Links: 
+
+<https://docs.djangoproject.com/en/2.1/topics/testing/overview/>`_
+<https://docs.djangoproject.com/en/2.1/intro/tutorial05/>`_
+
+
+"""
 
 import datetime
 
