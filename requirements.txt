@@ -3,7 +3,9 @@ configparser==3.5.0
 decorator==4.0.10
 Django==1.10
 django-extra-views==0.8.0
+django-crispy-forms==1.6.1
 django-forms-bootstrap==3.0.1
+django-bootstrap-pagination==1.6.2
 django-registration-redux==1.4
 entrypoints==0.2.2
 ipykernel==4.5.0
