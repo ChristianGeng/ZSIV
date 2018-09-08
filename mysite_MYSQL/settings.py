@@ -19,7 +19,14 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # handle settings
 
 parser = ConfigParser()
-settingsfile = os.path.join(BASE_DIR, 'settings.ini')
+
+if 'TRAVIS' in os.environ:
+    TRAVIS_ENVIRONMENT = True
+    settingsfile = os.path.join(BASE_DIR, 'settings_travis.ini')
+else:
+    TRAVIS_ENVIRONMENT = False
+    settingsfile = os.path.join(BASE_DIR, 'settings.ini')
+
 parser.read(settingsfile)
 
 # Logging einrichten
@@ -125,28 +132,16 @@ WSGI_APPLICATION = 'mysite_MYSQL.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 
-if 'TRAVIS' in os.environ:
-    TRAVIS_ENVIRONMENT = True
-else:
-    TRAVIS_ENVIRONMENT = False
-
-
 DATABASES = {}
 default = {}
+default["ENGINE"] = parser.get('DATABASE', 'ENGINE')
+default["NAME"] = parser.get('DATABASE', 'NAME')
+default["USER"] = parser.get('DATABASE', 'USER')
+default["PASSWORD"] = parser.get('DATABASE', 'PASSWORD')
+default["HOST"] = parser.get('DATABASE', 'HOST')
 
 if TRAVIS_ENVIRONMENT:
-    default['ENGINE'] = 'django.db.backends.postgresql_psycopg2'
-    default['NAME'] = 'travisdb',  # Must match travis.yml setting
-    default['USER'] = 'postgres'
-    default['PASSWORD'] = ''
-    default['HOST'] ='localhost'
     default['PORT'] = ''
-else:
-    default["ENGINE"] = parser.get('DATABASE', 'ENGINE')
-    default["NAME"] = parser.get('DATABASE', 'NAME')
-    default["USER"] = parser.get('DATABASE', 'USER')
-    default["PASSWORD"] = parser.get('DATABASE', 'PASSWORD')
-    default["HOST"] = parser.get('DATABASE', 'HOST')
 
 DATABASES["default"] = default
 
