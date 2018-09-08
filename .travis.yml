@@ -2,7 +2,8 @@ language: python
 python:
   - "3.4"
 
-services: postgresql
+services:
+  - mysql
 
 env:
   global:
@@ -17,7 +18,7 @@ install:
 
 # - psql -c "CREATE DATABASE travisdb;" -U postgres
 before_script:
-  - mysql -e 'CREATE DATABASE travisdb;'
+  - mysql -e 'CREATE DATABASE travisdb;' -u root
 # command to run tests
 script:
   - sh build_app.sh
