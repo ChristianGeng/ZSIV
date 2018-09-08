@@ -591,8 +591,7 @@ class Queuelistview(ListView):
                         print("Timeout Exception??")
                         pass
                     except:
-                        # raise Exception('Unknown Christian error ') # use raise to raise  your own errors.
-                        email_logger.error('EMAIL : Unknown Christian error ')
+                        email_logger.error('EMAIL : Unknown error ')
                         print("andere Exception?")
                         pass
             else:
