@@ -258,12 +258,41 @@ def Journal_Subscribe_MAs(request, journal_id):
         return render(request, formTemplate, context)
 
 
-"""
+""" 
 (3) Manage Summaries
 (3a) add, update, delete(nicht implementiert!)) + ein MultiDelete
 """
 
+""" Das Vorbild: Die Mitarbeiter
+class MitarbeiterListview(ListView):
+    model = Mitarbeiter
+    context_object_name = 'list_to_view'
+    template_name = "ZSIV/mitarbeiter_list_EditingView.html"
+    paginate_by = 20  # im template siehe https://djangosnippets.org/snippets/3023/ (twitter bootstrap pagination)
 
+    def get_context_data(self, **kwargs):
+        context = super(MitarbeiterListview, self).get_context_data(**kwargs)
+        return context
+
+    def get_queryset(self):
+        return Mitarbeiter.objects.filter().order_by('Nachname')
+"""
+
+class SummariesListView(ListView):
+    model = Summaries
+    context_object_name='all_summaries'
+    paginate_by='15'
+    template_name='ZSIV/summaries_list.html',  # not required, is the default
+            
+    def get_queryset(self):
+        # queryset=Summaries.objects.filter(SENT=False).select_related()
+        queryset=Summaries.objects.select_related()
+        return queryset
+        
+    def get_context_data(self, **kwargs):
+        context = super(SummariesListView, self).get_context_data(**kwargs)
+        return context
+        
 class ModelFormWidgetMixin(object):
     """
     Cooler Mixin, der die formfactory zum reinmixen von widgets erlaubt
@@ -289,29 +318,52 @@ class SummariesCreateView(ModelFormWidgetMixin, CreateView):
     }
 
 
+
 class SummariesUpdateView(UpdateView):
     model = Summaries
     fields = '__all__'
     template_name = 'ZSIV/summaries_update.html'
-    widgets = {
-        'SENT': CheckboxInput,
-        'Heftnummer':  Select,
-    }
+    # widgets = {
+    #     'SENT': CheckboxInput,
+    #     'Heftnummer':  Select,
+    # }
     context_object_name = 'summary'
 
 
 class SummariesDeleteView(DeleteView):
     model = Summaries
     fields = '__all__'
-    model = Summaries
-    widgets = {
-        'SENT': CheckboxInput,
-        'Heftnummer':  Select,
-    }
+    success_url = reverse_lazy('ZSIV:summaries-index')
     context_object_name = 'summary'
+    
+"""
+class MitarbeiterUpdateView(UpdateView):
+    model = Mitarbeiter
+    fields = ["Vorname", "Nachname", "Sex", "Anrede", "email"]
+    template_name = 'ZSIV/mitarbeiter_update.html'
+    context_object_name = 'Mitarbeiter'
 
-    def get_success_url(self):
-        return reverse('ZSIV:summaries-index')
+
+class MitarbeiterDeleteView(DeleteView):
+    model = Mitarbeiter
+    success_url = reverse_lazy('ZSIV:Mitarbeiter-List')
+    context_object_name = 'Mitarbeiter'
+
+"""
+
+    
+# class SummariesDeleteView(DeleteView):
+#     model = Summaries
+#     fields = '__all__'
+#     model = Summaries
+#     widgets = {
+#         'SENT': CheckboxInput,
+#         'Heftnummer':  Select,
+#     }
+#     context_object_name = 'summary'
+
+#     def get_success_url(self):
+#         return reverse('ZSIV:summaries-index')
 
 
 class TestFormstSetView(SortableListMixin, SearchableListMixin, ModelFormSetView):
@@ -690,16 +742,10 @@ class JournalDeleteView(DeleteView):
     context_object_name = 'Journal'
     template_name = 'ZSIV/journal_confirm_delete.html'
 
+    
 """
 (7) Manage Mitarbeiter
 """
-
-
-class MitarbeiterCreateView(CreateView):
-    model = Mitarbeiter
-    fields = ["Vorname", "Nachname", "Sex", "Anrede", "email"]
-    template_name = 'ZSIV/mitarbeiter_add.html'  # is the default
-
 
 class MitarbeiterListview(ListView):
     model = Mitarbeiter
@@ -713,6 +759,11 @@ class MitarbeiterListview(ListView):
 
     def get_queryset(self):
         return Mitarbeiter.objects.filter().order_by('Nachname')
+
+class MitarbeiterCreateView(CreateView):
+    model = Mitarbeiter
+    fields = ["Vorname", "Nachname", "Sex", "Anrede", "email"]
+    template_name = 'ZSIV/mitarbeiter_add.html'  # is the default
 
 
 class MitarbeiterUpdateView(UpdateView):

@@ -26,7 +26,7 @@
 								<td> {{ item.Heftnummer }} </td>
 								<td> {{ item.SENT }} </td>
                <td> <input type="checkbox" name="todelete" value="{{ item.id }}"/> </td>
-								<td> 	<a href="{% url 'ZSIV:Summaries-update' item.id  %}"> Edit  </a>  </td>
+								<!-- <td> 	<a href="{% url 'ZSIV:Summaries-update' item.id  %}"> Edit  </a>  </td> -->
 							</tr>
 						{% endfor %}
 					</tbody>

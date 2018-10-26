@@ -1,27 +1,28 @@
 # http://getbootstrap.com/components/#breadcrumbs
 from django.conf.urls import url
-from django.views.generic import DeleteView, ListView
+from django.views.generic import ListView
 
 from ZSIV.models import Mitarbeiter, Summaries
 
 from ZSIV.views import JournalCreateView, JournalDeleteView, JournalListview, JournalUpdateView, MessageTextView
 from ZSIV.views import MitarbeiterCreateView, MitarbeiterDeleteView, MitarbeiterListview
-from ZSIV.views import  SummariesUpdateView, TestFormstSetView, MitarbeiterUpdateView, Queuelistview, SummariesCreateView
+from ZSIV.views import TestFormstSetView, MitarbeiterUpdateView, Queuelistview, SummariesCreateView
+from ZSIV.views import SummariesListView
+from ZSIV.views import SummariesUpdateView
+from ZSIV.views import SummariesDeleteView
 
 from . import views
 
-# from ZSIV.views import SummariesDeleteView # TODO: Implement!
-
-# from ZSIV.views  import MyView
 app_name = 'ZSIV'
 
-# http://127.0.0.1:8000/ZSIV/queue
 """
-    # (1) Main Page
-    # (2) Manage Subscriptions
-    # (3) Manage Summaries
-    # (4) Queue and send,  email Text
-    # (5) Versuche 
+(1) Main Page
+(2) Manage Subscriptions
+(3) Manage Summaries
+(4) Queue and send,  email Text
+(5) Manage Journals
+(5) Manage Mitarbeiter
+(XXX) Versuche
 """
 
 # (1) Main Page, static so far
@@ -42,22 +43,12 @@ subscription_urls = [
 
 # (3) Manage Summaries
 # (3a) add, update, delete(nicht implementiert!)) + ein MultiDelete
-# http://localhost:8000/ZSIV/Summaries/add/
 summary_urls = [
     url(r'^Summaries/add/$', SummariesCreateView.as_view(), name='Summaries-add'),
+    url(r'^Summaries-all$', SummariesListView.as_view(), name='summaries-index'),
     url(r'^Summaries/update/(?P<pk>[0-9]+)/$', SummariesUpdateView.as_view(), name='Summaries-update'),
-    url(r'^Summaries/delete/$', TestFormstSetView.as_view(), name='Summaries-delete-multi'),
-    url(
-        r'^Summaries-all$',
-        ListView.as_view(
-            model=Summaries,
-            # queryset=Summaries.objects.order_by('-updated').select_related(),
-            queryset=Summaries.objects.order_by('SENT').select_related(),
-            context_object_name='all_summaries',
-            paginate_by='15',
-            template_name='ZSIV/summaries_list.html',  # not required, is the default
-        ),
-        name='summaries-index'),
+    url(r'^Summaries/delete/(?P<pk>[0-9]+)/$', SummariesDeleteView.as_view(), name='Summaries-delete'),
+    url(r'^Summaries/delete-many-old/$', TestFormstSetView.as_view(), name='Summaries-delete-multi'),
     url(
         r'^Summaries-unsent$',
         ListView.as_view(
@@ -65,11 +56,10 @@ summary_urls = [
             queryset=Summaries.objects.filter(SENT=False).select_related(),
             context_object_name='all_summaries',
             paginate_by='20',
-            template_name='ZSIV/summaries_list.html',  # not required, is the default
-        ),
+            template_name='ZSIV/summaries_list.html'),
         name='summaries-unsent'),
     url(
-        r'^Summaries-sent-delete-experimental$',
+        r'^Summaries/Summaries-sent-delete-experimental$',
         ListView.as_view(
             model=Summaries,
             queryset=Summaries.objects.filter(SENT=False).select_related(),
@@ -81,32 +71,25 @@ summary_urls = [
 
 # (4) Queue and send,  EmailText
 email_urls = [
-    url(r'^MessageText$', MessageTextView.as_view(), name='MessageText'), url(r'^queue$',
-                                                                              Queuelistview.as_view(
-                                                                                  model=Mitarbeiter,
-                                                                                  template_name='ZSIV/queue_list.html',
-                                                                              ),
-                                                                              name='queue')
+    url(r'^MessageText$', MessageTextView.as_view(), name='MessageText'),
+    url(r'^queue$', Queuelistview.as_view(model=Mitarbeiter, template_name='ZSIV/queue_list.html'), name='queue')
 ]
 
-# (6) Manage Journals
+# (5) Manage Journals
 # http://localhost:8000/ZSIV/Journal/add/
 journal_urls = [
     url(r'^Journal/add/$', JournalCreateView.as_view(), name='Journal-add'),
-    url(r'^Journals/all/$', JournalListview.as_view(), name='Journal-List'), url(r'^Journal/update/(?P<pk>[0-9]+)/$',
-                                                                                 JournalUpdateView.as_view(),
-                                                                                 name='Journal-update'),
+    url(r'^Journals/all/$', JournalListview.as_view(), name='Journal-List'),
+    url(r'^Journal/update/(?P<pk>[0-9]+)/$', JournalUpdateView.as_view(), name='Journal-update'),
     url(r'^Journal/delete/(?P<pk>[0-9]+)/$', JournalDeleteView.as_view(), name='Journal-delete')
 ]
 
-# (7) Manage Mitarbeiter
+# (6) Manage Mitarbeiter
 mitarbeiter_urls = [
-    url(r'^Mitarbeiter/add/$', MitarbeiterCreateView.as_view(),
-        name='Mitarbeiter-add'), url(r'^Mitarbeiter/all/$', MitarbeiterListview.as_view(), name='Mitarbeiter-List'),
-    url(r'^Mitarbeiter/update/(?P<pk>[0-9]+)/$', MitarbeiterUpdateView.as_view(),
-        name='Mitarbeiter-update'), url(r'^Mitarbeiter/delete/(?P<pk>[0-9]+)/$',
-                                        MitarbeiterDeleteView.as_view(),
-                                        name='Mitarbeiter-delete')
+    url(r'^Mitarbeiter/add/$', MitarbeiterCreateView.as_view(), name='Mitarbeiter-add'),
+    url(r'^Mitarbeiter/all/$', MitarbeiterListview.as_view(), name='Mitarbeiter-List'),
+    url(r'^Mitarbeiter/update/(?P<pk>[0-9]+)/$', MitarbeiterUpdateView.as_view(), name='Mitarbeiter-update'),
+    url(r'^Mitarbeiter/delete/(?P<pk>[0-9]+)/$', MitarbeiterDeleteView.as_view(), name='Mitarbeiter-delete')
 ]
 
 # (XXX) Versuche

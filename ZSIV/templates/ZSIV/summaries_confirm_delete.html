@@ -1,0 +1,20 @@
+{% extends "ZSIV/base.html" %}
+{% block content %}
+<div class="row">
+	<div class="col-md-7">
+		<h3>Do you want to delete this summary?</h3>
+		<div class="panel panel-default">
+			<div class="panel-heading"><h3 class="panel-title">{{summary.Journal}},{{summary.Jahrgang}}({{summary.Heftnummer}}), sent:{{summary.SENT}}   </h3></div>
+			<div class="panel-body">
+				<form action="{% url "ZSIV:Summaries-delete" pk=summary.id %}" method="post" enctype="multipart/form-data">
+					{% csrf_token %}
+					{{ form.as_p }}
+					<!--<input type="submit" value="submit" />-->
+					<!-- <hr /> -->
+					<button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-floppy-disk"></span>Yes</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
