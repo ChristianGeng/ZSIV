@@ -814,7 +814,6 @@ Mixin, der die formfactory zum reinmixen von widgets erlauben soll
 http://stackoverflow.com/questions/16937076/how-does-one-use-a-custom-widget-with-a-generic-updateview-without-having-to-red
 """
 
-
 class modelformset_factory_Mixin(object):
 
     def get_form_class(self):
