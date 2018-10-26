@@ -139,6 +139,7 @@ default["NAME"] = parser.get('DATABASE', 'NAME')
 default["USER"] = parser.get('DATABASE', 'USER')
 default["PASSWORD"] = parser.get('DATABASE', 'PASSWORD')
 default["HOST"] = parser.get('DATABASE', 'HOST')
+default["PORT"] = 3306 # TODO: get this from the options file?
 
 if TRAVIS_ENVIRONMENT:
     default['PORT'] = ''

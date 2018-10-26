@@ -13,12 +13,10 @@ Mein django-registration-redux-tutorial [6]
 [2] http://onecreativeblog.com/post/59051248/django-login-required-middleware
 [3] https://simpleisbetterthancomplex.com/tutorial/2016/07/18/how-to-create-a-custom-django-middleware.html
 [4] https://www.youtube.com/watch?v=3yKuKQ2fuys
-[5] https://docs.djangoproject.com/en/1.8/topics/http/middleware/#hooks-and-application-order 
+[5] https://docs.djangoproject.com/en/1.8/topics/http/middleware/#hooks-and-application-order
 [6] http://www.tangowithdjango.com/book17/chapters/login_redux.html
 '''
 
-
-        
 from django.http import HttpResponseRedirect
 from django.conf import settings
 from re import compile
@@ -38,15 +36,13 @@ class LoginRequiredMiddleware:
     """
     def process_request(self, request):
         assert hasattr(request, 'user'), "The Login Required middleware\
- requires authentication middleware to be installed. Edit your\
- MIDDLEWARE_CLASSES setting to insert\
- 'django.contrib.auth.middleware.AuthenticationMiddleware'. If that doesn't\
- work, ensure your TEMPLATE_CONTEXT_PROCESSORS setting includes\
- 'django.core.context_processors.auth'."
-        #print("der regwest:")
-        #print(request)
+        requires authentication middleware to be installed. Edit your\
+        MIDDLEWARE_CLASSES setting to insert\
+        'django.contrib.auth.middleware.AuthenticationMiddleware'. If that doesn't\
+        work, ensure your TEMPLATE_CONTEXT_PROCESSORS setting includes\
+        'django.core.context_processors.auth'."
+
         if not request.user.is_authenticated():
             path = request.path_info.lstrip('/')
             if not any(m.match(path) for m in EXEMPT_URLS):
                 return HttpResponseRedirect(settings.LOGIN_URL)
-
