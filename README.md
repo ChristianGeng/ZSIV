@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/ChristianGeng/mysite_MYSQL.svg?branch=master)](https://travis-ci.org/ChristianGeng/mysite_MYSQL)
+[![Build Status](https://travis-ci.org/ChristianGeng/ZSIV.svg?branch=master)](https://travis-ci.org/ChristianGeng/ZSIV)
 
 # ZSIV 
 
