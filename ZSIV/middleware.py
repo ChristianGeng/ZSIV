@@ -42,7 +42,11 @@ class LoginRequiredMiddleware:
         work, ensure your TEMPLATE_CONTEXT_PROCESSORS setting includes\
         'django.core.context_processors.auth'."
 
-        if not request.user.is_authenticated():
-            path = request.path_info.lstrip('/')
-            if not any(m.match(path) for m in EXEMPT_URLS):
-                return HttpResponseRedirect(settings.LOGIN_URL)
+        auth_von_mir_abgestellt = True
+        if auth_von_mir_abgestellt:
+            print("auth ist von mir abgestellt")
+        else:
+            if not request.user.is_authenticated():
+                path = request.path_info.lstrip('/')
+                if not any(m.match(path) for m in EXEMPT_URLS):
+                    return HttpResponseRedirect(settings.LOGIN_URL)
