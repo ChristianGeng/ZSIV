@@ -107,7 +107,7 @@ class Journals(models.Model):
 
     class Meta:
         unique_together = ("Name", "Kurztitel")
-
+        ordering = ["Name"]
 
 class MAJournal(models.Model):
     MA = models.ForeignKey(Mitarbeiter)
