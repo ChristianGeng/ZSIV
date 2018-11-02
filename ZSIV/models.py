@@ -77,6 +77,7 @@ class Mitarbeiter(models.Model):
 
     class Meta:
         unique_together = ("Vorname", "Nachname", "email")
+        ordering = ["Nachname"]  # this is required in order to get ordering in the subscriptions
 
 
 QUELLE_CHOICES = (
@@ -114,7 +115,6 @@ class MAJournal(models.Model):
 
     class Meta:
         unique_together = ('MA', 'Journal')
-
 
 def upload_location(filename):
     """
