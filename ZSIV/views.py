@@ -181,7 +181,9 @@ def MA_Subscribe_Journals(request, mitarbeiter_id):
     ma_journal_data = MAJournal.objects.filter(MA_id=mitarbeiter_id)  # linking table
     initialvalues = [x['Journal_id'] for x in mymitarbeiter.majournal_set.values()]
     if request.method == 'POST':
-        form = MitarbeiterForm(request.POST, initial={'Subscriptions': initialvalues}, instance=mymitarbeiter)
+        form = MitarbeiterForm(request.POST,
+                               initial={'Subscriptions': initialvalues},
+                               instance=mymitarbeiter)
         print(form.data)
         print(form.Meta)
 
@@ -197,7 +199,6 @@ def MA_Subscribe_Journals(request, mitarbeiter_id):
     else:
         form = MitarbeiterForm(initial={'Subscriptions': initialvalues}, instance=mymitarbeiter)
         context = {'form': form}
-        # return render(request, formTemplate, context)
         return render(request, formTemplate, context)
 
 
