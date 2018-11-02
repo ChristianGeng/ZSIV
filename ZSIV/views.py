@@ -221,25 +221,22 @@ class indexViewJournals(generic.ListView):
 
 def Journal_Subscribe_MAs(request, journal_id):
     """
-    Die Mitarbeiter, die ein bestimmtes Journal subscribieren wollen
+    Die Mitarbeiter, die ein bestimmtes Journal subscribieren wollen, werden hier editiert.
+    Args:
+        journal_id(int): journal id to edit
     """
 
     formTemplate = 'ZSIV/journal_subscribe_ma.html'
-    journallist = Journals.objects.filter(pk=journal_id).select_related()
+    myjournal = Journals.objects.filter(pk=journal_id).select_related()[0]  # always first instance
 
-
-    myjournal = journallist[0]  # TODO: pk lookup always first instance
-    print("Variable myjournal hat den Wert:", myjournal)
+    print("Which journal am I working on:", myjournal)
+    print("Subsription infor")
     _ = [print(x) for x in myjournal.majournal_set.values()]
+    _
 
     # linking table
     ma_journal_data = MAJournal.objects.filter(Journal_id=journal_id)
-    ma_journal_data = MAJournal.objects.order_by('MA__Nachname').filter(Journal_id=journal_id)
-    ma_journal_data = MAJournal.objects.order_by('MA__Nachname').filter(Journal_id=journal_id)
-    
-    print("bin ich denn hier??")
-    print("ma_journal_data")
-    print(ma_journal_data)
+    # ma_journal_data = MAJournal.objects.order_by('MA__Nachname').filter(Journal_id=journal_id)
 
     # ma_journal_data = MAJournal.objects.order_by('MA').filter(Journal_id=journal_id) - nicht der
     initialvalues = [x['MA_id'] for x in myjournal.majournal_set.values()]
@@ -250,16 +247,9 @@ def Journal_Subscribe_MAs(request, journal_id):
                            instance=myjournal,
                            )
 
-        print("hier habe ich die Mitarbeiterliste die nicht alphabetisch ist, oder?")
-        # import pdb; pdb.set_trace()
-
         if form.is_valid():
-            print("Is form valid?", form.is_valid())
-            # journals = form.cleaned_data.get('journals')
             MA_ids_subscribe = form.data.getlist('Subscriptions')  # ids
-            print("subscriptions ", MA_ids_subscribe)
             print("Anzahl subscriptions ", len(MA_ids_subscribe))
-            print('Substr:',  MA_ids_subscribe)
             ma_journal_data.delete()
             for x in MA_ids_subscribe:
                 ma_journal_data.update_or_create(Journal_id=journal_id, MA_id=x)
