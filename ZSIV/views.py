@@ -226,10 +226,21 @@ def Journal_Subscribe_MAs(request, journal_id):
 
     formTemplate = 'ZSIV/journal_subscribe_ma.html'
     journallist = Journals.objects.filter(pk=journal_id).select_related()
+
+
     myjournal = journallist[0]  # TODO: pk lookup always first instance
+    print("Variable myjournal hat den Wert:", myjournal)
+    _ = [print(x) for x in myjournal.majournal_set.values()]
 
     # linking table
     ma_journal_data = MAJournal.objects.filter(Journal_id=journal_id)
+    ma_journal_data = MAJournal.objects.order_by('MA__Nachname').filter(Journal_id=journal_id)
+    ma_journal_data = MAJournal.objects.order_by('MA__Nachname').filter(Journal_id=journal_id)
+    
+    print("bin ich denn hier??")
+    print("ma_journal_data")
+    print(ma_journal_data)
+
     # ma_journal_data = MAJournal.objects.order_by('MA').filter(Journal_id=journal_id) - nicht der
     initialvalues = [x['MA_id'] for x in myjournal.majournal_set.values()]
     if request.method == 'POST':
@@ -238,6 +249,10 @@ def Journal_Subscribe_MAs(request, journal_id):
                            initial={'Subscriptions': initialvalues},
                            instance=myjournal,
                            )
+
+        print("hier habe ich die Mitarbeiterliste die nicht alphabetisch ist, oder?")
+        # import pdb; pdb.set_trace()
+
         if form.is_valid():
             print("Is form valid?", form.is_valid())
             # journals = form.cleaned_data.get('journals')
@@ -258,7 +273,7 @@ def Journal_Subscribe_MAs(request, journal_id):
         return render(request, formTemplate, context)
 
 
-""" 
+"""
 (3) Manage Summaries
 (3a) add, update, delete(nicht implementiert!)) + ein MultiDelete
 """
@@ -283,16 +298,16 @@ class SummariesListView(ListView):
     context_object_name='all_summaries'
     paginate_by='15'
     template_name='ZSIV/summaries_list.html',  # not required, is the default
-            
+
     def get_queryset(self):
         # queryset=Summaries.objects.filter(SENT=False).select_related()
         queryset=Summaries.objects.select_related()
         return queryset
-        
+
     def get_context_data(self, **kwargs):
         context = super(SummariesListView, self).get_context_data(**kwargs)
         return context
-        
+
 class ModelFormWidgetMixin(object):
     """
     Cooler Mixin, der die formfactory zum reinmixen von widgets erlaubt
@@ -335,7 +350,7 @@ class SummariesDeleteView(DeleteView):
     fields = '__all__'
     success_url = reverse_lazy('ZSIV:summaries-index')
     context_object_name = 'summary'
-    
+
 """
 class MitarbeiterUpdateView(UpdateView):
     model = Mitarbeiter
@@ -351,7 +366,7 @@ class MitarbeiterDeleteView(DeleteView):
 
 """
 
-    
+
 # class SummariesDeleteView(DeleteView):
 #     model = Summaries
 #     fields = '__all__'
@@ -742,7 +757,7 @@ class JournalDeleteView(DeleteView):
     context_object_name = 'Journal'
     template_name = 'ZSIV/journal_confirm_delete.html'
 
-    
+
 """
 (7) Manage Mitarbeiter
 """
