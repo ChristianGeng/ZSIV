@@ -42,7 +42,7 @@ class LoginRequiredMiddleware:
         work, ensure your TEMPLATE_CONTEXT_PROCESSORS setting includes\
         'django.core.context_processors.auth'."
 
-        auth_von_mir_abgestellt = True
+        auth_von_mir_abgestellt = False
         if auth_von_mir_abgestellt:
             print("auth ist von mir abgestellt")
         else:
