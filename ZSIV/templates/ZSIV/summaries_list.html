@@ -1,39 +1,19 @@
 {% extends "ZSIV/base.html" %}
 {% block content %}
+{% load sorting_tags %}
 
 <div class="row">
 	<div class="col-md-7">
 
 <h3>Summaries<small> IVS </small></h3>
 
-{% if all_summaries %}
 <table class="table table-striped table-hover table-condensed">
 
-	<thead>
-		<tr class="active">
-			<th>Journal</th>
-			<th>Year</th>
-			<th>No.</th>
-			<th>sent?</th>
-			<th>-</th>
-		</tr>
-	</thead>
-	<tbody>
-	{% for item in all_summaries %}
-	<tr>
-		<td> {{ item.Journal }} </td>
-		<td> {{ item.Jahrgang }} </td>
-		<td> {{ item.Heftnummer }} </td>
-		<td> {{ item.SENT }} </td>
-		<td> 	<a href="{% url 'ZSIV:Summaries-update' item.id  %}"> Edit  </a>  </td>
-		<td> 	<a href="{% url 'ZSIV:Summaries-delete' item.id  %}"> Del  </a>  </td>
-	</tr>
-	{% endfor %}
-	</tbody>
+	{% sort_headers cl %}
+	
+
 </table>
-	{% else %}
-	<p>Keine Daten!</p>
-	{% endif %}
+
 	</div>
 </div>
 

@@ -89,7 +89,8 @@ INSTALLED_APPS = [
     'django.contrib.sites',  # unter sessions sagt das video
     'registration',  # should be immediately above 'django.contrib.auth'
     'crispy_forms',
-    'bootstrap_pagination'
+    'bootstrap_pagination',
+    'sorting_bootstrap'
 ]
 
 # http://stackoverflow.com/questions/37415247/django-error-while-installing-django-registration-redux

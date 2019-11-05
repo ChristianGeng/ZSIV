@@ -284,19 +284,30 @@ class MitarbeiterListview(ListView):
         return Mitarbeiter.objects.filter().order_by('Nachname')
 """
 
+from sorting_bootstrap.views import SimpleChangeList
+from django.views.generic import ListView
+
 class SummariesListView(ListView):
     model = Summaries
-    context_object_name='all_summaries'
-    paginate_by='15'
-    template_name='ZSIV/summaries_list.html',  # not required, is the default
+    # context_object_name = 'all_summaries'
+    paginate_by = '15'
+    template_name = 'ZSIV/summaries_list.html',  # not required, is the default
 
     def get_queryset(self):
         # queryset=Summaries.objects.filter(SENT=False).select_related()
-        queryset=Summaries.objects.select_related()
+        queryset = Summaries.objects.select_related()
         return queryset
 
     def get_context_data(self, **kwargs):
         context = super(SummariesListView, self).get_context_data(**kwargs)
+        list_display = [i.name for i in self.model._meta.fields]
+        # Doesnt show ID field
+        list_display = list_display[1:]
+        cl = SimpleChangeList(self.request, self.model, list_display)
+        # Pass a change list to the views
+        context['cl'] = cl
+        # import pdb; pdb.set_trace()
+
         return context
 
 class ModelFormWidgetMixin(object):
