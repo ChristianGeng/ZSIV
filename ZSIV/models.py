@@ -140,7 +140,7 @@ class Summaries(models.Model):
     Journal = models.ForeignKey(Journals)
     SENT = models.BooleanField(default=False)
     Jahrgang = models.PositiveSmallIntegerField(blank=True, null=True, choices=[(i, i) for i in range(2016, 2031)])
-    Heftnummer = models.PositiveSmallIntegerField(blank=True, null=True, choices=[(i, i) for i in range(100)])
+    Heftnummer = models.PositiveSmallIntegerField(blank=True, null=True, choices=[(i, i) for i in range(150)])
     Inhaltsverzeichnis = models.FileField(upload_to=content_file_name,
                                           blank=False,
                                           default=False)
