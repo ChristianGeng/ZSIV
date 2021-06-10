@@ -1,4 +1,4 @@
-Django==1.10
+Django==2.2.24
 configparser==3.5.0
 django-forms-bootstrap==3.0.1
 django-registration-redux==1.4
