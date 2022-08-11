@@ -86,7 +86,7 @@ QUELLE_CHOICES = (
     ('BeckOnline', 'Beck Online'),
     ('Volltext', 'Volltext'),
     ('Printausgabe', 'Printausgabe'),
-    ('Jurion', 'Jurion'),
+    ('Wolters Kluwer', 'Wolters Kluwer'),
 )
 
 
