@@ -616,6 +616,7 @@ class Queuelistview(ListView):
 
         try:
             connection = mail.get_connection()
+            email_logger.info(str(connection))
             connection.open()
             print("connection offen!")
             email_logger.info("Successfully opened email connection")
@@ -625,6 +626,8 @@ class Queuelistview(ListView):
             email_logger.error("smtp fehler")
             return HttpResponse(msg)
         except:  # https://docs.python.org/3/tutorial/errors.html
+            # __import__("pdb").set_trace()
+
             email_logger.error("ein anderer Fehler")
             return HttpResponse("ein anderer Fehler")
 

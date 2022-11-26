@@ -18,6 +18,49 @@ Links:
 from django.test import TestCase, TransactionTestCase
 from ZSIV.models import Mitarbeiter
 
+import unittest
+from django.core.mail import send_mail
+from django.core.mail import EmailMultiAlternatives
+
+class TestSendgrid(unittest.TestCase):
+
+    def test_sendgrid_send_message(self):
+        send_mail("Your Subject", "This is a simple text email body.",
+                  "Yamil Asusta <hello@yamilasusta.com>", ["yamil@sendgrid.com"])
+
+        mail = EmailMultiAlternatives(
+            subject="Your Subject",
+            body="This is a simple text email body.",
+            from_email="Christian Geng <jedhoo@web.de>",
+            to=["christian.c.geng@gmail.com"],
+            headers={"Reply-To": "jedhoo@gmail.com"})
+        # Add template
+        # mail.template_id = 'YOUR TEMPLATE ID FROM SENDGRID ADMIN'
+
+        # Replace substitutions in sendgrid template
+        mail.substitutions = {'%username%': 'elbuo8'}
+
+        # Attach file
+        pdf_file = '/media/win-d/myfiles/2018/mysite_MYSQL/ZSIV/uploads/Bundesgesetzblatt_Teil_II_2021_11.pdf'
+        with open(pdf_file, 'rb') as file:
+            mail.attachments = [
+                (pdf_file, file.read(), 'application/pdf')
+            ]
+
+            # Add categories
+            mail.categories = [
+                'work',
+                'urgent',
+            ]
+
+            mail.attach_alternative(
+                "<p>This is a simple HTML email body</p>", "text/html"
+            )
+
+            result = mail.send()
+            print(result)
+            __import__("pdb").set_trace()
+
 
 class TestMitarbeiter(TransactionTestCase):
 
