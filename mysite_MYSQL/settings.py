@@ -43,7 +43,7 @@ LOGGING = {
     },
     'handlers': {
         'file': {
-            'level': 'INFO',
+            'level': 'DEBUG',
             'class': 'logging.FileHandler',
             'filename': os.path.join(BASE_DIR, parser.get('EMAIL', 'LOGFILE')),
             'formatter': 'verbose'
@@ -226,7 +226,7 @@ http://stackoverflow.com/questions/6367014/how-to-send-email-via-django
 Sichere Apps erlauben?
 https://support.google.com/accounts/answer/6010255
 security: http://stackoverflow.com/questions/12461484/is-it-secure-to-store-passwords-as-environment-variables-rather-than-as-plain-t
-os.environ['CCGPWD'] 
+os.environ['CCGPWD']
 """
 parser.read(settingsfile)
 # EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
