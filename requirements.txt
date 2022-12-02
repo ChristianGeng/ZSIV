@@ -1,8 +1,15 @@
-Django==2.2.24
+# mysqlclient might need a pinned version
+# depending on the host operating system
+# as of 2022-12-02, my Ubuntu 20.04 has this:
+# mysqlclient==1.3.14
+# the my Ubuntu 20.04 on pythonanywhere needs
+# mysqlclient==1.3.7
+Django==1.10
 configparser==3.5.0
 django-forms-bootstrap==3.0.1
 django-registration-redux==1.4
 django-crispy-forms==1.6.1
 django-bootstrap-pagination==1.6.2
-mysqlclient
+mysqlclient==1.3.7
 django-extra-views==0.8.0
+sendgrid-django
