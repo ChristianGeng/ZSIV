@@ -611,9 +611,8 @@ class Queuelistview(ListView):
         # from email_validator import validate_email, EmailNotValidError, EmailUndeliverableError
 
         email_logger = logging.getLogger("email")
-
+        email_logger.debug("Entering post method")
         self.object_list = self.get_queryset()  # generiert emails mit: self.emails
-
         try:
             connection = mail.get_connection()
             connection.open()
